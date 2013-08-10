@@ -10,6 +10,7 @@
 #import "OrganizationCategoryViewController.h"
 #import "CategoryCell.h"
 #import "Category+Create.h"
+#import "OrganizationsTableViewController.h"
 
 @interface OrganizationCategoryViewController ()
 @property (weak, nonatomic) IBOutlet UICollectionView *categoryCollectionView;
@@ -28,9 +29,20 @@
         self.categories = categories;
         [self.categoryCollectionView reloadData];
     } failure:^(NSDictionary *errorData) {
-        [self fail:@"Categories" withMessage:@"Error loading categories"];
+        //[self fail:@"Categories" withMessage:@"Error loading categories"];
     }];
     
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"Organizations"]) {
+        if ([segue.destinationViewController isKindOfClass:[OrganizationsTableViewController class]]) {
+            OrganizationsTableViewController *organizationTableViewController = (OrganizationsTableViewController *)segue.destinationViewController;
+            Category *category = (Category *)sender;
+            organizationTableViewController.category = category;
+        }
+    }
 }
 
 #pragma mark - UICollectionDataSource

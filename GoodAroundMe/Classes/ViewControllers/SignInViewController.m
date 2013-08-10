@@ -77,7 +77,7 @@
                                             password, USER_PASSWORD, nil], USER_LOGIN, nil];
             
             [User signIn:userDictionary success:^{
-                [self authenticatedFirstTime:NO];
+                [self authenticatedFirstTime:YES]; // TO DO !!!!!!!
             } failure:^(NSDictionary *errorData) {
                 [self fail:@"Login" withMessage:errorData[@"errors"]];
             }];

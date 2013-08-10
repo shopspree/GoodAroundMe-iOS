@@ -11,6 +11,7 @@
 #define CATEGORY_ID @"id"
 #define CATEGORY_NAME @"name"
 #define CATEGORY_IMAGE_URL @"image_url"
+#define CATEGORY_ORGANIZATIONS @"organizations"
 
 @interface Category (Create)
 

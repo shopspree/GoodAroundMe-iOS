@@ -28,7 +28,10 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
-    self.navigationController.navigationBarHidden = YES;
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(performLoginIfRequired:)
+                                                 name:@"Unauthorized"
+                                               object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(willEnterForeground:)
@@ -56,34 +59,19 @@
 }
 
 - (void) willEnterForeground:(NSNotification *)notification {
-    [self performLoginIfRequired:self];
+    //[self performLoginIfRequired:self];
 }
 
-- (void) performLoginIfRequired: (UIViewController *) source {
-    
-    if (NO) {
-        
-        NSLog(@"Is not authed");
-        
-        //UIStoryboard *storyboard = [UIApplication sharedApplication].delegate.window.rootViewController.storyboard;
-        //UIViewController *loginController = [storyboard instantiateViewControllerWithIdentifier:@"loginScreen"];
-        
-        //[self presentViewController:nil animated:YES completion:^{ }];
-        [self performSegueWithIdentifier:@"SignUpSignIn" sender:self];
-        
-    } else {
-        NSLog(@"Is authe");
-        
-    }
+- (void) performLoginIfRequired:(UIViewController *)source {
+    [self navigateStoryboardWithIdentifier:@"Authenticate"];
 }
 
-- (BOOL)validateLogin
+- (void)navigateStoryboardWithIdentifier:(NSString *)identifier
 {
-    BOOL login = false;
-    
-    
-    
-    return login;
+    UIStoryboard *storyboard = [UIApplication sharedApplication].delegate.window.rootViewController.storyboard;
+    UITabBarController *obj=[storyboard instantiateViewControllerWithIdentifier:identifier];
+    self.navigationController.navigationBarHidden=YES;
+    [self.navigationController pushViewController:obj animated:YES];
 }
 
 @end

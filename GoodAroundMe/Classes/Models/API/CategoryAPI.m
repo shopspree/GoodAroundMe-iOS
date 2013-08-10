@@ -13,26 +13,11 @@
 + (void)categories:(void (^)(NSDictionary *responseDictionary))success
            failure:(void (^)(NSDictionary *errorData))failure
 {
-    NSURLRequest *request = [BaseAPI getRequestWithURL:API_ORGANIZATIONS_CATEGORIES withJSON:nil];
-    
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        if ([response statusCode] == 200) {
-            NSDictionary *responseDictionary = (NSDictionary *)JSON;
-            NSLog(@"[DEBUG] (categories) Response from server: %@", responseDictionary);
-            
-            if (success) {
-                success(responseDictionary);
-            }
-            
-        }
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-        NSLog(@"[DEBUG] (categories) %d error!!!", [response statusCode]);
-        
-        NSDictionary *errorData = (NSDictionary *)JSON;
+    [BaseAPI getRequestWithURL:API_ORGANIZATION_CATEGORIES json:nil success:^(NSDictionary *responseDictionary) {
+        success(responseDictionary);
+    } failure:^(NSDictionary *errorData) {
         failure(errorData);
     }];
-    
-    [operation start];
 }
 
 @end

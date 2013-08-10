@@ -9,6 +9,7 @@
 #import "Category+Create.h"
 #import "CategoryAPI.h"
 #import "CoreDataFactory.h"
+#import "Organization+Create.h"
 
 @implementation Category (Create)
 
@@ -31,7 +32,7 @@
             // handle error
         } else if (![matches count]) { // none found, so let's create a Photo for that Flickr photo
             category = [NSEntityDescription insertNewObjectForEntityForName:@"Category" inManagedObjectContext:context];
-            [category setWithDictionary:categoryDictionary];
+            [category setWithDictionary:categoryDictionary[@"organization_category"]];
         } else { // found the Photo, just return it from the list of matches (which there will only be one of)
             category = [matches lastObject];
         }
@@ -61,7 +62,7 @@
         } else { // let's fetch and create all categories
             [CategoryAPI categories:^(NSDictionary *responseDictionary) {
                 NSMutableArray *categories = [NSMutableArray array];
-                for (NSDictionary *categoryDictionary in responseDictionary[@"categories"]) {
+                for (NSDictionary *categoryDictionary in responseDictionary[@"organization_categories"]) {
                     Category *category = [Category categoryWithDictionary:categoryDictionary inManagedObjectContext:managedObjectContext];
                     [categories addObject:category];
                 }
@@ -80,6 +81,12 @@
     self.uid = [categoryDictionary[CATEGORY_ID] description];
     self.name = [categoryDictionary[CATEGORY_NAME] description];
     self.imageURL = [categoryDictionary[CATEGORY_IMAGE_URL] description];
+    
+    NSArray *organizationsArray = categoryDictionary[CATEGORY_ORGANIZATIONS];
+    for (NSDictionary *organizationDictionary in  organizationsArray) {
+        Organization *organization = [Organization organizationWithDictionary:organizationDictionary inManagedObjectContext:self.managedObjectContext];
+        [self addOrganizationsObject:organization];
+    }
 }
 
 @end

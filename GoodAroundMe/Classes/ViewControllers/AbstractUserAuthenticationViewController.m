@@ -15,6 +15,13 @@
 
 @implementation AbstractUserAuthenticationViewController
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    self.navigationController.navigationBarHidden = YES;
+}
+
 - (BOOL)validateEmail:(NSString*)email
 {
     if (![User validateEmail:email]) {
@@ -38,12 +45,7 @@
 - (void)authenticatedFirstTime:(BOOL)isInitialAuthentication
 {
     NSString *identifier = (isInitialAuthentication) ? @"Explore" : @"Newsfeed";
-    
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-    //[UIApplication sharedApplication].delegate.window.rootViewController.storyboard;
-    UITabBarController *obj=[storyboard instantiateViewControllerWithIdentifier:identifier];
-    self.navigationController.navigationBarHidden=YES;
-    [self.navigationController pushViewController:obj animated:YES];
+    [self navigateStoryboardWithIdentifier:identifier];
 }
 
 @end

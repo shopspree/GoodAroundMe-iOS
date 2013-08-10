@@ -16,9 +16,15 @@
 		D8B1213417B3EF8200F68F59 /* animal2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D8B1213217B3EF8200F68F59 /* animal2.jpg */; };
 		D8B1213517B3EF8200F68F59 /* animal1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D8B1213317B3EF8200F68F59 /* animal1.jpg */; };
 		D8B1213717B3EF9B00F68F59 /* animal3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D8B1213617B3EF9B00F68F59 /* animal3.jpg */; };
-		D8B1214917B5271E00F68F59 /* Category.m in Sources */ = {isa = PBXBuildFile; fileRef = D8B1214817B5271D00F68F59 /* Category.m */; };
-		D8B1214C17B5271E00F68F59 /* Organization.m in Sources */ = {isa = PBXBuildFile; fileRef = D8B1214B17B5271E00F68F59 /* Organization.m */; };
 		D8B1214F17B5972200F68F59 /* AbstractUserAuthenticationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D8B1214E17B5971E00F68F59 /* AbstractUserAuthenticationViewController.m */; };
+		D8B1215217B5A9B400F68F59 /* NewsfeedPostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D8B1215117B5A9B400F68F59 /* NewsfeedPostCell.m */; };
+		D8B1215517B5B34000F68F59 /* OrganizationsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D8B1215417B5B33F00F68F59 /* OrganizationsTableViewController.m */; };
+		D8B1215817B5B4ED00F68F59 /* OrganizationAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = D8B1215717B5B4EC00F68F59 /* OrganizationAPI.m */; };
+		D8B1215B17B6291600F68F59 /* Organization+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = D8B1215A17B6291500F68F59 /* Organization+Create.m */; };
+		D8B1215E17B62ED900F68F59 /* Category.m in Sources */ = {isa = PBXBuildFile; fileRef = D8B1215D17B62ED800F68F59 /* Category.m */; };
+		D8B1216A17B65DB200F68F59 /* OrganizationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D8B1216917B65DB100F68F59 /* OrganizationCell.m */; };
+		D8B1216D17B66A8000F68F59 /* Organization.m in Sources */ = {isa = PBXBuildFile; fileRef = D8B1216C17B66A7E00F68F59 /* Organization.m */; };
+		D8B1217017B6721100F68F59 /* AbstractTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D8B1216F17B6720F00F68F59 /* AbstractTableViewController.m */; };
 		D8C5EE7617AEA184008CFF51 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8C5EE7517AEA184008CFF51 /* UIKit.framework */; };
 		D8C5EE7817AEA184008CFF51 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8C5EE7717AEA184008CFF51 /* Foundation.framework */; };
 		D8C5EE7A17AEA184008CFF51 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8C5EE7917AEA184008CFF51 /* CoreGraphics.framework */; };
@@ -81,10 +87,6 @@
 		D8C5EFBA17AEA788008CFF51 /* UserChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C5EF8D17AEA788008CFF51 /* UserChangePasswordViewController.m */; };
 		D8C5EFBB17AEA788008CFF51 /* DiscoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C5EF8F17AEA788008CFF51 /* DiscoverViewController.m */; };
 		D8C5EFBE17AEA788008CFF51 /* HashtagNewsfeedsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C5EF9517AEA788008CFF51 /* HashtagNewsfeedsTableViewController.m */; };
-		D8C5EFC417AEA7E0008CFF51 /* NewsfeedPostView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D8C5EFBF17AEA7DF008CFF51 /* NewsfeedPostView.xib */; };
-		D8C5EFC517AEA7E0008CFF51 /* NewsfeedLikeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D8C5EFC017AEA7DF008CFF51 /* NewsfeedLikeView.xib */; };
-		D8C5EFC617AEA7E0008CFF51 /* NewsfeedCommentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D8C5EFC117AEA7DF008CFF51 /* NewsfeedCommentView.xib */; };
-		D8C5EFC717AEA7E0008CFF51 /* HashtagCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D8C5EFC217AEA7DF008CFF51 /* HashtagCell.xib */; };
 		D8C5EFC817AEA7E0008CFF51 /* MoreOptionsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D8C5EFC317AEA7E0008CFF51 /* MoreOptionsView.xib */; };
 		D8C5EFE517AEA9A9008CFF51 /* CategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C5EFCA17AEA9A9008CFF51 /* CategoryCell.m */; };
 		D8C5EFE617AEA9A9008CFF51 /* CommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C5EFCC17AEA9A9008CFF51 /* CommentCell.m */; };
@@ -153,12 +155,24 @@
 		D8B1213217B3EF8200F68F59 /* animal2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = animal2.jpg; sourceTree = "<group>"; };
 		D8B1213317B3EF8200F68F59 /* animal1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = animal1.jpg; sourceTree = "<group>"; };
 		D8B1213617B3EF9B00F68F59 /* animal3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = animal3.jpg; sourceTree = "<group>"; };
-		D8B1214717B5271D00F68F59 /* Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Category.h; sourceTree = "<group>"; };
-		D8B1214817B5271D00F68F59 /* Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Category.m; sourceTree = "<group>"; };
-		D8B1214A17B5271E00F68F59 /* Organization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Organization.h; sourceTree = "<group>"; };
-		D8B1214B17B5271E00F68F59 /* Organization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Organization.m; sourceTree = "<group>"; };
 		D8B1214D17B5971D00F68F59 /* AbstractUserAuthenticationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractUserAuthenticationViewController.h; sourceTree = "<group>"; };
 		D8B1214E17B5971E00F68F59 /* AbstractUserAuthenticationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbstractUserAuthenticationViewController.m; sourceTree = "<group>"; };
+		D8B1215017B5A9B400F68F59 /* NewsfeedPostCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsfeedPostCell.h; sourceTree = "<group>"; };
+		D8B1215117B5A9B400F68F59 /* NewsfeedPostCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsfeedPostCell.m; sourceTree = "<group>"; };
+		D8B1215317B5B33D00F68F59 /* OrganizationsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrganizationsTableViewController.h; sourceTree = "<group>"; };
+		D8B1215417B5B33F00F68F59 /* OrganizationsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrganizationsTableViewController.m; sourceTree = "<group>"; };
+		D8B1215617B5B4EC00F68F59 /* OrganizationAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrganizationAPI.h; sourceTree = "<group>"; };
+		D8B1215717B5B4EC00F68F59 /* OrganizationAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrganizationAPI.m; sourceTree = "<group>"; };
+		D8B1215917B6291400F68F59 /* Organization+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Organization+Create.h"; sourceTree = "<group>"; };
+		D8B1215A17B6291500F68F59 /* Organization+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Organization+Create.m"; sourceTree = "<group>"; };
+		D8B1215C17B62ED700F68F59 /* Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Category.h; sourceTree = "<group>"; };
+		D8B1215D17B62ED800F68F59 /* Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Category.m; sourceTree = "<group>"; };
+		D8B1216817B65DB100F68F59 /* OrganizationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrganizationCell.h; sourceTree = "<group>"; };
+		D8B1216917B65DB100F68F59 /* OrganizationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrganizationCell.m; sourceTree = "<group>"; };
+		D8B1216B17B66A7C00F68F59 /* Organization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Organization.h; sourceTree = "<group>"; };
+		D8B1216C17B66A7E00F68F59 /* Organization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Organization.m; sourceTree = "<group>"; };
+		D8B1216E17B6720E00F68F59 /* AbstractTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractTableViewController.h; sourceTree = "<group>"; };
+		D8B1216F17B6720F00F68F59 /* AbstractTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbstractTableViewController.m; sourceTree = "<group>"; };
 		D8C5EE7217AEA184008CFF51 /* GoodAroundMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GoodAroundMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8C5EE7517AEA184008CFF51 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D8C5EE7717AEA184008CFF51 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -275,10 +289,6 @@
 		D8C5EF8F17AEA788008CFF51 /* DiscoverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverViewController.m; sourceTree = "<group>"; };
 		D8C5EF9417AEA788008CFF51 /* HashtagNewsfeedsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HashtagNewsfeedsTableViewController.h; sourceTree = "<group>"; };
 		D8C5EF9517AEA788008CFF51 /* HashtagNewsfeedsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HashtagNewsfeedsTableViewController.m; sourceTree = "<group>"; };
-		D8C5EFBF17AEA7DF008CFF51 /* NewsfeedPostView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewsfeedPostView.xib; sourceTree = "<group>"; };
-		D8C5EFC017AEA7DF008CFF51 /* NewsfeedLikeView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewsfeedLikeView.xib; sourceTree = "<group>"; };
-		D8C5EFC117AEA7DF008CFF51 /* NewsfeedCommentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewsfeedCommentView.xib; sourceTree = "<group>"; };
-		D8C5EFC217AEA7DF008CFF51 /* HashtagCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HashtagCell.xib; sourceTree = "<group>"; };
 		D8C5EFC317AEA7E0008CFF51 /* MoreOptionsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MoreOptionsView.xib; sourceTree = "<group>"; };
 		D8C5EFC917AEA9A9008CFF51 /* CategoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CategoryCell.h; sourceTree = "<group>"; };
 		D8C5EFCA17AEA9A9008CFF51 /* CategoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CategoryCell.m; sourceTree = "<group>"; };
@@ -506,63 +516,65 @@
 				D8C5F00717AEAA2C008CFF51 /* BaseModel.m */,
 				D8C5F00A17AEAA2C008CFF51 /* Category+Create.h */,
 				D8C5F00B17AEAA2C008CFF51 /* Category+Create.m */,
-				D8C5F00C17AEAA2C008CFF51 /* Comment.h */,
-				D8C5F00D17AEAA2C008CFF51 /* Comment.m */,
 				D8C5F00E17AEAA2C008CFF51 /* Comment+Create.h */,
 				D8C5F00F17AEAA2C008CFF51 /* Comment+Create.m */,
-				D8C5F01017AEAA2C008CFF51 /* Company.h */,
-				D8C5F01117AEAA2C008CFF51 /* Company.m */,
+				D8C5F00C17AEAA2C008CFF51 /* Comment.h */,
+				D8C5F00D17AEAA2C008CFF51 /* Comment.m */,
 				D8C5F01217AEAA2C008CFF51 /* Company+Create.h */,
 				D8C5F01317AEAA2C008CFF51 /* Company+Create.m */,
+				D8C5F01017AEAA2C008CFF51 /* Company.h */,
+				D8C5F01117AEAA2C008CFF51 /* Company.m */,
 				D8C5F01417AEAA2C008CFF51 /* CoreDataFactory.h */,
 				D8C5F01517AEAA2C008CFF51 /* CoreDataFactory.m */,
 				D8C5F01617AEAA2C008CFF51 /* CurrentUser.h */,
 				D8C5F01717AEAA2C008CFF51 /* CurrentUser.m */,
 				D8C5F01817AEAA2C008CFF51 /* DataModel.xcdatamodeld */,
-				D8B1214717B5271D00F68F59 /* Category.h */,
-				D8B1214A17B5271E00F68F59 /* Organization.h */,
-				D8B1214B17B5271E00F68F59 /* Organization.m */,
-				D8B1214817B5271D00F68F59 /* Category.m */,
-				D8C5F01A17AEAA2C008CFF51 /* Group.h */,
-				D8C5F01B17AEAA2C008CFF51 /* Group.m */,
+				D8B1216B17B66A7C00F68F59 /* Organization.h */,
+				D8B1216C17B66A7E00F68F59 /* Organization.m */,
+				D8B1215C17B62ED700F68F59 /* Category.h */,
+				D8B1215D17B62ED800F68F59 /* Category.m */,
 				D8C5F01C17AEAA2C008CFF51 /* Group+Create.h */,
 				D8C5F01D17AEAA2C008CFF51 /* Group+Create.m */,
-				D8C5F01E17AEAA2C008CFF51 /* Hashtag.h */,
-				D8C5F01F17AEAA2C008CFF51 /* Hashtag.m */,
+				D8C5F01A17AEAA2C008CFF51 /* Group.h */,
+				D8C5F01B17AEAA2C008CFF51 /* Group.m */,
 				D8C5F02017AEAA2C008CFF51 /* Hashtag+Create.h */,
 				D8C5F02117AEAA2C008CFF51 /* Hashtag+Create.m */,
+				D8C5F01E17AEAA2C008CFF51 /* Hashtag.h */,
+				D8C5F01F17AEAA2C008CFF51 /* Hashtag.m */,
 				D8C5F02217AEAA2C008CFF51 /* IJSON.h */,
 				D8C5F02317AEAA2C008CFF51 /* ILike.h */,
-				D8C5F02417AEAA2C008CFF51 /* Like.h */,
-				D8C5F02517AEAA2C008CFF51 /* Like.m */,
 				D8C5F02617AEAA2C008CFF51 /* Like+Create.h */,
 				D8C5F02717AEAA2C008CFF51 /* Like+Create.m */,
-				D8C5F02817AEAA2C008CFF51 /* Newsfeed.h */,
-				D8C5F02917AEAA2C008CFF51 /* Newsfeed.m */,
+				D8C5F02417AEAA2C008CFF51 /* Like.h */,
+				D8C5F02517AEAA2C008CFF51 /* Like.m */,
 				D8C5F02A17AEAA2C008CFF51 /* Newsfeed+Activity.h */,
 				D8C5F02B17AEAA2C008CFF51 /* Newsfeed+Activity.m */,
 				D8C5F02C17AEAA2C008CFF51 /* Newsfeed+Create.h */,
 				D8C5F02D17AEAA2C008CFF51 /* Newsfeed+Create.m */,
-				D8C5F02E17AEAA2C008CFF51 /* Notification.h */,
-				D8C5F02F17AEAA2C008CFF51 /* Notification.m */,
+				D8C5F02817AEAA2C008CFF51 /* Newsfeed.h */,
+				D8C5F02917AEAA2C008CFF51 /* Newsfeed.m */,
 				D8C5F03017AEAA2C008CFF51 /* Notification+Create.h */,
 				D8C5F03117AEAA2C008CFF51 /* Notification+Create.m */,
+				D8C5F02E17AEAA2C008CFF51 /* Notification.h */,
+				D8C5F02F17AEAA2C008CFF51 /* Notification.m */,
 				D8C5F03217AEAA2C008CFF51 /* Photo.h */,
 				D8C5F03317AEAA2C008CFF51 /* Photo.m */,
-				D8C5F03417AEAA2C008CFF51 /* Picture.h */,
-				D8C5F03517AEAA2C008CFF51 /* Picture.m */,
 				D8C5F03617AEAA2C008CFF51 /* Picture+Create.h */,
 				D8C5F03717AEAA2C008CFF51 /* Picture+Create.m */,
-				D8C5F03817AEAA2C008CFF51 /* Post.h */,
-				D8C5F03917AEAA2C008CFF51 /* Post.m */,
+				D8C5F03417AEAA2C008CFF51 /* Picture.h */,
+				D8C5F03517AEAA2C008CFF51 /* Picture.m */,
 				D8C5F03A17AEAA2C008CFF51 /* Post+Create.h */,
 				D8C5F03B17AEAA2C008CFF51 /* Post+Create.m */,
+				D8C5F03817AEAA2C008CFF51 /* Post.h */,
+				D8C5F03917AEAA2C008CFF51 /* Post.m */,
 				D8C5F03C17AEAA2C008CFF51 /* Profile.h */,
 				D8C5F03D17AEAA2C008CFF51 /* Profile.m */,
-				D8C5F04217AEAA2C008CFF51 /* User.h */,
-				D8C5F04317AEAA2C008CFF51 /* User.m */,
 				D8C5F04417AEAA2D008CFF51 /* User+Create.h */,
 				D8C5F04517AEAA2D008CFF51 /* User+Create.m */,
+				D8C5F04217AEAA2C008CFF51 /* User.h */,
+				D8C5F04317AEAA2C008CFF51 /* User.m */,
+				D8B1215917B6291400F68F59 /* Organization+Create.h */,
+				D8B1215A17B6291500F68F59 /* Organization+Create.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -630,6 +642,10 @@
 				D8B1212617B2B21D00F68F59 /* OrganizationCategoryViewController.m */,
 				D8B1214D17B5971D00F68F59 /* AbstractUserAuthenticationViewController.h */,
 				D8B1214E17B5971E00F68F59 /* AbstractUserAuthenticationViewController.m */,
+				D8B1215317B5B33D00F68F59 /* OrganizationsTableViewController.h */,
+				D8B1215417B5B33F00F68F59 /* OrganizationsTableViewController.m */,
+				D8B1216E17B6720E00F68F59 /* AbstractTableViewController.h */,
+				D8B1216F17B6720F00F68F59 /* AbstractTableViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -665,6 +681,10 @@
 				D8C5EFE217AEA9A9008CFF51 /* NotificationItemCell.m */,
 				D8C5EFE317AEA9A9008CFF51 /* UserCell.h */,
 				D8C5EFE417AEA9A9008CFF51 /* UserCell.m */,
+				D8B1215017B5A9B400F68F59 /* NewsfeedPostCell.h */,
+				D8B1215117B5A9B400F68F59 /* NewsfeedPostCell.m */,
+				D8B1216817B65DB100F68F59 /* OrganizationCell.h */,
+				D8B1216917B65DB100F68F59 /* OrganizationCell.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -692,10 +712,6 @@
 			isa = PBXGroup;
 			children = (
 				D8C5F07217AED584008CFF51 /* iPhone.storyboard */,
-				D8C5EFBF17AEA7DF008CFF51 /* NewsfeedPostView.xib */,
-				D8C5EFC017AEA7DF008CFF51 /* NewsfeedLikeView.xib */,
-				D8C5EFC117AEA7DF008CFF51 /* NewsfeedCommentView.xib */,
-				D8C5EFC217AEA7DF008CFF51 /* HashtagCell.xib */,
 				D8C5EFC317AEA7E0008CFF51 /* MoreOptionsView.xib */,
 			);
 			path = UserInterfaces;
@@ -779,6 +795,8 @@
 				D8C5EFFE17AEAA2C008CFF51 /* PostAPI.m */,
 				D8C5EFFF17AEAA2C008CFF51 /* UserAPI.h */,
 				D8C5F00017AEAA2C008CFF51 /* UserAPI.m */,
+				D8B1215617B5B4EC00F68F59 /* OrganizationAPI.h */,
+				D8B1215717B5B4EC00F68F59 /* OrganizationAPI.m */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -838,10 +856,6 @@
 				D8C5EE8817AEA184008CFF51 /* Default.png in Resources */,
 				D8C5EE8A17AEA184008CFF51 /* Default@2x.png in Resources */,
 				D8C5EE8C17AEA184008CFF51 /* Default-568h@2x.png in Resources */,
-				D8C5EFC417AEA7E0008CFF51 /* NewsfeedPostView.xib in Resources */,
-				D8C5EFC517AEA7E0008CFF51 /* NewsfeedLikeView.xib in Resources */,
-				D8C5EFC617AEA7E0008CFF51 /* NewsfeedCommentView.xib in Resources */,
-				D8C5EFC717AEA7E0008CFF51 /* HashtagCell.xib in Resources */,
 				D8C5EFC817AEA7E0008CFF51 /* MoreOptionsView.xib in Resources */,
 				D8C5F07317AED584008CFF51 /* iPhone.storyboard in Resources */,
 				D8C5F07B17AEEC31008CFF51 /* default_background.jpg in Resources */,
@@ -965,9 +979,15 @@
 				D8C5F07F17AFEDF2008CFF51 /* SignUpTableController.m in Sources */,
 				D8C5F08217B04C4C008CFF51 /* SignInTableController.m in Sources */,
 				D8B1212717B2B21E00F68F59 /* OrganizationCategoryViewController.m in Sources */,
-				D8B1214917B5271E00F68F59 /* Category.m in Sources */,
-				D8B1214C17B5271E00F68F59 /* Organization.m in Sources */,
 				D8B1214F17B5972200F68F59 /* AbstractUserAuthenticationViewController.m in Sources */,
+				D8B1215217B5A9B400F68F59 /* NewsfeedPostCell.m in Sources */,
+				D8B1215517B5B34000F68F59 /* OrganizationsTableViewController.m in Sources */,
+				D8B1215817B5B4ED00F68F59 /* OrganizationAPI.m in Sources */,
+				D8B1215B17B6291600F68F59 /* Organization+Create.m in Sources */,
+				D8B1215E17B62ED900F68F59 /* Category.m in Sources */,
+				D8B1216A17B65DB200F68F59 /* OrganizationCell.m in Sources */,
+				D8B1216D17B66A8000F68F59 /* Organization.m in Sources */,
+				D8B1217017B6721100F68F59 /* AbstractTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

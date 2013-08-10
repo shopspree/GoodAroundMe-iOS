@@ -11,5 +11,6 @@
 @interface AbstractViewController : UIViewController <UIAlertViewDelegate>
 
 - (void)fail:(NSString *)title withMessage:(NSString *)message;
+- (void)navigateStoryboardWithIdentifier:(NSString *)identifier;
 
 @end

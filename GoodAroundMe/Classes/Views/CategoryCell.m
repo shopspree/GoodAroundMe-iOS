@@ -19,16 +19,20 @@
 
 - (void)setup
 {
-    self.backgroundColor = [UIColor clearColor];
+    self.backgroundColor = [UIColor whiteColor];
     
     self.contentView.backgroundColor = [UIColor whiteColor];
-    self.contentView.alpha = 0.75;
+    self.contentView.alpha = 1;//0.75;
     
-    self.categoryLabel.textColor = [UIColor blackColor];
-    self.categoryLabel.numberOfLines = 0;
-    [self.categoryLabel setLineBreakMode:NSLineBreakByWordWrapping]; //will wrap text in new line
-    [self.categoryLabel sizeToFit];
-    [self.categoryLabel setLineBreakMode:NSLineBreakByWordWrapping];
+    //self.categoryLabel.textColor = [UIColor blackColor];
+    //self.categoryLabel.numberOfLines = 0;
+    //[self.categoryLabel setLineBreakMode:NSLineBreakByWordWrapping]; //will wrap text in new line
+    //self.categoryLabel.adjustsFontSizeToFitWidth = YES;
+    //self.categoryLabel.minimumScaleFactor = 0.5;
+    //self.categoryLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    //self.categoryLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    //self.categoryLabel.numberOfLines = 0;
+    //[self.categoryLabel sizeToFit];
 }
 
 @end

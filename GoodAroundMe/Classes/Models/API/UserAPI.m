@@ -233,10 +233,5 @@
     }
 }
 
-+ (BOOL)validateLogin
-{
-    
-}
-
 
 @end

@@ -17,7 +17,7 @@
 
 @implementation BaseAPI
 
-+ (void)getRequestWithURL:(NSString *)url json:(NSData *)json requestType:(ServerRequestType)type success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure
++ (void)getRequestWithURL:(NSString *)url json:(NSData *)json success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure
 {
     [BaseAPI serverRequestWithURL:url json:json requestType:ServerRequestGet success:^(NSDictionary *responseDictionary) {
         success(responseDictionary);
@@ -26,7 +26,7 @@
     }];
 }
 
-+ (void)postRequestWithURL:(NSString *)url json:(NSData *)json requestType:(ServerRequestType)type success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure
++ (void)postRequestWithURL:(NSString *)url json:(NSData *)json success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure
 {
     [BaseAPI serverRequestWithURL:url json:json requestType:ServerRequestPost success:^(NSDictionary *responseDictionary) {
         success(responseDictionary);
@@ -35,7 +35,7 @@
     }];
 }
 
-+ (void)putRequestWithURL:(NSString *)url json:(NSData *)json requestType:(ServerRequestType)type success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure
++ (void)putRequestWithURL:(NSString *)url json:(NSData *)json success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure
 {
     [BaseAPI serverRequestWithURL:url json:json requestType:ServerRequestPut success:^(NSDictionary *responseDictionary) {
         success(responseDictionary);
@@ -44,7 +44,7 @@
     }];
 }
 
-+ (void)deleteRequestWithURL:(NSString *)url json:(NSData *)json requestType:(ServerRequestType)type success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure
++ (void)deleteRequestWithURL:(NSString *)url json:(NSData *)json success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure
 {
     [BaseAPI serverRequestWithURL:url json:json requestType:ServerRequestDelete success:^(NSDictionary *responseDictionary) {
         success(responseDictionary);
@@ -58,19 +58,19 @@
     NSURLRequest *request;
     switch (type) {
         case ServerRequestGet:
-            request = [BaseAPI getRequestWithURL:url withJSON:json];
+            request = [BaseAPI requestWithURL:url withJSON:json httpMethod:HTTP_GET];
             break;
             
         case ServerRequestPost:
-            request = [BaseAPI postRequestWithURL:url withJSON:json];
+            request = [BaseAPI requestWithURL:url withJSON:json httpMethod:HTTP_POST];
             break;
             
         case ServerRequestPut:
-            request = [BaseAPI putRequestWithURL:url withJSON:json];
+            request = [BaseAPI requestWithURL:url withJSON:json httpMethod:HTTP_PUT];
             break;
             
         case ServerRequestDelete:
-            request = [BaseAPI deleteRequestWithURL:url withJSON:json];
+            request = [BaseAPI requestWithURL:url withJSON:json httpMethod:HTTP_DELETE];
             break;
             
         default:
@@ -104,33 +104,14 @@
     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
         NSLog(@"[DEBUG] [%@] %d error!!!", [[self class] description], [response statusCode]);
         
+        [BaseAPI clientError:[response statusCode]];
+        
         NSDictionary *errorData = (NSDictionary *)JSON;
         failure(errorData);
     }];
     
     [operation start];
 }
-
-+ (NSURLRequest *)getRequestWithURL:(NSString *)urlString withJSON:(NSData *)jsonData
-{
-    return [BaseAPI requestWithURL:urlString withJSON:jsonData httpMethod:HTTP_GET];
-}
-
-+ (NSURLRequest *)postRequestWithURL:(NSString *)urlString withJSON:(NSData *)jsonData
-{
-    return [BaseAPI requestWithURL:urlString withJSON:jsonData httpMethod:HTTP_POST];
-}
-
-+ (NSURLRequest *)putRequestWithURL:(NSString *)urlString withJSON:(NSData *)jsonData
-{
-    return [BaseAPI requestWithURL:urlString withJSON:jsonData httpMethod:HTTP_PUT];
-}
-
-+ (NSURLRequest *)deleteRequestWithURL:(NSString *)urlString withJSON:(NSData *)jsonData
-{
-    return [BaseAPI requestWithURL:urlString withJSON:jsonData httpMethod:HTTP_DELETE];
-}
-
 
 + (NSURLRequest *)requestWithURL:(NSString *)urlString withJSON:(NSData *)jsonData httpMethod:(NSString *)httpMethod
 {
@@ -188,6 +169,32 @@
             break;
     }
     
+}
+
+
+
+
+
+
+
++ (NSURLRequest *)getRequestWithURL:(NSString *)urlString withJSON:(NSData *)jsonData
+{
+    return [BaseAPI requestWithURL:urlString withJSON:jsonData httpMethod:HTTP_GET];
+}
+
++ (NSURLRequest *)postRequestWithURL:(NSString *)urlString withJSON:(NSData *)jsonData
+{
+    return [BaseAPI requestWithURL:urlString withJSON:jsonData httpMethod:HTTP_POST];
+}
+
++ (NSURLRequest *)putRequestWithURL:(NSString *)urlString withJSON:(NSData *)jsonData
+{
+    return [BaseAPI requestWithURL:urlString withJSON:jsonData httpMethod:HTTP_PUT];
+}
+
++ (NSURLRequest *)deleteRequestWithURL:(NSString *)urlString withJSON:(NSData *)jsonData
+{
+    return [BaseAPI requestWithURL:urlString withJSON:jsonData httpMethod:HTTP_DELETE];
 }
 
 

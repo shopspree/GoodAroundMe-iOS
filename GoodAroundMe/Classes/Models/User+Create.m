@@ -70,6 +70,7 @@
 {
     [UserAPI signIn:userDictionary success:^(NSDictionary *responseDictionary) {
         [User storeUser:responseDictionary];
+        //BOOL isInitialLogin = responseDictionary[USER_BOOTSTRAP];
         success();
     } failure:^(NSDictionary *errorData) {
         failure(errorData);

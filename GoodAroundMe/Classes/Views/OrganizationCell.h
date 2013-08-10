@@ -1,20 +1,16 @@
 //
-//  Category.m
+//  OrganizationCell.h
 //  GoodAroundMe
 //
 //  Created by asaf ahi-mordehai on 8/10/13.
 //  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
-#import "Category.h"
+#import <UIKit/UIKit.h>
 #import "Organization.h"
 
+@interface OrganizationCell : UITableViewCell
 
-@implementation Category
-
-@dynamic name;
-@dynamic imageURL;
-@dynamic uid;
-@dynamic organizations;
+@property (nonatomic, strong) Organization *organization;
 
 @end

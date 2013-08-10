@@ -45,8 +45,14 @@
         <relationship name="user" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="notifications" inverseEntity="User" syncable="YES"/>
     </entity>
     <entity name="Organization" representedClassName="Organization" syncable="YES">
+        <attribute name="about" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="followers_count" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="image_thumbnail_url" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="is_followed" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="posts_count" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="web_site_url" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="category" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Category" inverseName="organizations" inverseEntity="Category" syncable="YES"/>
     </entity>
     <entity name="Picture" representedClassName="Picture" syncable="YES">
@@ -95,7 +101,7 @@
         <element name="Picture" positionX="142" positionY="198" width="128" height="118"/>
         <element name="Post" positionX="-110" positionY="180" width="128" height="238"/>
         <element name="User" positionX="142" positionY="360" width="128" height="253"/>
-        <element name="Organization" positionX="-344" positionY="207" width="128" height="88"/>
-        <element name="Category" positionX="-342" positionY="36" width="128" height="103"/>
+        <element name="Organization" positionX="-344" positionY="144" width="128" height="178"/>
+        <element name="Category" positionX="-342" positionY="-0" width="128" height="103"/>
     </elements>
 </model>

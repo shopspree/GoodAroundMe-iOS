@@ -14,6 +14,7 @@
 #define USER_EMAIL @"email"
 #define USER_AUTHENTICATION @"authentication_token"
 #define USER_PASSWORD @"password"
+#define USER_BOOTSTRAP @"boostrap"
 #define PROFILE @"profile"
 #define PROFILE_EMAIL @"email"
 #define PROFILE_FULL_NAME @"full_name"
