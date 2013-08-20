@@ -17,43 +17,43 @@
 
 @implementation BaseAPI
 
-+ (void)getRequestWithURL:(NSString *)url json:(NSData *)json success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure
++ (void)getRequestWithURL:(NSString *)url json:(NSData *)json success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure
 {
     [BaseAPI serverRequestWithURL:url json:json requestType:ServerRequestGet success:^(NSDictionary *responseDictionary) {
         success(responseDictionary);
-    } failure:^(NSDictionary *errorData) {
-        failure(errorData);
+    } failure:^(NSString *message) {
+        failure(message);
     }];
 }
 
-+ (void)postRequestWithURL:(NSString *)url json:(NSData *)json success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure
++ (void)postRequestWithURL:(NSString *)url json:(NSData *)json success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure
 {
     [BaseAPI serverRequestWithURL:url json:json requestType:ServerRequestPost success:^(NSDictionary *responseDictionary) {
         success(responseDictionary);
-    } failure:^(NSDictionary *errorData) {
-        failure(errorData);
+    } failure:^(NSString *message) {
+        failure(message);
     }];
 }
 
-+ (void)putRequestWithURL:(NSString *)url json:(NSData *)json success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure
++ (void)putRequestWithURL:(NSString *)url json:(NSData *)json success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure
 {
     [BaseAPI serverRequestWithURL:url json:json requestType:ServerRequestPut success:^(NSDictionary *responseDictionary) {
         success(responseDictionary);
-    } failure:^(NSDictionary *errorData) {
-        failure(errorData);
+    } failure:^(NSString *message) {
+        failure(message);
     }];
 }
 
-+ (void)deleteRequestWithURL:(NSString *)url json:(NSData *)json success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure
++ (void)deleteRequestWithURL:(NSString *)url json:(NSData *)json success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure
 {
     [BaseAPI serverRequestWithURL:url json:json requestType:ServerRequestDelete success:^(NSDictionary *responseDictionary) {
         success(responseDictionary);
-    } failure:^(NSDictionary *errorData) {
-        failure(errorData);
+    } failure:^(NSString *message) {
+        failure(message);
     }];
 }
 
-+ (void)serverRequestWithURL:(NSString *)url json:(NSData *)json requestType:(ServerRequestType)type success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure
++ (void)serverRequestWithURL:(NSString *)url json:(NSData *)json requestType:(ServerRequestType)type success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure
 {
     NSURLRequest *request;
     switch (type) {
@@ -81,14 +81,14 @@
         if (success) {
             success(responseDictionary);
         }
-    } failure:^(NSDictionary *errorData) {
+    } failure:^(NSString *message) {
         if (failure) {
-            failure(errorData);
+            failure(message);
         }
     }];
 }
 
-+ (void)serverRequest:(NSURLRequest *)request success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure
++ (void)serverRequest:(NSURLRequest *)request success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure
 {
     AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         if ([response statusCode] == 200) {
@@ -96,18 +96,13 @@
             
             if (success) {
                 success(responseDictionary);
-            }
-            
-        } else if ([response statusCode] == 401) {
-            [BaseAPI clientError:[response statusCode]];
+            }  
         }
     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-        NSLog(@"[DEBUG] [%@] %d error!!!", [[self class] description], [response statusCode]);
+        NSLog(@"[DEBUG] [%@] %d error for %@!!!", [[self class] description], [response statusCode], request.URL.path);
         
-        [BaseAPI clientError:[response statusCode]];
-        
-        NSDictionary *errorData = (NSDictionary *)JSON;
-        failure(errorData);
+        NSString *message = [BaseAPI error:JSON withStatusCode:[response statusCode]];
+        failure(message);
     }];
     
     [operation start];
@@ -157,18 +152,24 @@
     return [NSString stringWithFormat:@"%@%@", [BaseAPI baseURL], apiURL];
 }
 
-+ (void)clientError:(NSInteger)statusCode
++ (NSString *)error:(NSDictionary *)errorData withStatusCode:(NSInteger)statusCode
 {
-    switch (statusCode) {
-        case 401:
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Unauthorized" object:self];
-            break;
-            
-        default:
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"ClientError" object:self];
-            break;
+    NSString *message = nil;
+    
+    if (statusCode == 401) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"Unauthorized" object:self];
+        
+    } else if (statusCode == 500) {
+        message = @"Oops, we have a problem and we are working to fix it";
+        
+    } else {
+        NSString *messageTopic = [[errorData[@"errors"] allKeys] lastObject];
+        NSString *messageContent = [[errorData[@"errors"] allValues] lastObject][0];
+        message = (messageTopic && messageContent) ? [NSString stringWithFormat:@"%@ %@", messageTopic, messageContent] : @"Oops, an error occured. Please try later";
+        
     }
     
+    return message;
 }
 
 

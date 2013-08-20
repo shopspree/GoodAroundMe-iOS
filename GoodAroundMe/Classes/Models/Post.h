@@ -1,20 +1,20 @@
 //
 //  Post.h
-//  TempName
+//  GoodAroundMe
 //
-//  Created by asaf ahi-mordehai on 7/30/13.
-//  Copyright (c) 2013 asaf ahi-mordehai. All rights reserved.
+//  Created by asaf ahi-mordehai on 8/15/13.
+//  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Comment, Hashtag, Like, Newsfeed, Picture, Subcategory, User, Video;
+@class Comment, Like, Newsfeed, Organization, Picture, User;
 
 @interface Post : NSManagedObject
 
+@property (nonatomic, retain) NSString * caption;
 @property (nonatomic, retain) NSNumber * comments_count;
-@property (nonatomic, retain) NSString * content;
 @property (nonatomic, retain) NSDate * created_at;
 @property (nonatomic, retain) NSNumber * liked_by_user;
 @property (nonatomic, retain) NSNumber * likes_count;
@@ -22,13 +22,11 @@
 @property (nonatomic, retain) NSString * uid;
 @property (nonatomic, retain) NSDate * updated_at;
 @property (nonatomic, retain) NSSet *comments;
-@property (nonatomic, retain) NSSet *hashtags;
 @property (nonatomic, retain) NSSet *likes;
 @property (nonatomic, retain) Newsfeed *newsfeed;
+@property (nonatomic, retain) Organization *organization;
 @property (nonatomic, retain) NSSet *pictures;
-@property (nonatomic, retain) Subcategory *subcategories;
-@property (nonatomic, retain) User *user;
-@property (nonatomic, retain) NSSet *videos;
+@property (nonatomic, retain) User *contributor;
 @end
 
 @interface Post (CoreDataGeneratedAccessors)
@@ -37,11 +35,6 @@
 - (void)removeCommentsObject:(Comment *)value;
 - (void)addComments:(NSSet *)values;
 - (void)removeComments:(NSSet *)values;
-
-- (void)addHashtagsObject:(Hashtag *)value;
-- (void)removeHashtagsObject:(Hashtag *)value;
-- (void)addHashtags:(NSSet *)values;
-- (void)removeHashtags:(NSSet *)values;
 
 - (void)addLikesObject:(Like *)value;
 - (void)removeLikesObject:(Like *)value;
@@ -52,10 +45,5 @@
 - (void)removePicturesObject:(Picture *)value;
 - (void)addPictures:(NSSet *)values;
 - (void)removePictures:(NSSet *)values;
-
-- (void)addVideosObject:(Video *)value;
-- (void)removeVideosObject:(Video *)value;
-- (void)addVideos:(NSSet *)values;
-- (void)removeVideos:(NSSet *)values;
 
 @end

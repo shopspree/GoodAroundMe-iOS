@@ -26,11 +26,7 @@
 
 + (void)synchronizeInContext:(NSManagedObjectContext *)context
                      success:(void (^)())success
-                     failure:(void (^)(NSDictionary *errorData))failure;
-+ (void)newsfeed:(NSString *)uid
-         context:(NSManagedObjectContext *)context
-         success:(void (^)())success
-         failure:(void (^)(NSDictionary *errorData))failure;
+                     failure:(void (^)(NSString *message))failure;
 
 + (Newsfeed *)newsfeedWithActivity:(NSDictionary *)activityDictionary inManagedObjectContext:(NSManagedObjectContext *)context;
 

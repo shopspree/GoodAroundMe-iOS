@@ -25,7 +25,6 @@
 #define API_SIGN_UP                     @"/users.json"
 #define API_SIGN_IN                     @"/users/sign_in.json"
 #define API_SIGN_OUT                    @"/users/sign_out.json"
-#define API_CHANGE_PASSWORD             @"/users/update_password.json"
 #define API_ACTIVITIES_URL              @"/api/v1/activities.json"
 #define API_ACTIVITY_URL                @"/api/v1/activities/%@.json"
 #define API_POST                        @"/api/v1/posts.json"
@@ -44,12 +43,14 @@
 #define API_CATEGORY_SUBCATEGORIES      @"/api/v1/categories/%@/subcategories.json"
 #define API_SUBCATEGORIES               @"/api/v1/subcategories.json"
 #define API_HASHTAGS_URL                @"/api/v1/hashtags.json"
-#define API_PROFILE                     @"/api/v1/profiles/email/%@.json"
+#define API_USER                        @"/api/v1/users/%@.json"
+#define API_USER_CHANGE_PASSWORD        @"/api/v1/users/%@/update_password.json"
 #define API_PROFILE_SEARCH              @"/api/v1/profiles/search/%@.json?page=%@"
 #define API_NOTIFICATIONS               @"/api/v1/notifications/%@.json"
 #define API_ORGANIZATION_CATEGORIES     @"/api/v1/organization_categories.json"
 #define API_ORGANIZATION_FOLLOW         @"/api/v1/organizations/%@/follow.json"
 #define API_ORGANIZATION_UNFOLLOW       @"/api/v1/organizations/%@/unfollow.json"
+#define API_ORGANIZATION_NEWSFEED       @"/api/v1/organizations/%@/activities.json"
 
 
 

@@ -12,54 +12,26 @@
 
 @implementation UserAPI
 
-+ (void)userByEmail:(NSString *)email success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure
++ (void)userByEmail:(NSString *)email success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure
 {
     NSData *json = nil;
     
-    NSURLRequest *request = [BaseAPI getRequestWithURL:[NSString stringWithFormat:API_PROFILE, email] withJSON:json];
-    
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        if ([response statusCode] == 200) {
-            NSDictionary *responseDictionary = (NSDictionary *)JSON;
-            NSLog(@"[DEBUG] response from server is %@", responseDictionary);
-            if (success) {
-                success(responseDictionary);
-            }
-            
-        }
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-        NSLog(@"[DEBUG] [%@] %d error!!!", [[self class] description], [response statusCode]);
-        
-        NSDictionary *errorData = (NSDictionary *)JSON;
-        failure(errorData);
+    [BaseAPI getRequestWithURL:[NSString stringWithFormat:API_USER, email] json:json success:^(NSDictionary *responseDictionary) {
+        success(responseDictionary);
+    } failure:^(NSString *message) {
+        failure(message);
     }];
-    
-    [operation start];
 }
 
-+ (void)updateUser:(User *)user success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure
++ (void)updateUser:(User *)user success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure
 {
     NSData *json = [user toJSON];
     
-    NSURLRequest *request = [BaseAPI putRequestWithURL:[NSString stringWithFormat:API_PROFILE, user.email] withJSON:json];
-    
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        if ([response statusCode] == 200) {
-            NSDictionary *responseDictionary = (NSDictionary *)JSON;
-            
-            if (success) {
-                success(responseDictionary);
-            }
-            
-        }
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-        NSLog(@"[DEBUG] [%@] %d error!!!", [[self class] description], [response statusCode]);
-        
-        NSDictionary *errorData = (NSDictionary *)JSON;
-        failure(errorData);
+    [BaseAPI putRequestWithURL:[NSString stringWithFormat:API_USER, user.email] json:json success:^(NSDictionary *responseDictionary) {
+        success(responseDictionary);
+    } failure:^(NSString *message) {
+        failure(message);
     }];
-    
-    [operation start];
 
 }
 
@@ -115,25 +87,15 @@
     
 }
 
-+ (void)signUp:(NSDictionary *)userDictionary success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure
++ (void)signUp:(NSDictionary *)userDictionary success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure
 {
     NSData *json = [ApplicationHelper constructJSON:userDictionary];
     
-    NSURLRequest *request = [BaseAPI postRequestWithURL:API_SIGN_UP withJSON:json];
-    
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        if ([response statusCode] == 200) {
-            NSDictionary *responseDictionary = (NSDictionary *)JSON;
-            success(responseDictionary);
-        } 
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-        NSLog(@"[DEBUG] [%@] %d error!!!", [[self class] description], [response statusCode]);
-        
-        NSDictionary *errorData = (NSDictionary *)JSON;
-        failure(errorData);
+    [BaseAPI postRequestWithURL:API_SIGN_UP json:json success:^(NSDictionary *responseDictionary) {
+        success(responseDictionary);
+    } failure:^(NSString *message) {
+        failure(message);
     }];
-    
-    [operation start];
 }
 
 + (void)signIn:(NSDictionary *)userDictionary success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure
@@ -157,54 +119,25 @@
     [operation start];
 }
 
-+ (void)signOut:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure
++ (void)signOut:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure
 {
     NSData *json = nil;
-    
-    NSURLRequest *request = [BaseAPI putRequestWithURL:API_SIGN_OUT withJSON:json];
-    
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        if ([response statusCode] == 200) {
-            NSDictionary *responseDictionary = (NSDictionary *)JSON;
-            
-            if (success) {
-                success(responseDictionary);
-            }
-            
-        }
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-        NSLog(@"[DEBUG] [%@] %d error!!!", [[self class] description], [response statusCode]);
-        
-        NSDictionary *errorData = (NSDictionary *)JSON;
-        failure(errorData);
+    [BaseAPI putRequestWithURL:API_SIGN_OUT json:json success:^(NSDictionary *responseDictionary) {
+        success(responseDictionary);
+    } failure:^(NSString *message) {
+        failure(message);
     }];
-    
-    [operation start];
 }
 
-+ (void)changePassword:(NSDictionary *)requestDictionary success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure
++ (void)changePassword:(NSDictionary *)requestDictionary forEmail:(NSString *)email success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure
 {
     NSData *json = [ApplicationHelper constructJSON:requestDictionary];
     
-    NSURLRequest *request = [BaseAPI putRequestWithURL:API_CHANGE_PASSWORD withJSON:json];
-    
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        if ([response statusCode] == 200) {
-            NSDictionary *responseDictionary = (NSDictionary *)JSON;
-            
-            if (success) {
-                success(responseDictionary);
-            }
-            
-        }
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-        NSLog(@"[DEBUG] [%@] %d error!!!", [[self class] description], [response statusCode]);
-        
-        NSDictionary *errorData = (NSDictionary *)JSON;
-        failure(errorData);
+    [BaseAPI putRequestWithURL:[NSString stringWithFormat:API_USER_CHANGE_PASSWORD, email] json:json success:^(NSDictionary *responseDictionary) {
+        success(requestDictionary);
+    } failure:^(NSString *message) {
+        failure(message);
     }];
-    
-    [operation start];
 }
 
 + (void)search:(NSString *)keyword page:(NSInteger)page success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure
@@ -231,6 +164,15 @@
         
         [operation start];
     }
+}
+
++ (void)followedOrganizationsByUserEmail:(NSString *)email success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure
+{
+    [BaseAPI getRequestWithURL:API_ORGANIZATION_CATEGORIES json:nil success:^(NSDictionary *responseDictionary) {
+        success(responseDictionary);
+    } failure:^(NSString *message) {
+        failure(message);
+    }];
 }
 
 

@@ -7,8 +7,13 @@
 //
 
 #import "MenuViewController.h"
-#import "MenuItemCell.h"
-#import "NotificationItemCell.h"
+#import "MenuCell.h"
+#import "StoryboardConstants.h"
+#import "UserProfileViewController.h"
+#import "User+Create.h"
+
+#define NAME @"setting name"
+#define SEGUE_IDENTIFIER @"identifier"
 
 @interface MenuViewController ()
 
@@ -16,56 +21,70 @@
 
 @implementation MenuViewController
 
-- (void)viewWillAppear:(BOOL)animated
+-(NSArray *)menuItems
 {
-    [super viewWillAppear:animated];
-    self.navigationController.navigationBarHidden = YES;
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    self.navigationController.navigationBarHidden = NO;
-}
-
-- (NSArray *)menuItems
-{
-    return @[@"My feed", @"My profile", @"Notifications", @"Discover",
-             @"Coworkers", @"Feedback",@"Groups", @"Help"];
-}
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-{
-    return [self.menuItems count];
-}
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    MenuItemCell *cell = nil;
-    
-    NSString *item = [self.menuItems objectAtIndex:indexPath.item];
-    if ([item isEqualToString:@"Notifications"]) {
-        NSString *cellIdentifier = @"NotificationItemCell";
-        NotificationItemCell *notificationCell = [self.collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
-        notificationCell.notificationCount = 22; // TO DO: connect with notification API for user
-        cell = notificationCell;
-        
-    } else {
-        NSString *cellIdentifier = @"MenuItemCell";
-        cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
+    if (! _menuItems) {
+        _menuItems = [NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"Feed", NAME,
+                                                NEWSFEED, SEGUE_IDENTIFIER, nil],
+                      [NSDictionary dictionaryWithObjectsAndKeys:@"Explore", NAME,
+                       EXPLORE, SEGUE_IDENTIFIER, nil],
+                      [NSDictionary dictionaryWithObjectsAndKeys:@"Profile", NAME,
+                       USER_PROFILE, SEGUE_IDENTIFIER, nil],
+                      [NSDictionary dictionaryWithObjectsAndKeys:@"About us", NAME,
+                       ABOUT_US, SEGUE_IDENTIFIER, nil],
+                      [NSDictionary dictionaryWithObjectsAndKeys:@"Send feedback", NAME,
+                       FEEDBACK, SEGUE_IDENTIFIER, nil], nil];
     }
     
-    cell.itemName.text = item;
+    return _menuItems;
+}
+
+- (IBAction)menuButtonAction:(id)sender
+{
+    [self dismissViewControllerAnimated:YES completion:^{
+        return;
+    }];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:USER_PROFILE]) {
+        UserProfileViewController *userProfileVC = (UserProfileViewController *)segue.destinationViewController;
+        
+        NSString *email = [[NSUserDefaults standardUserDefaults] objectForKey:USER_EMAIL];
+        userProfileVC.email = email;
+    }
+}
+
+#pragma mark - UITableViewDataSource
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    NSInteger numberOfRowsInSection = [self.menuItems count];
+    return numberOfRowsInSection;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"MenuCell";
+    MenuCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    
+    NSDictionary *settingDictionary = [self.menuItems objectAtIndex:indexPath.row];
+    NSString *settingName = [settingDictionary objectForKey:NAME];
+    cell.settingLabel.text = settingName;
     
     return cell;
 }
 
-- (IBAction)menuItemTapped:(UITapGestureRecognizer *)gesture
+
+#pragma mark - UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CGPoint tapLocation = [gesture locationInView:self.collectionView];
-    NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:tapLocation];
-    if (indexPath) {
-        NSString *identifier = [self.menuItems objectAtIndex:indexPath.item];
+    NSDictionary *settingDictionary = [self.menuItems objectAtIndex:indexPath.row];
+    NSString *identifier = [settingDictionary objectForKey:SEGUE_IDENTIFIER];
+    
+    if (identifier) {
         [self performSegueWithIdentifier:identifier sender:self];
     }
 }

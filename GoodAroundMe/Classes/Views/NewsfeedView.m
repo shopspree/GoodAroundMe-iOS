@@ -10,9 +10,9 @@
 
 @implementation NewsfeedView
 
-- (void)populateViewWithNewsfeed:(Newsfeed *)newsfeed
+- (void) initWithNewsfeed:(Newsfeed *)newsfeed
 {
-    // abstract method
+    // absrtact method
 }
 
 @end

@@ -11,7 +11,9 @@
 #import "User+Create.h"
 
 @interface SignUpViewController ()
-@property (weak, nonatomic) IBOutlet UILabel *errorLabel;
+@property (weak, nonatomic) IBOutlet UIButton *signUpbutton;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+
 @end
 
 @implementation SignUpViewController
@@ -28,12 +30,19 @@
         signUpTableController.emailTextField.delegate = self;
         signUpTableController.passwordTextField.delegate = self;
     }
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
     
-    self.errorLabel.hidden = YES;
+    self.activityIndicator.hidden = YES;
 }
 
 - (IBAction)signUpButtonAction:(id)sender
 {
+    self.activityIndicator.hidden = NO;
+    [self.activityIndicator startAnimating];
     [self signUp];
 }
 
@@ -84,15 +93,13 @@
             ([self validateName:lastName]) &&
             ([self validateEmail:email]) &&
             ([self validatePassword:password])) {
-            NSDictionary *userDictionary = [NSDictionary dictionaryWithObjectsAndKeys:[NSDictionary dictionaryWithObjectsAndKeys:email, USER_EMAIL,
-                                            password, USER_PASSWORD, nil], @"user", nil];
+            NSDictionary *userDictionary = [NSDictionary dictionaryWithObjectsAndKeys:[NSDictionary dictionaryWithObjectsAndKeys:email, USER_EMAIL, password, USER_PASSWORD, firstName, USER_FIRST_NAME, lastName, USER_LAST_NAME, nil], USER, nil];
             
-            [User signUp:userDictionary success:^{
-                [self authenticatedFirstTime:YES];
-            } failure:^(NSDictionary *errorData) {
-                NSString *messageTopic = [[errorData[@"errors"] allKeys] lastObject];
-                NSString *messageContent = [[errorData[@"errors"] allValues] lastObject][0];
-                NSString *message = [NSString stringWithFormat:@"%@ %@", messageTopic, messageContent];
+            [User signUp:userDictionary success:^(User *user){
+                [self.activityIndicator stopAnimating];
+                [self navigateStoryboardWithIdentifier:EXPLORE];
+            } failure:^(NSString *message) {
+                [self.activityIndicator stopAnimating];
                 [self fail:@"Sign up" withMessage:message];
             }];
         }

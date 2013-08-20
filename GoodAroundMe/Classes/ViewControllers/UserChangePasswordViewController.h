@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UserEditViewController.h"
 
-@interface UserChangePasswordViewController : UITableViewController
+@interface UserChangePasswordViewController : UserEditViewController
 
 @end

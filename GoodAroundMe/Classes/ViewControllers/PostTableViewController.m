@@ -12,6 +12,7 @@
 #import "Newsfeed.h"
 #import "Comment.h"
 #import "User.h"
+#import "UserProfileViewController.h"
 
 @interface PostTableViewController ()
 @property (nonatomic, strong) NSIndexPath *selectedIndexPath;
@@ -26,7 +27,7 @@
     if (!post.newsfeed) {
         [post newsfeedForPost:^(Newsfeed *newsfeed) {
             [self setup];
-        } failure:^(NSDictionary *errorData) {
+        } failure:^(NSString *message) {
             // TO DO
         }];
     } else {
@@ -39,8 +40,8 @@
 {
     [self.post comments:^(NSArray *comments) {
         [self setupFetchedResultsController];
-    } failure:^(NSDictionary *errorData) {
-        // TO DO
+    } failure:^(NSString *message) {
+        [self fail:@"Good Around Me" withMessage:message];
     }];
 }
 
@@ -68,7 +69,19 @@
     if (indexPath) {
         Comment *comment = [self commentForIndexPath:indexPath];
         NSLog(@"User tapped is %@", comment.user.email);
-        [self.masterController performSegueWithIdentifier:@"UserProfile" sender:comment];
+        [self performSegueWithIdentifier:@"UserProfile" sender:comment];
+    }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:USER_PROFILE]) {
+        if ([segue.destinationViewController isKindOfClass:[UserProfileViewController class]] && [sender isKindOfClass:[Comment class]]) {
+            UserProfileViewController *userProfileVC = (UserProfileViewController *)segue.destinationViewController;
+            Comment *comment = (Comment *)sender;
+            
+            userProfileVC.user = comment.user;
+        }
     }
 }
 
@@ -134,11 +147,11 @@
             CGSize constraint = CGSizeMake(232.0f, 1000.0f);
             // size of name label
             NSString *username = [NSString stringWithFormat:@"%@ %@", comment.user.firstname, comment.user.lastname];
-            CGSize usernameSize = [username sizeWithFont:[UIFont systemFontOfSize:14.0f]
+            CGSize usernameSize = [username sizeWithFont:[UIFont fontWithName:@"Gill Sans Light" size:14.0f]
                                        constrainedToSize:constraint lineBreakMode:NSLineBreakByWordWrapping];
             // size of content label
             NSString *content = comment.content;
-            CGSize contentSize = [content sizeWithFont:[UIFont systemFontOfSize:14.0f]
+            CGSize contentSize = [content sizeWithFont:[UIFont fontWithName:@"Gill Sans Light" size:14.0f]
                                      constrainedToSize:constraint lineBreakMode:NSLineBreakByWordWrapping];
             
             // ---
@@ -185,8 +198,8 @@
                 NSLog(@"[DEBUG] deleted comment is %@", [selectedComment description]);
                 [self.post deleteComment:selectedComment success:^{
                     [self.tableView reloadData];
-                } failure:^(NSDictionary *errorData) {
-                    // TODO: notify if delete fails
+                } failure:^(NSString *message) {
+                    [self fail:@"Deletec comment failed" withMessage:message];
                 }];
             }
             break;

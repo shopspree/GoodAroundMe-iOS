@@ -76,8 +76,9 @@
             NSDictionary *userDictionary = [NSDictionary dictionaryWithObjectsAndKeys:[NSDictionary dictionaryWithObjectsAndKeys:email, USER_EMAIL,
                                             password, USER_PASSWORD, nil], USER_LOGIN, nil];
             
-            [User signIn:userDictionary success:^{
-                [self authenticatedFirstTime:YES]; // TO DO !!!!!!!
+            [User signIn:userDictionary success:^(User *user) {
+                NSString *identifier =  ([user.following count] < 1) ? EXPLORE : NEWSFEED;
+                [self navigateStoryboardWithIdentifier:identifier];
             } failure:^(NSDictionary *errorData) {
                 [self fail:@"Login" withMessage:errorData[@"errors"]];
             }];

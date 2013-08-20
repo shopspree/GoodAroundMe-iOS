@@ -16,6 +16,7 @@
 #define ORGANIZATION_IMAGE_THUMBNAIL_URL @"image_thumbnail_url"
 #define ORGANIZATION_WEBSITE_URL @"website_url"
 #define ORGANIZATION_ABOUT @"about"
+#define ORGANIZATION_LOCATION @"location"
 #define ORGANIZATION_IS_FOLLOWED @"is_followed"
 
 
@@ -23,8 +24,7 @@
 
 + (Organization *)organizationWithDictionary:(NSDictionary *)organizationDictionary inManagedObjectContext:(NSManagedObjectContext *)context;
 
-- (void)follow:(void (^)(NSDictionary *reponseDictionary))success failure:(void (^)(NSDictionary *errorData))failure;
-- (void)unfollow:(void (^)(NSDictionary *reponseDictionary))success failure:(void (^)(NSDictionary *errorData))failure;
-- (void)setWithDictionary:(NSDictionary *)organizationDictionary;
+- (void)newsfeedForOrganization:(void (^)())success
+                        failure:(void (^)(NSString *message))failure;
 
 @end

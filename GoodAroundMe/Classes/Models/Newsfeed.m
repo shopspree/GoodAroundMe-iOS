@@ -1,16 +1,15 @@
 //
 //  Newsfeed.m
-//  TempName
+//  GoodAroundMe
 //
-//  Created by asaf ahi-mordehai on 7/30/13.
-//  Copyright (c) 2013 asaf ahi-mordehai. All rights reserved.
+//  Created by asaf ahi-mordehai on 8/15/13.
+//  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
 #import "Newsfeed.h"
 #import "Comment.h"
 #import "Like.h"
 #import "Post.h"
-#import "User.h"
 
 
 @implementation Newsfeed
@@ -23,6 +22,5 @@
 @dynamic comment;
 @dynamic like;
 @dynamic post;
-@dynamic user;
 
 @end

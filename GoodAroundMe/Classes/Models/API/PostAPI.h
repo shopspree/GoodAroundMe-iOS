@@ -12,43 +12,21 @@
 @interface PostAPI : BaseAPI
 
 // posts
-+ (void)post:(NSString *)postID
-     success:(void (^)(NSDictionary *responseDictionary))success
-     failure:(void (^)(NSDictionary *errorData))failure;
-+ (void)newPost:(NSDictionary *)postDictionary
-        success:(void (^)(NSDictionary *responseDictionary))success
-        failure:(void (^)(NSDictionary *errorData))failure;
-+ (void)deletePost:(Post *)post
-           success:(void (^)())success
-           failure:(void (^)(NSDictionary *errorData))failure;
-+ (void)popular:(void (^)(NSDictionary *responseDictionary))success
-        failure:(void (^)(NSDictionary *errorData))failure;
++ (void)post:(NSString *)postID success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure;
++ (void)newPost:(NSDictionary *)postDictionary success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure;
++ (void)deletePost:(Post *)post success:(void (^)())success failure:(void (^)(NSString *message))failure;
 
 // likes
-+ (void)likesOnPost:(Post *)post
-            success:(void (^)(NSDictionary *responseDictionary))success
-            failure:(void (^)(NSDictionary *errorData))failure;
-+ (void)likePost:(Post *)post
-         success:(void (^)(NSDictionary *responseDictionary))success
-         failure:(void (^)(NSDictionary *errorData))failure;
-+ (void)unlike:(Like *)like post:(Post *)post
-       success:(void (^)(NSDictionary *responseDictionary))success
-       failure:(void (^)(NSDictionary *errorData))failure;
++ (void)likesOnPost:(Post *)post success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure;
++ (void)likePost:(Post *)post success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure;
++ (void)unlike:(Like *)like post:(Post *)post success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure;
 
 // comments
-+ (void)commentsOnPost:(Post *)post
-               success:(void (^)(NSDictionary *responseDictionary))success
-               failure:(void (^)(NSDictionary *errorData))failure;
-+ (void)comment:(NSString *)content onPost:(Post *)post
-        success:(void (^)(NSDictionary *responseDictionary))success
-        failure:(void (^)(NSDictionary *errorData))failure;
-+ (void)deleteComment:(Comment *)comment onPost:(Post *)post
-              success:(void (^)(NSDictionary *responseDictionary))success
-              failure:(void (^)(NSDictionary *errorData))failure;
++ (void)commentsOnPost:(Post *)post success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure;
++ (void)comment:(NSString *)content onPost:(Post *)post success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure;
++ (void)deleteComment:(Comment *)comment onPost:(Post *)post success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure;
 
 // inappropriate reports
-+ (void)inappropriatePost:(Post *)post
-                  success:(void (^)())success
-                  failure:(void (^)(NSDictionary *errorData))failure;
++ (void)inappropriatePost:(Post *)post success:(void (^)())success failure:(void (^)(NSString *message))failure;
 
 @end

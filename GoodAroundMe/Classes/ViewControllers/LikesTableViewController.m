@@ -6,15 +6,17 @@
 //  Copyright (c) 2013 asaf ahi-mordehai. All rights reserved.
 //
 
+#import <SDWebImage/UIImageView+WebCache.h>
 #import "LikesTableViewController.h"
-#import "UserCell.h"
+#import "LikeCell.h"
 #import "CoreDataFactory.h"
 #import "Like.h"
+#import "User.h"
 
 #define ROW_HEIGHT 60.0
 
 @interface LikesTableViewController ()
-@property (nonatomic, strong) Like *selectedLike;
+
 @end
 
 @implementation LikesTableViewController
@@ -27,8 +29,8 @@
             [self setupFetchedResultsController];
             [self.tableView reloadData];
             self.title = [NSString stringWithFormat:@"%@ Likes", post.likes_count];
-        } failure:^(NSDictionary *errorData) {
-            // TO DO
+        } failure:^(NSString *message) {
+            [self fail:@"Retrieving likes list failed" withMessage:message];
         }];
     }
 }
@@ -64,8 +66,9 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"UserProfile"]) {
-        User *user = self.selectedLike.user;
+    if ([segue.identifier isEqualToString:USER_PROFILE]) {
+        Like *like = [self.fetchedResultsController objectAtIndexPath:(NSIndexPath *)sender];
+        User *user = like.user;
         if (user) {
             if ([segue.destinationViewController respondsToSelector:@selector(setEmail:)]) {
                 [segue.destinationViewController performSelector:@selector(setEmail:) withObject:user.email];
@@ -78,10 +81,10 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UserCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserCell" forIndexPath:indexPath];
+    LikeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"LikeCell" forIndexPath:indexPath];
  
     Like *like = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.user = like.user;
+    cell.like = like;
     
     return cell;
 }
@@ -93,8 +96,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    self.selectedLike = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    [self performSegueWithIdentifier:@"UserProfile" sender:self];
+    [self performSegueWithIdentifier:@"UserProfile" sender:indexPath];
 }
 
 

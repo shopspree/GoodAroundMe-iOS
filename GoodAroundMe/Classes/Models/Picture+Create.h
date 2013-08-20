@@ -17,7 +17,6 @@
 
 + (Picture *)pictureWithDictionary:(NSDictionary *)pictureDictionary post:(Post *)post;
 
-- (void)setWithDictionary:(NSDictionary *)pictureDictionary post:(Post *)post;
-- (NSString *)description;
+- (void)setWithDictionary:(NSDictionary *)pictureDictionary;
 
 @end

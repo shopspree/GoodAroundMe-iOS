@@ -39,8 +39,8 @@
     if (self.post) {
         [self.post inappropriate:^{
             [self done];
-        } failure:^(NSDictionary *errorData) {
-            // TO DO: notify user something went wrong
+        } failure:^(NSString *message) {
+            //[self fail]
         }];
     }
 }

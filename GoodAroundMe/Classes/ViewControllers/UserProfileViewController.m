@@ -1,26 +1,31 @@
 //
 //  UserProfileViewController.m
-//  TempName
+//  GoodAroundMe
 //
-//  Created by asaf ahi-mordehai on 7/7/13.
-//  Copyright (c) 2013 asaf ahi-mordehai. All rights reserved.
+//  Created by asaf ahi-mordehai on 8/14/13.
+//  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
-#import <SDWebImage/UIImageView+WebCache.h>
 #import "UserProfileViewController.h"
-#import "Group+Create.h"
 #import "CoreDataFactory.h"
+#import "UserCell.h"
+#import "OrganizationCell.h"
+#import "User+Create.h"
+#import "UserSettingsViewController.h"
+#import "Organization+Create.h"
 
-@interface UserProfileViewController () <UITextFieldDelegate>
+#define USER_SECTION_INDEX 0
+#define ORGANIZATION_SECTION_INDEX 1
+
+#define SECTION_NAME_USER @""
+#define SECTION_NAME_FOLLOWING @"Followed organizations"
+
+@interface UserProfileViewController ()
+
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
-@property (nonatomic, strong) User *user;
-
-@property (weak, nonatomic) IBOutlet UIImageView *userImage;
-@property (weak, nonatomic) IBOutlet UITextField *titleTextField;
-@property (weak, nonatomic) IBOutlet UITextField *teamTextField;
-@property (weak, nonatomic) IBOutlet UILabel *usernameLabel;
-@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *tap;
-
+@property (nonatomic, strong) NSArray *sections;
+@property (nonatomic, strong) NSArray *following;
+@property (weak, nonatomic) IBOutlet UIButton *settingsButton;
 
 @end
 
@@ -29,162 +34,227 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
     
-    // register for keyboard notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillShow:)
-                                                 name:UIKeyboardWillShowNotification
-                                               object:self.view.window];
+    User *currentUser = [User currentUser:self.user.managedObjectContext];
+    if (self.user != currentUser) {
+        self.settingsButton.hidden = YES;
+    }
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillHide:)
-                                                 name:UIKeyboardWillHideNotification
-                                               object:self.view.window];
-    
-    self.titleTextField.returnKeyType = UIReturnKeyDone;
-    self.titleTextField.delegate = self;
-    
-    self.teamTextField.returnKeyType = UIReturnKeyDone;
-    self.teamTextField.delegate = self;
-    
+    [self.tableView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
-    if (! self.managedObjectContext) {
-        [[CoreDataFactory getInstance] context:^(NSManagedObjectContext *managedObjectContext) {
-            self.managedObjectContext = managedObjectContext;
-            [self retrieveUser];
-        } get:^(NSManagedObjectContext *managedObjectContext) {
-            self.managedObjectContext = managedObjectContext;
-            [self retrieveUser];
-        }];
-    } else {
-        [self retrieveUser];
-    }
+    [self refresh];
 }
 
-- (void)viewDidDisappear:(BOOL)animated
+- (void)setEmail:(NSString *)email
 {
-    [super viewDidDisappear:animated];
+    _email = email;
     
-    
+    [self refresh];
 }
 
-- (void)setUser:(User *)user
+- (NSManagedObjectContext *)managedObjectContext
 {
-    _user = user;
-    if (user) {
-        self.usernameLabel.text = [NSString stringWithFormat:@"%@ %@", user.firstname, user.lastname];
-        [self.userImage setImageWithURL:[NSURL URLWithString:user.thumbnailURL] placeholderImage:[UIImage imageNamed:@"Default.png"]];
-        if (! [user.jobTitle isEqualToString:@"<null>"]) {
-            self.titleTextField.text = user.jobTitle;
-        }
-        self.teamTextField.text = user.group.name;
+    if (! _managedObjectContext) {
+        _managedObjectContext = [CoreDataFactory getInstance].managedObjectContext;
+        
     }
+    
+    return _managedObjectContext;
 }
 
-- (void)retrieveUser
+- (NSArray *)sections
 {
-    if (self.managedObjectContext && self.email) {
-        [User fullUserProfileByEmail:self.email managedObjectContext:self.managedObjectContext success:^(User *user) {
+    if (!_sections) {
+        _sections = [NSArray arrayWithObjects:SECTION_NAME_USER, SECTION_NAME_FOLLOWING, nil];
+    }
+    
+    return _sections;
+}
+
+- (NSArray *)following
+{
+    if (! _following) {
+        _following = [NSArray array];
+    }
+    
+    return _following;
+}
+
+- (void)refresh
+{
+    if (self.email) {
+        [User userByEmail:self.email inManagedObjectContext:self.managedObjectContext success:^(User *user) {
             self.user = user;
-        } failure:^(NSDictionary *errorData) {
-            // TO DO
+            
+            if (self.user) {
+                NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Organization"];
+                request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"uid" ascending:YES selector:@selector(localizedCaseInsensitiveCompare:)]];
+                request.predicate = [NSPredicate predicateWithFormat:@"%@ in followers", self.user];
+                
+                // Execute the fetch
+                NSError *error = nil;
+                NSArray *matches = [self.managedObjectContext executeFetchRequest:request error:&error];
+                
+                // Check what happened in the fetch
+                NSLog(@"matches count = %d", [matches count]);
+                
+                self.following = matches;
+            }
+            
+            [self.tableView reloadData];
+        } failure:^(NSString *message) {
+            [self fail:@"User Profile" withMessage:message];
         }];
     }
+    
+    [self.tableView reloadData];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"UserSettings"]) {
-        
+    if ([segue.identifier isEqualToString:USER_SETTINGS]) {
+        if ([segue.destinationViewController isKindOfClass:[UserSettingsViewController class]]) {
+            UserSettingsViewController *userSettingsVC = (UserSettingsViewController *)segue.destinationViewController;
+            userSettingsVC.user = self.user;
+        }
     }
 }
 
-#pragma mark - storyboard
 
-- (IBAction)followButtonClicked:(id)sender
+#pragma mark - Storyboard
+
+- (IBAction)settingsButtonAction:(id)sender
 {
+    [self performSegueWithIdentifier:USER_SETTINGS sender:self];
 }
 
-- (IBAction)contactButtonClicked:(id)sender
+- (IBAction)followMoreOrganizationButton:(id)sender
 {
+    [self performSegueWithIdentifier:EXPLORE sender:self];
 }
 
-- (IBAction)moreButtonClicked:(id)sender
+- (IBAction)followButton:(id)sender
 {
-    // TO DO
+    CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
+    if (indexPath != nil)
+    {
+        Organization *organization = [self.following objectAtIndex:indexPath.row];
+        ([organization.is_followed boolValue]) ? [self unfollow:organization] : [self follow:organization];
+    }
 }
 
-- (IBAction)settingButtonClicked:(id)sender
+- (void)follow:(Organization *)organization
 {
-    [self performSegueWithIdentifier:@"UserSettings" sender:sender];
-}
-
-- (IBAction)menuButtonClicked:(id)sender
-{
-    [self performSegueWithIdentifier:@"Menu" sender:self];
-}
-
-#pragma mark - Keyboard
-
-- (void)keyboardWillShow:(UITextView *)textView
-{
-    [self.view addGestureRecognizer:self.tap]; // add tap gesture to tap away from the keyboard
-    
-    [self animateTextField:textView up:YES];
-}
-
-
-- (void)keyboardWillHide:(UITextView *)textView
-{
-    [self.view removeGestureRecognizer:self.tap]; // remove tap gesture
-    
-    [self animateTextField:textView up:NO];
-}
-
-- (void) animateTextField:(UITextView *)textView up:(BOOL)up
-{
-    const int movementDistance = 216.0; // tweak as needed
-    const float movementDuration = 0.3f; // tweak as needed
-    
-    int movement = (up ? -movementDistance : movementDistance);
-    
-    [UIView animateWithDuration:movementDuration animations:^{
-        self.view.frame = CGRectMake(self.view.frame.origin.x,
-                                     self.view.frame.origin.y + movement,
-                                     self.view.frame.size.width,
-                                     self.view.frame.size.height);
+    [self.user
+     follow:organization success:^() {
+         [self refresh];
+    } failure:^(NSString *message) {
+        [self fail:@"Follow" withMessage:message];
     }];
 }
 
-- (IBAction)dismissKeyboard:(id)sender
+- (void)unfollow:(Organization *)organization
 {
-    [self.view endEditing:YES];
+    [self.user
+     unfollow:organization success:^() {
+        [self refresh];
+    } failure:^(NSString *message) {
+        [self fail:@"Follow" withMessage:message];
+    }];
+    
 }
 
-#pragma mark - UITextFieldDelegate
+#pragma mark - Table view data source
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return [self.sections count];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    NSInteger numberOfRowsInSection = 0;
+    switch (section) {
+        case USER_SECTION_INDEX:
+            numberOfRowsInSection = 1;
+            break;
+
+        case ORGANIZATION_SECTION_INDEX:
+            numberOfRowsInSection = [self.following count] + 1;
+            break;
+
+        default:
+            break;
+    };
+    return numberOfRowsInSection;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *UserCellIdentifier = @"UserCell";
+    static NSString *OrganizationCellIdentifier = @"OrganizationCell";
+    static NSString *AddOrganizationCellIdentifier = @"AddOrganizationCell";
     
-	[textField resignFirstResponder];
+    UITableViewCell *cell;
+    if (indexPath.section == USER_SECTION_INDEX) {
+        cell = [tableView dequeueReusableCellWithIdentifier:UserCellIdentifier forIndexPath:indexPath];
+        UserCell *userCell = (UserCell *)cell;
+        userCell.user = self.user;
+        
+    } else if (indexPath.section == ORGANIZATION_SECTION_INDEX) {
+        NSInteger lastRow = [self.following count];
+        if (indexPath.row < lastRow)  {
+            cell = [tableView dequeueReusableCellWithIdentifier:OrganizationCellIdentifier forIndexPath:indexPath];
+            OrganizationCell *organizationCell = (OrganizationCell *)cell;
+            Organization *organization = [self.following objectAtIndex:indexPath.row];
+            organizationCell.organization = organization;
+        } else {
+            cell = [tableView dequeueReusableCellWithIdentifier:AddOrganizationCellIdentifier forIndexPath:indexPath];
+        }
+    } 
     
-    NSDictionary *jobProfileDictionary = [NSDictionary dictionaryWithObjectsAndKeys:self.titleTextField.text, JOB_PROFILE_TITLE, nil];
-    NSDictionary *groupDictionary = [NSDictionary dictionaryWithObjectsAndKeys:self.teamTextField.text, GROUP_NAME, nil];
-    NSDictionary *userDictionary = [NSDictionary dictionaryWithObjectsAndKeys:jobProfileDictionary, JOB_PROFILE,
-                                    groupDictionary, GROUP, nil];
-    [self.user saveUser:userDictionary success:^(User *user) {
+    return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CGFloat height = self.tableView.rowHeight;
+    
+    if (indexPath.section == USER_SECTION_INDEX) {
+        height = 223.0f;
+        
+    } else if (indexPath.section == ORGANIZATION_SECTION_INDEX) {
+        height = 60.0f;
+        
+    } 
+    
+    return height;
+}
+
+#pragma mark - Table view delegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == USER_SECTION_INDEX) {
+        // do nothing
         return;
-    } failure:^(NSDictionary *errorData) {
-        // TO DO
-    }];
-    
-	return YES;
-    
+    } else if (indexPath.section == ORGANIZATION_SECTION_INDEX) {
+        NSInteger lastRow = [self.following count] - 1;
+        if (indexPath.row == lastRow)  {
+            [self performSegueWithIdentifier:EXPLORE sender:self];
+        }
+    } 
 }
 
 

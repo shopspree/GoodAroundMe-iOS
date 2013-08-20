@@ -2,7 +2,7 @@
 //  Category.h
 //  GoodAroundMe
 //
-//  Created by asaf ahi-mordehai on 8/10/13.
+//  Created by asaf ahi-mordehai on 8/15/13.
 //  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
@@ -13,8 +13,8 @@
 
 @interface Category : NSManagedObject
 
-@property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * imageURL;
+@property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * uid;
 @property (nonatomic, retain) NSSet *organizations;
 @end

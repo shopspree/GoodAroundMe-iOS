@@ -12,6 +12,8 @@
 
 @interface CoreDataFactory : NSObject
 
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+
 + (CoreDataFactory *)getInstance;
 
 - (void)context:(void (^)(NSManagedObjectContext *managedObjectContext))create get:(void (^)(NSManagedObjectContext *managedObjectContext))get;

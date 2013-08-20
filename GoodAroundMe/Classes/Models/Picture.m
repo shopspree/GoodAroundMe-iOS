@@ -1,9 +1,9 @@
 //
 //  Picture.m
-//  TempName
+//  GoodAroundMe
 //
-//  Created by asaf ahi-mordehai on 7/30/13.
-//  Copyright (c) 2013 asaf ahi-mordehai. All rights reserved.
+//  Created by asaf ahi-mordehai on 8/15/13.
+//  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
 #import "Picture.h"

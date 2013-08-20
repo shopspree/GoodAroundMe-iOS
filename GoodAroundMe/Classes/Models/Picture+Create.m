@@ -38,32 +38,20 @@
                 picture = [matches lastObject];
             }
             
-            [picture setWithDictionary:pictureDictionary post:post];
+            [picture setWithDictionary:pictureDictionary];
         }
     }
     
     return picture;
 }
 
-- (void)setWithDictionary:(NSDictionary *)pictureDictionary post:(Post *)post
+- (void)setWithDictionary:(NSDictionary *)pictureDictionary
 {
     
     self.uid = [pictureDictionary[PICTURE_ID] description];
     self.url = [pictureDictionary[PICTURE_URL] description];
     self.created_at = [ApplicationHelper dateFromString:[pictureDictionary[PICTURE_CREATED_AT] description]];
     self.updated_at = [ApplicationHelper dateFromString:[pictureDictionary[PICTURE_UPDATED_AT] description]];
-    self.post = post;
-}
-
-- (NSString *)description
-{
-    NSString *desc = [NSString stringWithFormat:@"uid=%@, url=%@, created_at=%@, updated_at=%@",
-                      [self.uid description],
-                      [self.url description],
-                      [self.created_at description],
-                      [self.updated_at description]];
-    
-    return desc;
 }
 
 @end

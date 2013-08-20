@@ -7,12 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ApplicationHelper.h"
-#import "NewsfeedView.h"
 #import "Newsfeed.h"
 
 @interface NewsfeedView : UIView
 
-- (void)populateViewWithNewsfeed:(Newsfeed *)newsfeed;
+- (void) initWithNewsfeed:(Newsfeed *)newsfeed;
 
 @end

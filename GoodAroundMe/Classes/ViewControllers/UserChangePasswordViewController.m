@@ -13,8 +13,11 @@
 #define NEW_PASSWORD_TAG        2
 #define CONFIRM_PASSWORD_TAG    3
 
-@interface UserChangePasswordViewController () <UITextFieldDelegate>
-@property (weak, nonatomic) IBOutletCollection(UITextField) NSArray *textFieldCollection;
+@interface UserChangePasswordViewController () 
+@property (weak, nonatomic) IBOutlet UITextField *currentPasswordTextField;
+@property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
+@property (weak, nonatomic) IBOutlet UITextField *confirmedPasswordTextField;
+
 @end
 
 @implementation UserChangePasswordViewController
@@ -32,101 +35,49 @@
 {
     [super viewDidLoad];
     
-    // register for keyboard notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillShow:)
-                                                 name:UIKeyboardWillShowNotification
-                                               object:self.view.window];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillHide:)
-                                                 name:UIKeyboardWillHideNotification
-                                               object:self.view.window];
+    self.currentPasswordTextField.tag = CURRENT_PASSWORD_TAG;
+    self.passwordTextField.tag = NEW_PASSWORD_TAG;
+    self.confirmedPasswordTextField.tag = CONFIRM_PASSWORD_TAG;
 }
 
-- (void)didReceiveMemoryWarning
+- (void)doUserEditAction
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    [self changePassword];
 }
 
-#pragma mark - Keyboard
-
-- (void)keyboardWillShow:(UITextView *)textView
+- (void)changePassword
 {
-    [self animateTextField:textView up:YES];
-}
-
-
-- (void)keyboardWillHide:(UITextView *)textView
-{
-    [self animateTextField:textView up:NO];
-}
-
-- (void) animateTextField:(UITextView *)textView up:(BOOL)up
-{
-    const int movementDistance = 216.0; // tweak as needed
-    const float movementDuration = 0.3f; // tweak as needed
-    
-    int movement = (up ? -movementDistance : movementDistance);
-    
-    [UIView animateWithDuration:movementDuration animations:^{
-        self.tableView.frame = CGRectMake(self.tableView.frame.origin.x,
-                                          self.tableView.frame.origin.y,
-                                          self.tableView.frame.size.width,
-                                          self.tableView.frame.size.height + movement);
-    }];
-}
-
-#pragma mark - Storyboard
-
-- (IBAction)changePasswordButtonClicked:(id)sender
-{
-    UITextField *currentPasswordTF = (UITextField *)[self.view viewWithTag:CURRENT_PASSWORD_TAG];
-    UITextField *newPasswordTF = (UITextField *)[self.view viewWithTag:NEW_PASSWORD_TAG];
-    UITextField *confirmPasswordTF = (UITextField *)[self.view viewWithTag:CONFIRM_PASSWORD_TAG];
-    
-    if ([currentPasswordTF.text length] > 0) {
-        if ([newPasswordTF.text isEqualToString:confirmPasswordTF.text]) {
-            [User changePassword:newPasswordTF.text confirmPassword:confirmPasswordTF.text currentPassword:currentPasswordTF.text success:^{
+    if ([self.currentPasswordTextField.text length] > 0) {
+        if ([self.passwordTextField.text isEqualToString:self.confirmedPasswordTextField.text]) {
+            [self.user changePassword:self.passwordTextField.text confirmPassword:self.confirmedPasswordTextField.text currentPassword:self.currentPasswordTextField.text success:^{
                 [self.navigationController popViewControllerAnimated:YES];
-            } failure:^(NSDictionary *errorData) {
-                // TO DO pop up message to screen wrong current password
+            } failure:^(NSString *message) {
+                [self fail:@"Change password" withMessage:message];
             }];
         } else {
             NSLog(@"[DEBUG] password do not match");
-            // TO DO pop up message to screen password do not match
+            [self fail:@"Change password" withMessage:@"Confirmed password do no match"];
         }
     } else {
         NSLog(@"[DEBUG] current password is empty");
-        // TO DO pop up message to screen wrong current password
+        [self fail:@"Change password" withMessage:@"Current password is empty"];
     }
-    
-    
-
-
 }
 
-- (IBAction)cancelButtonClicked:(id)sender
+- (void)cancel
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-#pragma mark - UITextFieldDelegate
+#pragma mark - UITableViewDelegate
 
--(BOOL)textFieldShouldReturn:(UITextField*)textField;
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSInteger nextTag = textField.tag + 1;
-    // Try to find next responder
-    UIResponder* nextResponder = [self.view viewWithTag:nextTag];
-    if (nextResponder) {
-        // Found next responder, so set it.
-        [nextResponder becomeFirstResponder];
-    } else {
-        // Not found, so remove keyboard.
-        [self changePasswordButtonClicked:textField];
+    if (indexPath.section == 2) {
+        [self changePassword];
+    } else if (indexPath.section == 3) {
+        [self cancel];
     }
-    return NO; // We do not want UITextField to insert line-breaks.
 }
 
 

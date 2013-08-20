@@ -15,39 +15,35 @@
 #define USER_AUTHENTICATION @"authentication_token"
 #define USER_PASSWORD @"password"
 #define USER_BOOTSTRAP @"boostrap"
-#define PROFILE @"profile"
-#define PROFILE_EMAIL @"email"
-#define PROFILE_FULL_NAME @"full_name"
-#define PROFILE_FIRST_NAME @"first_name"
-#define PROFILE_LAST_NAME @"last_name"
-#define PROFILE_THUMBNAIL_URL @"thumbnail_url"
-#define PROFILE_PICTURE_URL @"picture_url"
-#define PROFILE_CREATED_AT @"created_at"
-#define PROFILE_UPDATED_AT @"updated_at"
-#define JOB_PROFILE @"job_profile"
-#define JOB_PROFILE_ORGANIZATION @"organization"
-#define JOB_PROFILE_TITLE @"title"
-#define JOB_PROFILE_EMAIL @"email"
-#define GROUP @"group"
+#define USER_FULL_NAME @"full_name"
+#define USER_FIRST_NAME @"first_name"
+#define USER_LAST_NAME @"last_name"
+#define USER_THUMBNAIL_URL @"thumbnail_url"
+#define USER_PICTURE_URL @"picture_url"
+#define USER_CREATED_AT @"created_at"
+#define USER_UPDATED_AT @"updated_at"
+#define USER_FOLLOWING @"following"
 
 @interface User (Create) <IJSON>
 
-+ (void)fullUserProfileByEmail:(NSString *)email managedObjectContext:(NSManagedObjectContext *)managedObjectContext success:(void (^)(User *user))success failure:(void (^)(NSDictionary *errorData))failure;
++ (void)userByEmail:(NSString *)email inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext success:(void (^)(User *user))success failure:(void (^)(NSString *message))failure;
 + (User *)userWithDictionary:(NSDictionary *)userDictionary inManagedObjectContext:(NSManagedObjectContext *)context;
-+ (User *)curretnUser:(NSManagedObjectContext *)context;
-+ (void)signUp:(NSDictionary *)userDictionary success:(void (^)())success failure:(void (^)(NSDictionary *errorData))failure;
-+ (void)signIn:(NSDictionary *)userDictionary success:(void (^)())success failure:(void (^)(NSDictionary *errorData))failure;
-+ (void)signOut:(void (^)())success failure:(void (^)(NSDictionary *errorData))failure;
-+ (void)changePassword:(NSString *)password confirmPassword:(NSString *)passwordConfirmation currentPassword:(NSString *)currentPassword success:(void (^)())success failure:(void (^)(NSDictionary *errorData))failure;
++ (User *)currentUser:(NSManagedObjectContext *)context;
+
++ (void)signUp:(NSDictionary *)userDictionary success:(void (^)(User *user))success failure:(void (^)(NSString *message))failure;
++ (void)signIn:(NSDictionary *)userDictionary success:(void (^)(User *user))success failure:(void (^)(NSDictionary *errorData))failure;
++ (void)signOut:(void (^)())success failure:(void (^)(NSString *message))failure;
 + (void)search:(NSString *)keyword page:(NSInteger)page success:(void (^)(NSArray *usersArray))success failure:(void (^)(NSDictionary *errorData))failure;
+
 + (BOOL)validateEmail:(NSString*)email;
 + (BOOL)validateName:(NSString*)name;
 + (BOOL)validatePassword:(NSString *)password;
 
 - (void)setWithDictionary:(NSDictionary *)userDictionary;
-- (void)saveUser:(NSDictionary *)userDictionary success:(void (^)(User *user))success failure:(void (^)(NSDictionary *errorData))failure;
-- (void)notifications:(void (^)())success failure:(void (^)(NSDictionary *errorData))failure;
-- (void)acknowledgeNotifications:(void (^)())success failure:(void (^)(NSDictionary *errorData))failure;
+- (void)changePassword:(NSString *)password confirmPassword:(NSString *)passwordConfirmation currentPassword:(NSString *)currentPassword success:(void (^)())success failure:(void (^)(NSString *message))failure;
+- (void)updateUser:(NSDictionary *)userDictionary success:(void (^)(User *user))success failure:(void (^)(NSString *message))failure;
+- (void)follow:(Organization *)organization success:(void (^)())success failure:(void (^)(NSString *message))failure;
+- (void)unfollow:(Organization *)organization success:(void (^)())success failure:(void (^)(NSString *message))failure;
 - (NSData *)toJSON;
 
 @end

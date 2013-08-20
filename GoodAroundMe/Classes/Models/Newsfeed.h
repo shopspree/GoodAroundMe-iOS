@@ -1,15 +1,15 @@
 //
 //  Newsfeed.h
-//  TempName
+//  GoodAroundMe
 //
-//  Created by asaf ahi-mordehai on 7/30/13.
-//  Copyright (c) 2013 asaf ahi-mordehai. All rights reserved.
+//  Created by asaf ahi-mordehai on 8/15/13.
+//  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Comment, Like, Post, User;
+@class Comment, Like, Post;
 
 @interface Newsfeed : NSManagedObject
 
@@ -21,6 +21,5 @@
 @property (nonatomic, retain) Comment *comment;
 @property (nonatomic, retain) Like *like;
 @property (nonatomic, retain) Post *post;
-@property (nonatomic, retain) User *user;
 
 @end

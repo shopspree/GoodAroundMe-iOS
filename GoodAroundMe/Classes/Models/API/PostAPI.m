@@ -13,302 +13,116 @@
 
 @implementation PostAPI
 
-+ (void)post:(NSString *)postID
-     success:(void (^)(NSDictionary *responseDictionary))success
-     failure:(void (^)(NSDictionary *errorData))failure
++ (void)post:(NSString *)postID success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure
 {
+    NSData *json = nil;
     
-    NSData *jsonData = nil;
-    
-    NSURLRequest *request = [BaseAPI getRequestWithURL:[NSString stringWithFormat:API_POST_SHOW, postID] withJSON:jsonData];
-    
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        if ([response statusCode] == 200) {
-            NSDictionary *responseDictionary = (NSDictionary *)JSON;
-            NSLog(@"[DEBUG] [%@] Response from server is: %@", [[self class] description], responseDictionary);
-            
-            if (success) {
-                success(responseDictionary);
-            }
-            
-        }
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-        NSLog(@"[DEBUG] [%@] %d error!!!", [[self class] description], [response statusCode]);
-        
-        NSDictionary *errorData = (NSDictionary *)JSON;
-        failure(errorData);
+    [BaseAPI getRequestWithURL:[NSString stringWithFormat:API_POST_SHOW, postID] json:json success:^(NSDictionary *responseDictionary) {
+        success(responseDictionary);
+    } failure:^(NSString *message) {
+        failure(message);
     }];
-    
-    [operation start];
     
 }
 
-+ (void)newPost:(NSDictionary *)postDictionary
-        success:(void (^)(NSDictionary *responseDictionary))success
-        failure:(void (^)(NSDictionary *errorData))failure
++ (void)newPost:(NSDictionary *)postDictionary success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure
 {
-    NSData *jsonData = [PostAPI jsonRequestForPost:postDictionary];
+    NSData *json = [PostAPI jsonRequestForPost:postDictionary];
     
-    NSURLRequest *request = [BaseAPI postRequestWithURL:API_POST withJSON:jsonData];
-    
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        if ([response statusCode] == 200) {
-            NSDictionary *responseDictionary = (NSDictionary *)JSON;
-            NSLog(@"[DEBUG] [%@] Response from server is: %@", [[self class] description], responseDictionary);
-            
-            if (success) {
-                success(responseDictionary);
-            }
-            
-        }
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-        NSLog(@"[DEBUG] [%@] %d error!!!", [[self class] description], [response statusCode]);
-        
-        NSDictionary *errorData = (NSDictionary *)JSON;
-        failure(errorData);
+    [BaseAPI postRequestWithURL:API_POST json:json success:^(NSDictionary *responseDictionary) {
+        success(responseDictionary);
+    } failure:^(NSString *message) {
+        failure(message);
     }];
-    
-    [operation start];
 }
 
-+ (void)deletePost:(Post *)post
-           success:(void (^)())success
-           failure:(void (^)(NSDictionary *errorData))failure
++ (void)deletePost:(Post *)post success:(void (^)())success failure:(void (^)(NSString *message))failure
 {
-    NSURLRequest *request = [BaseAPI deleteRequestWithURL:[NSString stringWithFormat:API_POST_DELETE, post.uid] withJSON:nil];
+    NSData *json = nil;
     
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        if ([response statusCode] == 200) {
-            NSLog(@"[DEBUG] (likePost)Response code from server is: %d", [response statusCode]);
-            
-            if (success) {
-                success();
-            }
-            
-        }
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-        NSLog(@"[DEBUG] (likePost) %d error!!!", [response statusCode]);
-        
-        NSDictionary *errorData = (NSDictionary *)JSON;
-        failure(errorData);
+    [BaseAPI deleteRequestWithURL:[NSString stringWithFormat:API_POST_DELETE, post.uid] json:json success:^(NSDictionary *responseDictionary) {
+        success(responseDictionary);
+    } failure:^(NSString *message) {
+        failure(message);
     }];
-    
-    [operation start];
 }
 
-+ (void)popular:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure
++ (void)likesOnPost:(Post *)post success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure
 {
-    NSData *jsonData = nil;
+    NSData *json = nil;
     
-    NSURLRequest *request = [BaseAPI getRequestWithURL:API_POST_POPULAR withJSON:jsonData];
-    
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        if ([response statusCode] == 200) {
-            NSDictionary *responseDictionary = (NSDictionary *)JSON;
-            NSLog(@"[DEBUG] [%@] Response from server is: %@", [[self class] description], responseDictionary);
-            
-            if (success) {
-                success(responseDictionary);
-            }
-            
-        }
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-        NSLog(@"[DEBUG] [%@] %d error!!!", [[self class] description], [response statusCode]);
-        
-        NSDictionary *errorData = (NSDictionary *)JSON;
-        failure(errorData);
+    [BaseAPI getRequestWithURL:[NSString stringWithFormat:API_POST_LIKES, post.uid] json:json success:^(NSDictionary *responseDictionary) {
+        success(responseDictionary);
+    } failure:^(NSString *message) {
+        failure(message);
     }];
-    
-    [operation start];
 }
 
-+ (void)likesOnPost:(Post *)post
-         success:(void (^)(NSDictionary *responseDictionary))success
-         failure:(void (^)(NSDictionary *errorData))failure
++ (void)likePost:(Post *)post success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure
 {
-    NSURLRequest *request = [BaseAPI getRequestWithURL:[NSString stringWithFormat:API_POST_LIKES, post.uid] withJSON:nil];
+    NSData *json = nil;
     
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        if ([response statusCode] == 200) {
-            NSDictionary *responseDictionary = (NSDictionary *)JSON;
-            NSLog(@"[DEBUG] [likesOnPost] Response from server is: %@", responseDictionary);
-            
-            if (success) {
-                success(responseDictionary);
-            }
-            
-        }
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-        NSLog(@"[DEBUG] [likePost] %d error!!!", [response statusCode]);
-        
-        NSDictionary *errorData = (NSDictionary *)JSON;
-        failure(errorData);
+    [BaseAPI postRequestWithURL:[NSString stringWithFormat:API_POST_LIKE, post.uid]  json:json success:^(NSDictionary *responseDictionary) {
+        success(responseDictionary);
+    } failure:^(NSString *message) {
+        failure(message);
     }];
+}
+
++ (void)unlike:(Like *)like post:(Post *)post success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure
+{
+    NSData *json = nil;
     
-    [operation start];
+    [BaseAPI deleteRequestWithURL:[NSString stringWithFormat:API_POST_UNLIKE, post.uid, like.uid] json:json success:^(NSDictionary *responseDictionary) {
+        success(responseDictionary);
+    } failure:^(NSString *message) {
+        failure(message);
+    }];
     
 }
 
-+ (void)likePost:(Post *)post
-         success:(void (^)(NSDictionary *responseDictionary))success
-         failure:(void (^)(NSDictionary *errorData))failure
++ (void)commentsOnPost:(Post *)post success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure
 {
-    NSURLRequest *request = [BaseAPI postRequestWithURL:[NSString stringWithFormat:API_POST_LIKE, post.uid] withJSON:nil];
+    NSData *json = nil;
     
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        if ([response statusCode] == 200) {
-            NSDictionary *responseDictionary = (NSDictionary *)JSON;
-            NSLog(@"[DEBUG] [likePost)Response] from server is: %@", responseDictionary);
-            
-            if (success) {
-                success(responseDictionary);
-            }
-            
-        }
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-        NSLog(@"[DEBUG] (likePost) %d error!!!", [response statusCode]);
-        
-        NSDictionary *errorData = (NSDictionary *)JSON;
-        failure(errorData);
+    [BaseAPI getRequestWithURL:[NSString stringWithFormat:API_POST_COMMENTS, post.uid] json:json success:^(NSDictionary *responseDictionary) {
+        success(responseDictionary);
+    } failure:^(NSString *message) {
+        failure(message);
     }];
-    
-    [operation start];
-    
 }
 
-+ (void)unlike:(Like *)like post:(Post *)post
-         success:(void (^)(NSDictionary *responseDictionary))success
-         failure:(void (^)(NSDictionary *errorData))failure
++ (void)comment:(NSString *)content onPost:(Post *)post success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure
 {
-    NSURLRequest *request = [BaseAPI deleteRequestWithURL:[NSString stringWithFormat:API_POST_UNLIKE, post.uid, like.uid] withJSON:nil];
+    NSData *json = [PostAPI jsonRequestForComment:content onPost:post];
     
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        if ([response statusCode] == 200) {
-            NSDictionary *responseDictionary = (NSDictionary *)JSON;
-            NSLog(@"[DEBUG] (likePost)Response from server is: %@", responseDictionary);
-            
-            if (success) {
-                success(responseDictionary);
-            }
-            
-        }
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-        NSLog(@"[DEBUG] (likePost) %d error!!!", [response statusCode]);
-        
-        NSDictionary *errorData = (NSDictionary *)JSON;
-        failure(errorData);
+    [BaseAPI postRequestWithURL:[NSString stringWithFormat:API_POST_COMMENT, post.uid] json:json success:^(NSDictionary *responseDictionary) {
+        success(responseDictionary);
+    } failure:^(NSString *message) {
+        failure(message);
     }];
-    
-    [operation start];
-    
 }
 
-+ (void)commentsOnPost:(Post *)post
-        success:(void (^)(NSDictionary *responseDictionary))success
-        failure:(void (^)(NSDictionary *errorData))failure
++ (void)deleteComment:(Comment *)comment onPost:(Post *)post success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure
 {
-    NSURLRequest *request = [BaseAPI getRequestWithURL:[NSString stringWithFormat:API_POST_COMMENTS, post.uid] withJSON:nil];
+    NSData *json = nil;
     
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        if ([response statusCode] == 200) {
-            NSDictionary *responseDictionary = (NSDictionary *)JSON;
-            NSLog(@"[DEBUG] [%@] Response from server is: %@", [[self class] description], responseDictionary);
-            
-            if (success) {
-                success(responseDictionary);
-            }
-            
-        }
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-        NSLog(@"[DEBUG] [%@] %d error!!!", [[self class] description], [response statusCode]);
-        
-        NSDictionary *errorData = (NSDictionary *)JSON;
-        failure(errorData);
+    [BaseAPI deleteRequestWithURL:[NSString stringWithFormat:API_POST_COMMENT_DELETE, post.uid, comment.uid] json:json success:^(NSDictionary *responseDictionary) {
+        success(responseDictionary);
+    } failure:^(NSString *message) {
+        failure(message);
     }];
-    
-    [operation start];
-    
 }
 
-+ (void)comment:(NSString *)content onPost:(Post *)post
-         success:(void (^)(NSDictionary *responseDictionary))success
-         failure:(void (^)(NSDictionary *errorData))failure
++ (void)inappropriatePost:(Post *)post success:(void (^)())success failure:(void (^)(NSDictionary *errorData))failure
 {
-    NSData *jsonData = [PostAPI jsonRequestForComment:content onPost:post];
+    NSData *json = nil;
     
-    NSURLRequest *request = [BaseAPI postRequestWithURL:[NSString stringWithFormat:API_POST_COMMENT, post.uid] withJSON:jsonData];
-    
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        if ([response statusCode] == 200) {
-            NSDictionary *responseDictionary = (NSDictionary *)JSON;
-            NSLog(@"[DEBUG] [%@] Response from server is: %@", [[self class] description], responseDictionary);
-            
-            if (success) {
-                success(responseDictionary);
-            }
-            
-        }
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-        NSLog(@"[DEBUG] [%@] %d error!!!", [[self class] description], [response statusCode]);
-        
-        NSDictionary *errorData = (NSDictionary *)JSON;
-        failure(errorData);
+    [BaseAPI postRequestWithURL:[NSString stringWithFormat:API_POST_INAPPROPRIATE, post.uid] json:json success:^(NSDictionary *responseDictionary) {
+        success();
+    } failure:^(NSString *message) {
+        failure(message);
     }];
-    
-    [operation start];
-    
-}
-
-+ (void)deleteComment:(Comment *)comment onPost:(Post *)post
-       success:(void (^)(NSDictionary *responseDictionary))success
-       failure:(void (^)(NSDictionary *errorData))failure
-{
-    NSURLRequest *request = [BaseAPI deleteRequestWithURL:[NSString stringWithFormat:API_POST_COMMENT_DELETE, post.uid, comment.uid] withJSON:nil];
-    
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        if ([response statusCode] == 200) {
-            NSDictionary *responseDictionary = (NSDictionary *)JSON;
-            NSLog(@"[DEBUG] (deleteComment)Response from server is: %@", responseDictionary);
-            
-            if (success) {
-                success(responseDictionary);
-            }
-            
-        }
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-        NSLog(@"[DEBUG] (deleteComment) %d error!!!", [response statusCode]);
-        
-        NSDictionary *errorData = (NSDictionary *)JSON;
-        failure(errorData);
-    }];
-    
-    [operation start];
-    
-}
-
-+ (void)inappropriatePost:(Post *)post
-         success:(void (^)())success
-         failure:(void (^)(NSDictionary *errorData))failure
-{
-    NSURLRequest *request = [BaseAPI postRequestWithURL:[NSString stringWithFormat:API_POST_INAPPROPRIATE, post.uid] withJSON:nil];
-    
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        if ([response statusCode] == 200) {
-            NSLog(@"[DEBUG] (likePost)Response status code from server is: %d", [response statusCode]);
-            
-            if (success) {
-                success();
-            }
-            
-        }
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-        NSLog(@"[DEBUG] (likePost) %d error!!!", [response statusCode]);
-        
-        NSDictionary *errorData = (NSDictionary *)JSON;
-        failure(errorData);
-    }];
-    
-    [operation start];
     
 }
 

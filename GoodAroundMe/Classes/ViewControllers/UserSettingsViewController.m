@@ -7,76 +7,107 @@
 //
 
 #import <QuartzCore/QuartzCore.h>
+#import <SDWebImage/UIButton+WebCache.h>
 #import "UserSettingsViewController.h"
-#import "User+Create.h"
 
 #define CHANGE_PASSWORD @"Change password"
 #define LOGOUT @"Log out"
+#define ALERT_VIEW_TAG 666
 
 @interface UserSettingsViewController ()
-@property (nonatomic, strong) NSArray *sections;
+
+@property (weak, nonatomic) IBOutlet UITextField *firstNameTextField;
+@property (weak, nonatomic) IBOutlet UITextField *lastNameTextField;
 
 @end
 
 @implementation UserSettingsViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
+- (void)setUser:(User *)user
 {
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
+    [super setUser:user];
+    if (user) {
+        self.firstNameTextField.text = self.user.firstname;
+        self.lastNameTextField.text = self.user.lastname;
     }
-    return self;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    NSArray *about = [NSArray arrayWithObjects:@"About", @"Info", nil];
-    NSArray *user = [NSArray arrayWithObjects:CHANGE_PASSWORD, LOGOUT, nil];
-    self.sections = [NSArray arrayWithObjects:about, user, nil];
 }
 
-#pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (void)signOut
 {
-    NSInteger numberOfSections = [self.sections count];
-    return numberOfSections;
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
+                                                    message:@"Are you sure?"
+                                                   delegate:self
+                                          cancelButtonTitle:@"Cancel"
+                                          otherButtonTitles:@"Sign out", nil];
+    alert.tag = ALERT_VIEW_TAG;
+    [alert show];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (void)changeImage
 {
-     NSInteger numberOfRows = [[self.sections objectAtIndex:section] count];
-    return numberOfRows;
+    // TO DO!!!
+    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+    imagePicker.delegate = self;
+    [self presentModalViewController:imagePicker animated:YES];
+    AmazonS3Client *s3 = [[[AmazonS3Client alloc] initWithAccessKey:MY_ACCESS_KEY_ID withSecretKey:MY_SECRET_KEY] autorelease];
+    
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *CellIdentifier = @"Cell";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    
-    // Configure the cell...
-    cell.textLabel.text = [[self.sections objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-    
-    return cell;
-}
 
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *selection = [[self.sections objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-    if ([selection isEqualToString:LOGOUT]) {
+    if (indexPath.section == 0 && indexPath.row == 1) {
+        [self performSegueWithIdentifier:EDIT_NAME sender:self];
+        
+    } else if (indexPath.section == 0 && indexPath.row == 2) {
+        [self performSegueWithIdentifier:CHANGE_PASSWORD sender:self];
+        
+    } else if (indexPath.section == 0 && indexPath.row == 0) {
+        [self signOut];
+    }
+}
+
+
+#pragma mark - Storyboard
+
+- (IBAction)imageAction:(id)sender
+{
+    [self changeImage];
+}
+
+- (IBAction)changeImageAction:(id)sender
+{
+    [self changeImage];
+}
+
+- (IBAction)doneButtonAction:(id)sender
+{
+    NSDictionary *userDictionary = [NSDictionary dictionary];
+    [self.user updateUser:userDictionary success:^(User *user) {
+        [self dismissViewControllerAnimated:YES completion:^{ return; }];
+    } failure:^(NSString *message) {
+        [self fail:@"User preferences" withMessage:message];
+    }];
+}
+
+#pragma mark - UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag == ALERT_VIEW_TAG && buttonIndex == 0) {
         [User signOut:^{
-            [self performSegueWithIdentifier:@"SignOut" sender:self];
-        } failure:^(NSDictionary *errorData) {
-            // TO DO
+            [self navigateStoryboardWithIdentifier:SIGNUP_SIGNIN];
+        } failure:^(NSString *message) {
+            [self fail:@"Sign out failed" withMessage:message];
         }];
-    } else if ([selection isEqualToString:CHANGE_PASSWORD]) {
-        [self performSegueWithIdentifier:@"ChangePassword" sender:self];
     }
 }
 

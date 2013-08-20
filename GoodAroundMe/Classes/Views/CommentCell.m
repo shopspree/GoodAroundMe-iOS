@@ -37,8 +37,8 @@
 - (void)setImageURL:(NSString *)imageURL
 {
     _imageURL = imageURL;
-    self.thumbnailImage.frame = CGRectMake(10, 5, 50, 50);
-    //[self.pictureImage setImageWithURL:[NSURL URLWithString:imageURL] placeholderImage:[UIImage imageNamed:@"Default.png"]];
+    //self.thumbnailImage.frame = CGRectMake(10, 5, 50, 50);
+    [self.thumbnailImage setImageWithURL:[NSURL URLWithString:imageURL] placeholderImage:[UIImage imageNamed:@"Default.png"]];
 }
 
 - (void)setUsername:(NSString *)username
@@ -55,12 +55,10 @@
 
 - (void)layoutSubviews
 {
-    self.contentLabel.frame = CGRectMake(self.contentLabel.frame.origin.x, self.contentLabel.frame.origin.y, 232, 21); // TO DO: how to avoid hard coding ?!
+    self.contentLabel.frame = CGRectMake(self.contentLabel.frame.origin.x, self.contentLabel.frame.origin.y, 237, 21); // TO DO: how to avoid hard coding ?!
     self.contentLabel.numberOfLines = 0;
     [self.contentLabel setLineBreakMode:NSLineBreakByWordWrapping]; //will wrap text in new line
     [self.contentLabel sizeToFit];
-    //NSLog(@"number of lines is %d", self.contentLabel.numberOfLines);
-    [self.contentLabel setLineBreakMode:NSLineBreakByWordWrapping];
 }
 
 @end

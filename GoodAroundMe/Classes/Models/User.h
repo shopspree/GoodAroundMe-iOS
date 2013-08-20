@@ -1,33 +1,29 @@
 //
 //  User.h
-//  TempName
+//  GoodAroundMe
 //
-//  Created by asaf ahi-mordehai on 7/30/13.
-//  Copyright (c) 2013 asaf ahi-mordehai. All rights reserved.
+//  Created by asaf ahi-mordehai on 8/19/13.
+//  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Comment, Company, Group, Like, Newsfeed, Notification, Post;
+@class Comment, Like, Organization, Post;
 
 @interface User : NSManagedObject
 
 @property (nonatomic, retain) NSDate * created_at;
 @property (nonatomic, retain) NSString * email;
 @property (nonatomic, retain) NSString * firstname;
-@property (nonatomic, retain) NSString * full_name;
-@property (nonatomic, retain) NSString * jobTitle;
 @property (nonatomic, retain) NSString * lastname;
-@property (nonatomic, retain) NSString * pictureURL;
 @property (nonatomic, retain) NSString * thumbnailURL;
 @property (nonatomic, retain) NSDate * updated_at;
+@property (nonatomic, retain) NSString * about;
 @property (nonatomic, retain) NSSet *comments;
-@property (nonatomic, retain) Company *company;
-@property (nonatomic, retain) Group *group;
 @property (nonatomic, retain) NSSet *likes;
-@property (nonatomic, retain) NSSet *newsfeeds;
-@property (nonatomic, retain) NSSet *notifications;
+@property (nonatomic, retain) NSSet *following;
+@property (nonatomic, retain) Organization *organization;
 @property (nonatomic, retain) NSSet *posts;
 @end
 
@@ -43,15 +39,10 @@
 - (void)addLikes:(NSSet *)values;
 - (void)removeLikes:(NSSet *)values;
 
-- (void)addNewsfeedsObject:(Newsfeed *)value;
-- (void)removeNewsfeedsObject:(Newsfeed *)value;
-- (void)addNewsfeeds:(NSSet *)values;
-- (void)removeNewsfeeds:(NSSet *)values;
-
-- (void)addNotificationsObject:(Notification *)value;
-- (void)removeNotificationsObject:(Notification *)value;
-- (void)addNotifications:(NSSet *)values;
-- (void)removeNotifications:(NSSet *)values;
+- (void)addFollowingObject:(Organization *)value;
+- (void)removeFollowingObject:(Organization *)value;
+- (void)addFollowing:(NSSet *)values;
+- (void)removeFollowing:(NSSet *)values;
 
 - (void)addPostsObject:(Post *)value;
 - (void)removePostsObject:(Post *)value;

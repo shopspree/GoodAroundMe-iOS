@@ -1,15 +1,15 @@
 //
 //  UserProfileViewController.h
-//  TempName
+//  GoodAroundMe
 //
-//  Created by asaf ahi-mordehai on 7/7/13.
-//  Copyright (c) 2013 asaf ahi-mordehai. All rights reserved.
+//  Created by asaf ahi-mordehai on 8/14/13.
+//  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
-#import "User+Create.h"
+#import "UserViewController.h"
 
-@interface UserProfileViewController : UIViewController
+@interface UserProfileViewController : UserViewController
 
 @property (nonatomic, strong) NSString *email;
 

@@ -7,21 +7,13 @@
 //
 
 #import "AbstractViewController.h"
+#import "StoryboardConstants.h"
 
 @interface AbstractViewController ()
 
 @end
 
 @implementation AbstractViewController
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
 
 - (void)viewDidLoad
 {
@@ -39,39 +31,12 @@
                                                object:nil];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void)fail:(NSString *)title withMessage:(NSString *)message
-{
-    if (title && message) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
-                                                        message:message
-                                                       delegate:self
-                                              cancelButtonTitle:nil
-                                              otherButtonTitles:@"OK", nil];
-        [alert show];
-        
-    }
-}
-
 - (void) willEnterForeground:(NSNotification *)notification {
     //[self performLoginIfRequired:self];
 }
 
 - (void) performLoginIfRequired:(UIViewController *)source {
     [self navigateStoryboardWithIdentifier:@"Authenticate"];
-}
-
-- (void)navigateStoryboardWithIdentifier:(NSString *)identifier
-{
-    UIStoryboard *storyboard = [UIApplication sharedApplication].delegate.window.rootViewController.storyboard;
-    UITabBarController *obj=[storyboard instantiateViewControllerWithIdentifier:identifier];
-    self.navigationController.navigationBarHidden=YES;
-    [self.navigationController pushViewController:obj animated:YES];
 }
 
 @end

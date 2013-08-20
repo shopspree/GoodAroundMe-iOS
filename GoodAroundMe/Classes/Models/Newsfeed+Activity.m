@@ -18,7 +18,7 @@
 @implementation Newsfeed (Activity)
 
 + (void)synchronizeInContext:(NSManagedObjectContext *)context success:(void (^)())success
-failure:(void (^)(NSDictionary *errorData))failure
+failure:(void (^)(NSString *message))failure
 {
     [FeedAPI newsfeeds:^(NSDictionary *responseDictionary) {
         NSArray *newsfeedArray = responseDictionary[@"activities"];
@@ -27,20 +27,9 @@ failure:(void (^)(NSDictionary *errorData))failure
         }
         success();
     }
-    failure:^(NSDictionary *errorData) {
-        failure(errorData);
+    failure:^(NSString *message) {
+        failure(message);
     }];
-}
-
-+ (void)newsfeed:(NSString *)uid context:(NSManagedObjectContext *)context success:(void (^)())success failure:(void (^)(NSDictionary *errorData))failure
-{
-    [FeedAPI newsfeed:uid success:^(NSDictionary *newsfeedDictionary) {
-        [Newsfeed newsfeedWithActivity:newsfeedDictionary inManagedObjectContext:context];
-        success();
-    } failure:^(NSDictionary *errorData) {
-        failure(errorData);
-    }];
-    
 }
 
 

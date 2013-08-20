@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UIViewController+Utility.h"
 
-@interface MenuViewController : UICollectionViewController
+@interface MenuViewController : UITableViewController
 
 @property (nonatomic, strong) NSArray *menuItems;
 

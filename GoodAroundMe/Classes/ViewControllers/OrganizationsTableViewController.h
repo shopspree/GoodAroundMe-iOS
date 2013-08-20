@@ -7,11 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "User+Create.h"
 #import "Category+Create.h"
 #import "CoreDataTableViewController.h"
 
 @interface OrganizationsTableViewController : CoreDataTableViewController
 
+@property (nonatomic, strong) User *user;
 @property (nonatomic, strong) Category *category;
 
 @end

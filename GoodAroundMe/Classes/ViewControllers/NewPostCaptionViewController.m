@@ -8,12 +8,10 @@
 
 #import "NewPostCaptionViewController.h"
 
-@interface NewPostCaptionViewController () <UITextViewDelegate, UIGestureRecognizerDelegate>
+@interface NewPostCaptionViewController () <UITextViewDelegate>
 @property (nonatomic) CGRect captionInputTextViewFrameOrigin;
 @property (weak, nonatomic) IBOutlet UITextView *captionInputTextView;
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *tap;
-@property (weak, nonatomic) IBOutlet UIButton *mentionButton;
-@property (weak, nonatomic) IBOutlet UIButton *hashtagButton;
 
 @end
 
@@ -42,10 +40,6 @@
     self.captionInputTextView.alpha = 0.9;
     self.captionInputTextView.textColor = [UIColor whiteColor];
     self.captionInputTextView.backgroundColor = [UIColor blackColor];
-    
-    
-    // hide hashtah & mention buttons
-    [self hideButtons:YES];
 }
 
 #pragma mark - storyboard
@@ -56,18 +50,6 @@
     [self.postDictionary setObject:self.captionInputTextView.text forKey:CONTENT];
     
     [self performSegueWithIdentifier:@"PostCategory" sender:self];
-}
-
-- (IBAction)mentionButtonClicked:(id)sender
-{
-    self.captionInputTextView.text = [self.captionInputTextView.text stringByAppendingString:@"@"];
-    [self.captionInputTextView becomeFirstResponder];
-}
-
-- (IBAction)hashtagButtonClicked:(id)sender
-{
-    self.captionInputTextView.text = [self.captionInputTextView.text stringByAppendingString:@"#"];
-    [self.captionInputTextView becomeFirstResponder];
 }
 
 - (IBAction)cancelButtonClicked:(id)sender
@@ -90,21 +72,6 @@
     }
 }
 
-#pragma mark - keyboard
-
-- (IBAction)keyboardWillShow:(id)sender
-{
-    const int keyboardHeight = 216.0; // tweak as needed
-    
-    [self hideButtons:NO];
-}
-
-- (IBAction)keyboardWillHide:(id)sender
-{
-   
-    [self hideButtons:YES];
-}
-
 - (IBAction)dismissKeyboard:(id)sender
 {
     [self.captionInputTextView resignFirstResponder];
@@ -119,22 +86,6 @@
         return NO;
     }
     return YES;
-}
-
-#pragma mark - UIGestureRecognizerDelegate
-
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
-{
-    
-    return YES;
-}
-
-#pragma mark - private methods
-
-- (void)hideButtons:(BOOL)hide
-{
-    self.hashtagButton.hidden = hide;
-    self.mentionButton.hidden = hide;
 }
 
 

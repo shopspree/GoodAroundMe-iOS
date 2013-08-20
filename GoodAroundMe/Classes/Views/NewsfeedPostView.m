@@ -7,8 +7,9 @@
 //
 
 #import "NewsfeedPostView.h"
+#import "ApplicationHelper.h"
 #import "NewsfeedPostViewDelegate.h"
-#import "User.h"
+#import "Organization.h"
 #import "Post+Create.h"
 #import "Picture.h"
 #import "Like.h"
@@ -17,36 +18,41 @@
 
 @interface NewsfeedPostView()
 
+@property (nonatomic, strong) Post *post;
+
 @property (weak, nonatomic) IBOutlet UIImageView *thumbnailImage;
-@property (weak, nonatomic) IBOutlet UILabel *usernameLabel;
-@property (weak, nonatomic) IBOutlet UIImageView *pictureImage;
+@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
-@property (weak, nonatomic) IBOutlet UIButton *likesCountButton;
-@property (weak, nonatomic) IBOutlet UIButton *commentsCountButton;
+@property (weak, nonatomic) IBOutlet UIImageView *pictureImage;
+@property (weak, nonatomic) IBOutlet UILabel *captionLabel;
 @property (weak, nonatomic) IBOutlet UIButton *likeButton;
 @property (weak, nonatomic) IBOutlet UIButton *commentButton;
+@property (weak, nonatomic) IBOutlet UIButton *giveButon;
+@property (weak, nonatomic) IBOutlet UIButton *likesCountButton;
+@property (weak, nonatomic) IBOutlet UIButton *commentsCountButton;
 @property (weak, nonatomic) IBOutlet UILabel *timestampLabel;
+@property (weak, nonatomic) IBOutlet UILabel *contributorLabel;
 @property (weak, nonatomic) IBOutlet UIButton *deleteButton;
+@property (weak, nonatomic) IBOutlet UIButton *moreButton;
 
 @property (nonatomic, strong) NSString *thumbnailURL;
-@property (nonatomic, strong) NSString *usernameText;
+@property (nonatomic, strong) NSString *nameText;
 @property (nonatomic, strong) NSString *titleText;
 @property (nonatomic, strong) NSString *pictureURL;
 @property (nonatomic, strong) NSNumber *likesCountNumber;
 @property (nonatomic, strong) NSNumber *commentsCountNumber;
-@property (nonatomic, strong) NSString *descrtiptionText;
+@property (nonatomic, strong) NSString *caption;
 @property (nonatomic, strong) NSDate *timestampDate;
+@property (nonatomic, strong) NSString *contributor;
 @property (nonatomic) BOOL isLiked;
 
 @end
 
 @implementation NewsfeedPostView
 
-- (void)populateViewWithNewsfeed:(Newsfeed *)newsfeed
+- (void) initWithNewsfeed:(Newsfeed *)newsfeed
 {
     if (newsfeed) {
-        NSLog(@"[DEBUG] populateViewWithNewsfeed uid=%@", newsfeed.post? newsfeed.post.uid : newsfeed.like.post.uid);
         self.post = newsfeed.post;
     }
 }
@@ -55,13 +61,13 @@
 {
     _post = post;
     if (post) {
-        self.thumbnailURL = post.user.thumbnailURL;
-        self.usernameText = [NSString stringWithFormat:@"%@ %@", post.user.firstname, post.user.lastname];
-        self.titleText = post.uid;
-        self.pictureURL = [self pictureURLFromPictures:post.pictures];
+        self.thumbnailURL = post.organization.image_thumbnail_url;
+        self.nameText = post.organization.name;
+        self.titleText = post.title;
+        self.pictureURL = ((Picture *)[post.pictures anyObject]).url;
         self.likesCountNumber = post.likes_count;
         self.commentsCountNumber = post.comments_count;
-        self.descrtiptionText = post.content;
+        self.caption = post.caption;
         self.timestampDate = post.created_at;
         self.isLiked = [post.liked_by_user boolValue];
     }
@@ -82,14 +88,17 @@
     }
 }
 
-- (void)setUsernameText:(NSString *)usernameText
+- (void)setNameText:(NSString *)nameText
 {
-    _usernameText = usernameText;
-    self.usernameLabel.text = _usernameText ? _usernameText : @"John Doe";
-    [self.usernameLabel setUserInteractionEnabled:YES];
-    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(usernameLabelTapped:)];
-    [tapGestureRecognizer setNumberOfTapsRequired:1];
-    [self.usernameLabel addGestureRecognizer:tapGestureRecognizer];
+    _nameText = nameText;
+    if (nameText) {
+        self.nameLabel.text = _nameText;
+        [self.nameLabel setUserInteractionEnabled:YES];
+        UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(usernameLabelTapped:)];
+        [tapGestureRecognizer setNumberOfTapsRequired:1];
+        [self.nameLabel addGestureRecognizer:tapGestureRecognizer];
+    }
+    
 }
 
 - (void)setTitleText:(NSString *)titleText
@@ -124,10 +133,10 @@
     self.commentsCountButton.tag = NEWSFEED_POST_VIEW_COMMENTS_COUNT_BUTTON;
 }
 
-- (void)setDescrtiptionText:(NSString *)descrtiptionText
+- (void)setCaption:(NSString *)caption
 {
-    _descrtiptionText = descrtiptionText;
-    self.descriptionLabel.text = descrtiptionText;
+    _caption = caption;
+    self.captionLabel.text = caption;
 }
 
 - (void)setTimestampDate:(NSDate *)timestampDate
@@ -136,16 +145,10 @@
     self.timestampLabel.text = [ApplicationHelper timeSinceNow:timestampDate];
 }
 
-- (NSString *)pictureURLFromPictures:(NSSet *)pictures
+- (void)setContributor:(NSString *)contributor
 {
-    for (Picture *picture in pictures) {
-        if (picture) {
-            NSLog(@"Picture url:%@ uid:%@", picture.url, picture.uid);
-            return picture.url;
-        }
-    }
-    
-    return nil;
+    _contributor = contributor;
+    self.contributorLabel.text = contributor ? [NSString stringWithFormat:@"By %@", contributor] : @"By unknown";
 }
 
 - (NSString *)likesCountWithNumber:(NSNumber *)count
@@ -190,10 +193,8 @@
 - (void)setIsLiked:(BOOL)isLiked
 {
     _isLiked = isLiked;
-    if (isLiked) {
-        [self.likeButton setTitle:@"Unlike" forState:UIControlStateNormal];
-        NSLog(@"like button title is %@", self.likeButton.titleLabel.text);
-    }
+    self.likeButton.highlighted = isLiked;
+    //[self.likeButton setTitle:@"Liked" forState:UIControlStateNormal];
 }
 
 - (IBAction)likeButtonClicked:(id)sender
@@ -205,7 +206,6 @@
 - (IBAction)commentButtonClicked:(id)sender
 {
     id <NewsfeedPostViewDelegate> delegate = [self traverseResponderChainForProtocol:@protocol(NewsfeedPostViewDelegate)];
-    NSLog(@"commentButton tag = %d", self.commentButton.tag);
     [delegate commentButtonClicked:sender];
 }
 

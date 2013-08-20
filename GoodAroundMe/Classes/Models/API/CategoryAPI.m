@@ -11,12 +11,12 @@
 @implementation CategoryAPI
 
 + (void)categories:(void (^)(NSDictionary *responseDictionary))success
-           failure:(void (^)(NSDictionary *errorData))failure
+           failure:(void (^)(NSString *message))failure
 {
     [BaseAPI getRequestWithURL:API_ORGANIZATION_CATEGORIES json:nil success:^(NSDictionary *responseDictionary) {
         success(responseDictionary);
-    } failure:^(NSDictionary *errorData) {
-        failure(errorData);
+    } failure:^(NSString *message) {
+        failure(message);
     }];
 }
 

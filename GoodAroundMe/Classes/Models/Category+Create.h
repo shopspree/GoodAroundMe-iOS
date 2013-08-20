@@ -16,6 +16,6 @@
 @interface Category (Create)
 
 + (Category *)categoryWithDictionary:(NSDictionary *)categoryDictionary inManagedObjectContext:(NSManagedObjectContext *)context;
-+ (void)categories:(void (^)(NSArray *categories))success failure:(void (^)(NSDictionary *errorData))failure;
++ (void)categories:(void (^)(NSArray *categories))success failure:(void (^)(NSString *message))failure;
 
 @end

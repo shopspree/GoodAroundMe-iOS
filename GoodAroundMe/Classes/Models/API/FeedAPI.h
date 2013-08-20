@@ -10,9 +10,8 @@
 
 @interface FeedAPI : BaseAPI
 
-+ (void)postNewsfeed:(NSString *)postId success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure;
-+ (void)newsfeeds:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure;
-+ (void)newsfeed:(NSString *)newsfeedID success:(void (^)(NSDictionary *newsfeedDictionary))success failure:(void (^)(NSDictionary *errorData))failure;
++ (void)postNewsfeed:(NSString *)postId success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure;
++ (void)newsfeeds:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure;
 
 @end
 

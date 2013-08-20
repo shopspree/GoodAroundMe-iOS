@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "AbstractViewController.h"
+#import "StoryboardConstants.h"
 
 @interface AbstractUserAuthenticationViewController : AbstractViewController
 
 - (BOOL)validateEmail:(NSString*)email;
 - (BOOL)validatePassword:(NSString*)password;
-- (void)authenticatedFirstTime:(BOOL)isInitialAuthentication;
 
 @end

@@ -34,26 +34,21 @@
         <relationship name="comment" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Comment" inverseName="newsfeed" inverseEntity="Comment" syncable="YES"/>
         <relationship name="like" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Like" inverseName="newsfeed" inverseEntity="Like" syncable="YES"/>
         <relationship name="post" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Post" inverseName="newsfeed" inverseEntity="Post" syncable="YES"/>
-        <relationship name="user" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="newsfeeds" inverseEntity="User" syncable="YES"/>
-    </entity>
-    <entity name="Notification" representedClassName="Notification" syncable="YES">
-        <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="is_read" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="post_id" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="user" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="notifications" inverseEntity="User" syncable="YES"/>
     </entity>
     <entity name="Organization" representedClassName="Organization" syncable="YES">
         <attribute name="about" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="followers_count" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="image_thumbnail_url" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="is_followed" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="posts_count" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="web_site_url" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="admins" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="organization" inverseEntity="User" syncable="YES"/>
         <relationship name="category" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Category" inverseName="organizations" inverseEntity="Category" syncable="YES"/>
+        <relationship name="followers" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="following" inverseEntity="User" syncable="YES"/>
+        <relationship name="posts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Post" inverseName="organization" inverseEntity="Post" syncable="YES"/>
     </entity>
     <entity name="Picture" representedClassName="Picture" syncable="YES">
         <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
@@ -63,8 +58,8 @@
         <relationship name="post" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Post" inverseName="pictures" inverseEntity="Post" syncable="YES"/>
     </entity>
     <entity name="Post" representedClassName="Post" syncable="YES">
+        <attribute name="caption" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="comments_count" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
-        <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="liked_by_user" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="likes_count" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -72,36 +67,34 @@
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="comments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Comment" inverseName="post" inverseEntity="Comment" syncable="YES"/>
+        <relationship name="contributor" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="posts" inverseEntity="User" syncable="YES"/>
         <relationship name="likes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Like" inverseName="post" inverseEntity="Like" syncable="YES"/>
         <relationship name="newsfeed" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Newsfeed" inverseName="post" inverseEntity="Newsfeed" syncable="YES"/>
+        <relationship name="organization" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Organization" inverseName="posts" inverseEntity="Organization" syncable="YES"/>
         <relationship name="pictures" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Picture" inverseName="post" inverseEntity="Picture" syncable="YES"/>
-        <relationship name="user" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="posts" inverseEntity="User" syncable="YES"/>
     </entity>
     <entity name="User" representedClassName="User" syncable="YES">
+        <attribute name="about" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="firstname" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="full_name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="jobTitle" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lastname" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="pictureURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="thumbnailURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="comments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Comment" inverseName="user" inverseEntity="Comment" syncable="YES"/>
+        <relationship name="following" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Organization" inverseName="followers" inverseEntity="Organization" syncable="YES"/>
         <relationship name="likes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Like" inverseName="user" inverseEntity="Like" syncable="YES"/>
-        <relationship name="newsfeeds" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Newsfeed" inverseName="user" inverseEntity="Newsfeed" syncable="YES"/>
-        <relationship name="notifications" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Notification" inverseName="user" inverseEntity="Notification" syncable="YES"/>
-        <relationship name="posts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Post" inverseName="user" inverseEntity="Post" syncable="YES"/>
+        <relationship name="organization" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Organization" inverseName="admins" inverseEntity="Organization" syncable="YES"/>
+        <relationship name="posts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Post" inverseName="contributor" inverseEntity="Post" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Comment" positionX="-20" positionY="657" width="128" height="178"/>
-        <element name="Like" positionX="-378" positionY="602" width="128" height="133"/>
-        <element name="Newsfeed" positionX="-342" positionY="315" width="128" height="178"/>
-        <element name="Notification" positionX="-108" positionY="-0" width="128" height="133"/>
-        <element name="Picture" positionX="142" positionY="198" width="128" height="118"/>
-        <element name="Post" positionX="-110" positionY="180" width="128" height="238"/>
-        <element name="User" positionX="142" positionY="360" width="128" height="253"/>
-        <element name="Organization" positionX="-344" positionY="144" width="128" height="178"/>
-        <element name="Category" positionX="-342" positionY="-0" width="128" height="103"/>
+        <element name="Category" positionX="-342" positionY="-45" width="128" height="103"/>
+        <element name="Comment" positionX="187" positionY="218" width="128" height="178"/>
+        <element name="Like" positionX="153" positionY="65" width="128" height="133"/>
+        <element name="Newsfeed" positionX="-110" positionY="-169" width="128" height="163"/>
+        <element name="Organization" positionX="-362" positionY="131" width="128" height="238"/>
+        <element name="Picture" positionX="135" positionY="431" width="128" height="118"/>
+        <element name="Post" positionX="-146" positionY="72" width="128" height="253"/>
+        <element name="User" positionX="-180" positionY="383" width="128" height="223"/>
     </elements>
 </model>

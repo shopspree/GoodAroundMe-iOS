@@ -9,6 +9,7 @@
 #import "Organization+Create.h"
 #import "OrganizationAPI.h"
 #import "ApplicationHelper.h"
+#import "Newsfeed+Activity.h"
 
 @implementation Organization (Create)
 
@@ -31,9 +32,10 @@
             // handle error
         } else if (![matches count]) { // none found, so let's create a Photo for that Flickr photo
             organization = [NSEntityDescription insertNewObjectForEntityForName:@"Organization" inManagedObjectContext:context];
-            [organization setWithDictionary:organizationDictionary[ORGANIZATION]];
-        } else { // found the Photo, just return it from the list of matches (which there will only be one of)
+            [organization setWithDictionary:organizationDictionary];
+        } else { // found it, just return it from the list of matches (which there will only be one of)
             organization = [matches lastObject];
+            [organization setWithDictionary:organizationDictionary];
         }
         
     }
@@ -41,25 +43,19 @@
     return organization;
 }
 
-- (void)follow:(void (^)(NSDictionary *reponseDictionary))success failure:(void (^)(NSDictionary *errorData))failure
+- (void)newsfeedForOrganization:(void (^)())success
+                        failure:(void (^)(NSString *message))failure
 {
-    [OrganizationAPI follow:self.uid success:^(NSDictionary *reponseDictionary) {
-        self.is_followed = [NSNumber numberWithBool:YES];
-        self.followers_count = [NSNumber numberWithInteger:([self.followers_count integerValue] + 1)];
-        success(reponseDictionary);
-    } failure:^(NSDictionary *errorData) {
-        failure(errorData);
-    }];
-}
-     
-- (void)unfollow:(void (^)(NSDictionary *reponseDictionary))success failure:(void (^)(NSDictionary *errorData))failure
-{
-    [OrganizationAPI unfollow:self.uid success:^(NSDictionary *reponseDictionary) {
-        self.is_followed = [NSNumber numberWithBool:NO];
-        self.followers_count = [NSNumber numberWithInteger:([self.followers_count integerValue] - 1)];
-        success(reponseDictionary);
-    } failure:^(NSDictionary *errorData) {
-        failure(errorData);
+    [OrganizationAPI newsfeedForOrganization:self success:^(NSDictionary *reponseDictionary) {
+        NSArray *activities = reponseDictionary[@"activities"];
+        
+        for (NSDictionary *activityDictionary in activities) {
+            Newsfeed *newsfeed = [Newsfeed newsfeedWithActivity:activityDictionary[ACTIVITY] inManagedObjectContext:self.managedObjectContext];
+            [self addPostsObject:newsfeed.post];
+        }
+        success();
+    } failure:^(NSString *message) {
+        failure(message);
     }];
 }
 
@@ -67,15 +63,18 @@
 
 - (void)setWithDictionary:(NSDictionary *)organizationDictionary
 {
-    self.uid = [organizationDictionary[ORGANIZATION_ID] description];
-    self.name = [organizationDictionary[ORGANIZATION_NAME] description];
-    self.followers_count = [ApplicationHelper numberFromString:[organizationDictionary[ORGANIZATION_FOLLOWERS_COUNT] description]];
-    self.posts_count = [ApplicationHelper numberFromString:[organizationDictionary[ORGANIZATION_POSTS_COUNT] description]];
-    self.image_thumbnail_url = [organizationDictionary[ORGANIZATION_IMAGE_THUMBNAIL_URL] description];
-    self.about = [organizationDictionary[ORGANIZATION_ABOUT] description];
-    self.web_site_url = [organizationDictionary[ORGANIZATION_WEBSITE_URL] description];
-    self.is_followed = [NSNumber numberWithBool:[organizationDictionary[ORGANIZATION_IS_FOLLOWED] boolValue]];
+    if ([organizationDictionary[ORGANIZATION_NAME] description]) {
+        self.uid = [organizationDictionary[ORGANIZATION_ID] description];
+        self.name = [organizationDictionary[ORGANIZATION_NAME] description];
+        self.followers_count = [ApplicationHelper numberFromString:[organizationDictionary[ORGANIZATION_FOLLOWERS_COUNT] description]];
+        self.posts_count = [ApplicationHelper numberFromString:[organizationDictionary[ORGANIZATION_POSTS_COUNT] description]];
+        self.image_thumbnail_url = [organizationDictionary[ORGANIZATION_IMAGE_THUMBNAIL_URL] description];
+        self.about = [organizationDictionary[ORGANIZATION_ABOUT] description];
+        self.web_site_url = [organizationDictionary[ORGANIZATION_WEBSITE_URL] description];
+        self.location = [organizationDictionary[ORGANIZATION_LOCATION] description];
+        self.is_followed = [NSNumber numberWithBool:[organizationDictionary[ORGANIZATION_IS_FOLLOWED] boolValue]];
         
+    }    
 }
 
 @end

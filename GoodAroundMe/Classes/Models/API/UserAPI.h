@@ -11,15 +11,16 @@
 
 @interface UserAPI : BaseAPI
 
-+ (void)userByEmail:(NSString *)email success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure;
-+ (void)updateUser:(User *)user success:(void (^)(NSDictionary *userDictionary))success failure:(void (^)(NSDictionary *errorData))failure;
++ (void)userByEmail:(NSString *)email success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure;
++ (void)updateUser:(User *)user success:(void (^)(NSDictionary *userDictionary))success failure:(void (^)(NSString *message))failure;
 + (void)notificationsForUser:(User *)user success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure;
 + (void)acknowledgeNotificationsForUser:(User *)user success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure;
 
-+ (void)signUp:(NSDictionary *)userDictionary success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure;
++ (void)signUp:(NSDictionary *)userDictionary success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure;
 + (void)signIn:(NSDictionary *)userDictionary success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure;
-+ (void)signOut:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure;
-+ (void)changePassword:(NSDictionary *)requestDictionary success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure;
++ (void)signOut:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure;
++ (void)changePassword:(NSDictionary *)requestDictionary forEmail:(NSString *)email success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure;
 + (void)search:(NSString *)keyword page:(NSInteger)page success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure;
++ (void)followedOrganizationsByUserEmail:(NSString *)email success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure;
 
 @end

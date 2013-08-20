@@ -16,13 +16,13 @@
     _newsfeed = newsfeed;
     if (newsfeed) {
         
-        NewsfeedView *view = [[[NSBundle mainBundle] loadNibNamed:[NSString stringWithFormat:@"Newsfeed%@View", newsfeed.type] owner:nil options:nil] lastObject];
+        NewsfeedView *newsfeedView = [[[NSBundle mainBundle] loadNibNamed:[NSString stringWithFormat:@"Newsfeed%@View", newsfeed.type] owner:nil options:nil] lastObject];
         
-        view.tag = 500;
+        newsfeedView.tag = 500;
         [[self.contentView viewWithTag:500] removeFromSuperview];
-        [self.contentView addSubview:view];
-        self.contentView.frame = view.frame;
-        [view populateViewWithNewsfeed:newsfeed];
+        [self.contentView addSubview:newsfeedView];
+        self.contentView.frame = newsfeedView.frame;
+        [newsfeedView initWithNewsfeed:newsfeed];
     }
 }
 

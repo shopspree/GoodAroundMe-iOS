@@ -9,7 +9,6 @@
 #import "CoreDataFactory.h"
 
 @interface CoreDataFactory()
-@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong) NSString *filename;
 @end
 
@@ -44,7 +43,10 @@
     url = [url URLByAppendingPathComponent:self.filename];
     UIManagedDocument *document = [[UIManagedDocument alloc] initWithFileURL:url];
     
-    if (![[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
+    if (self.managedObjectContext) {
+        create(self.managedObjectContext);
+        get(self.managedObjectContext);
+    } else if (![[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
         [document saveToURL:url
            forSaveOperation:UIDocumentSaveForCreating
           completionHandler:^(BOOL success) {

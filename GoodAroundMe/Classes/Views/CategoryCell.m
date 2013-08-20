@@ -19,10 +19,10 @@
 
 - (void)setup
 {
-    self.backgroundColor = [UIColor whiteColor];
+    self.backgroundColor = [UIColor clearColor];
     
-    self.contentView.backgroundColor = [UIColor whiteColor];
-    self.contentView.alpha = 1;//0.75;
+    self.contentView.backgroundColor = [UIColor clearColor];
+    self.contentView.alpha = 0.75;
     
     //self.categoryLabel.textColor = [UIColor blackColor];
     //self.categoryLabel.numberOfLines = 0;

@@ -42,8 +42,7 @@
     return category;
 }
 
-+ (void)categories:(void (^)(NSArray *categories))success
-             failure:(void (^)(NSDictionary *errorData))failure
++ (void)categories:(void (^)(NSArray *categories))success failure:(void (^)(NSString *message))failure
 {
     [[CoreDataFactory getInstance] context:^(NSManagedObjectContext *managedObjectContext) {
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Category"];
@@ -67,8 +66,8 @@
                     [categories addObject:category];
                 }
                 success(categories);
-            } failure:^(NSDictionary *errorData) {
-                failure(errorData);
+            } failure:^(NSString *message) {
+                failure(message);
             }];
         }
     }];
@@ -84,7 +83,7 @@
     
     NSArray *organizationsArray = categoryDictionary[CATEGORY_ORGANIZATIONS];
     for (NSDictionary *organizationDictionary in  organizationsArray) {
-        Organization *organization = [Organization organizationWithDictionary:organizationDictionary inManagedObjectContext:self.managedObjectContext];
+        Organization *organization = [Organization organizationWithDictionary:organizationDictionary[ORGANIZATION] inManagedObjectContext:self.managedObjectContext];
         [self addOrganizationsObject:organization];
     }
 }

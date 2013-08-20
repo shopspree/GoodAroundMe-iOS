@@ -10,6 +10,8 @@
 #import "OrganizationsTableViewController.h"
 #import "Organization+Create.h"
 #import "OrganizationCell.h"
+#import "CoreDataFactory.h"
+#import "OrganizationProfileViewController.h"
 
 @interface OrganizationsTableViewController ()
 
@@ -21,7 +23,8 @@
 {
     [super viewDidLoad];
     self.navigationController.navigationBarHidden = NO;
-}
+    
+    }
 
 - (void)setCategory:(Category *)category
 {
@@ -29,6 +32,16 @@
     self.title = category.name;
     [self setupFetchedResultsController];
     
+}
+
+- (User *)user
+{
+    if (! _user) {
+        NSManagedObjectContext *managedObjectContext = [CoreDataFactory getInstance].managedObjectContext;
+        _user = [User currentUser:managedObjectContext];
+    }
+    
+    return _user;
 }
 
 - (void)setupFetchedResultsController
@@ -47,6 +60,17 @@
     }
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.destinationViewController isEqualToString:STORYBOARD_ORGANIZATION_PROFILE]) {
+        if ([segue.destinationViewController isKindOfClass:[OrganizationProfileViewController class]]) {
+            OrganizationProfileViewController *organizationProfileVC = (OrganizationProfileViewController *)segue.destinationViewController;
+            NSIndexPath *indexPath = (NSIndexPath *)sender;
+            Organization *organization = [self.fetchedResultsController objectAtIndexPath:indexPath];
+            organizationProfileVC.organization = organization;
+        }
+    }
+}
 
 #pragma mark - UITableViewDataSource
 
@@ -62,18 +86,11 @@
     return cell;
 }
 
-
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
+    [self performSegueWithIdentifier:STORYBOARD_ORGANIZATION_PROFILE sender:indexPath];
 }
 
 - (IBAction)followButton:(id)sender
@@ -90,19 +107,21 @@
 
 - (void)follow:(Organization *)organization
 {
-    [organization follow:^(NSDictionary *reponseDictionary) {
+    [self.user
+     follow:organization success:^() {
         return;
-    } failure:^(NSDictionary *errorData) {
-        [self fail:@"Follow" withMessage:errorData[@"errors"]];
+    } failure:^(NSString *message) {
+        [self fail:@"Follow" withMessage:message];
     }];
 }
 
 - (void)unfollow:(Organization *)organization
 {
-    [organization unfollow:^(NSDictionary *reponseDictionary) {
+    [self.user
+     unfollow:organization success:^() {
         return;
-    } failure:^(NSDictionary *errorData) {
-        // TO DO
+    } failure:^(NSString *message) {
+        [self fail:@"Follow" withMessage:message];
     }];
     
 }

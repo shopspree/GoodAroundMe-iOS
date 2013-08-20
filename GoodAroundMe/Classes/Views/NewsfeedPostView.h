@@ -26,8 +26,4 @@
 
 @interface NewsfeedPostView : NewsfeedView
 
-@property (nonatomic, strong) Post *post;
-
-- (void)populateViewWithNewsfeed:(Newsfeed *)newsfeed;
-
 @end

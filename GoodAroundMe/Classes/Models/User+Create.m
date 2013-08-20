@@ -7,22 +7,23 @@
 //
 
 #import "User+Create.h"
+#import "CoreDataFactory.h"
 #import "ApplicationHelper.h"
 #import "UserAPI.h"
-#import "Company+Create.h"  
-#import "Group+Create.h"
-#import "Notification+Create.h"
+#import "Organization+Create.h"
+#import "OrganizationAPI.h"
 
 @implementation User (Create)
 
-+ (void)fullUserProfileByEmail:(NSString *)email managedObjectContext:(NSManagedObjectContext *)managedObjectContext success:(void (^)(User *user))success failure:(void (^)(NSDictionary *errorData))failure
++ (void)userByEmail:(NSString *)email inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext success:(void (^)(User *user))success failure:(void (^)(NSString *message))failure
 {
     [UserAPI userByEmail:email success:^(NSDictionary *responseDictionary) {
         NSDictionary *userDictionary = responseDictionary[USER];
         User *user = [User userWithDictionary:userDictionary inManagedObjectContext:managedObjectContext];
         success(user);
-    } failure:^(NSDictionary *errorData) {
-        failure(errorData);
+        
+    } failure:^(NSString *message) {
+        failure(message);
     }];
 }
 
@@ -33,7 +34,7 @@
     if (userDictionary) {
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
         request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"email" ascending:YES]];
-        request.predicate = [NSPredicate predicateWithFormat:@"email = %@", [userDictionary[PROFILE][PROFILE_EMAIL] description]];
+        request.predicate = [NSPredicate predicateWithFormat:@"email = %@", [userDictionary[USER_EMAIL] description]];
         
         // Execute the fetch
         NSError *error = nil;
@@ -56,54 +57,52 @@
     
 }
 
-+ (void)signUp:(NSDictionary *)userDictionary success:(void (^)())success failure:(void (^)(NSDictionary *errorData))failure;
++ (void)signUp:(NSDictionary *)userDictionary success:(void (^)(User *user))success failure:(void (^)(NSString *message))failure;
 {
     [UserAPI signUp:userDictionary success:^(NSDictionary *responseDictionary) {
-        [User storeUser:responseDictionary[USER_LOGIN]];
-        success();
-    } failure:^(NSDictionary *errorData) {
-        failure(errorData);
+        [User storeUser:responseDictionary];
+        
+        [[CoreDataFactory getInstance] context:^(NSManagedObjectContext *managedObjectContext) {
+            NSDictionary *userDictionary = responseDictionary[USER];
+            User *authenticatedUser = [User userWithDictionary:userDictionary inManagedObjectContext:managedObjectContext];
+            success(authenticatedUser);
+        }];
+    } failure:^(NSString *message) {
+        failure(message);
     }];
 }
 
-+ (void)signIn:(NSDictionary *)userDictionary success:(void (^)())success failure:(void (^)(NSDictionary *errorData))failure
++ (void)signIn:(NSDictionary *)userDictionary success:(void (^)(User *user))success failure:(void (^)(NSDictionary *errorData))failure
 {
     [UserAPI signIn:userDictionary success:^(NSDictionary *responseDictionary) {
         [User storeUser:responseDictionary];
-        //BOOL isInitialLogin = responseDictionary[USER_BOOTSTRAP];
-        success();
+        
+        [[CoreDataFactory getInstance] context:^(NSManagedObjectContext *managedObjectContext) {
+            NSDictionary *userDictionary = responseDictionary[USER];
+            User *authenticatedUser = [User userWithDictionary:userDictionary inManagedObjectContext:managedObjectContext];
+            success(authenticatedUser);
+        }];
+        
     } failure:^(NSDictionary *errorData) {
         failure(errorData);
     }];
 }
 
-+ (void)signOut:(void (^)())success failure:(void (^)(NSDictionary *errorData))failure
++ (void)signOut:(void (^)())success failure:(void (^)(NSString *message))failure
 {
     [UserAPI signOut:^(NSDictionary *responseDictionary) {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_EMAIL];
         success();
-    } failure:^(NSDictionary *errorData) {
-        failure(errorData);
+    } failure:^(NSString *message) {
+        failure(message);
     }];
 }
 
-+ (void)changePassword:(NSString *)password confirmPassword:(NSString *)passwordConfirmation currentPassword:(NSString *)currentPassword success:(void (^)())success failure:(void (^)(NSDictionary *errorData))failure
-{
-    NSDictionary *userDictionary = [NSDictionary dictionaryWithObjectsAndKeys:currentPassword, @"current_password",
-                                    password, @"password",
-                                    passwordConfirmation, @"password_confirmation",nil];
-    NSDictionary *requestDictionary = [NSDictionary dictionaryWithObjectsAndKeys:USER, userDictionary, nil];
-    [UserAPI changePassword:requestDictionary success:^(NSDictionary *responseDictionary) {
-        success(responseDictionary);
-    } failure:^(NSDictionary *errorData) {
-        failure(errorData);
-    }];
-}
-
-+ (User *)curretnUser:(NSManagedObjectContext *)context
++ (User *)currentUser:(NSManagedObjectContext *)context
 {
     User *user = nil;
     
-    NSString *email = nil; // TO DO !!!
+    NSString *email = [[NSUserDefaults standardUserDefaults] objectForKey:USER_EMAIL];
     
     if (email) {
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
@@ -175,89 +174,83 @@
 
 - (void)setWithDictionary:(NSDictionary *)userDictionary
 {
-    if (YES) {
-        if (userDictionary[PROFILE]) {
-            NSDictionary *profileDictionary = userDictionary[PROFILE];
-            self.email = [profileDictionary[PROFILE_EMAIL] description];
-            self.full_name = [profileDictionary[PROFILE_FULL_NAME] description];
-            self.firstname = [profileDictionary[PROFILE_FIRST_NAME] description];
-            self.lastname = [profileDictionary[PROFILE_LAST_NAME] description];
-            self.thumbnailURL = [profileDictionary[PROFILE_THUMBNAIL_URL] description];
-            self.pictureURL = [profileDictionary[PROFILE_PICTURE_URL] description];
-            self.created_at = [ApplicationHelper dateFromString:[profileDictionary[PROFILE_CREATED_AT] description]];
-            self.updated_at = [ApplicationHelper dateFromString:[profileDictionary[PROFILE_UPDATED_AT] description]];
-        }
+    if (userDictionary) {
+        self.email = [userDictionary[USER_EMAIL] description];
+        self.firstname = [userDictionary[USER_FIRST_NAME] description];
+        self.lastname = [userDictionary[USER_LAST_NAME] description];
+        self.thumbnailURL = [userDictionary[USER_THUMBNAIL_URL] description];
+        self.created_at = [ApplicationHelper dateFromString:[userDictionary[USER_CREATED_AT] description]];
+        self.updated_at = [ApplicationHelper dateFromString:[userDictionary[USER_UPDATED_AT] description]];
         
-        if (userDictionary[JOB_PROFILE]) {
-            NSDictionary *jobProfile = userDictionary[JOB_PROFILE];
-            self.jobTitle = [jobProfile[JOB_PROFILE_TITLE] description];
-            
-            Company *company = [Company companyWithName:[jobProfile[JOB_PROFILE_ORGANIZATION] description] inManagedObjectContext:self.managedObjectContext];
-            self.company = company;            
-        }
-        
-        if (userDictionary[GROUP]) {
-            NSDictionary *groupDictionary = userDictionary[GROUP];
-            Group *group = [Group groupWithName:[groupDictionary[GROUP_NAME] description] inManagedObjectContext:self.managedObjectContext];
-            self.group = group;
-
+        if (userDictionary[USER_FOLLOWING]) {
+            self.following = [NSSet set];
+            for (NSDictionary *orgazniationDictionary in userDictionary[USER_FOLLOWING]) {
+                Organization *organization = [Organization organizationWithDictionary:orgazniationDictionary[ORGANIZATION] inManagedObjectContext:self.managedObjectContext];
+                [self addFollowingObject:organization];
+            }
         }
     }
 }
 
-- (void)saveUser:(NSDictionary *)userDictionary success:(void (^)(User *user))success failure:(void (^)(NSDictionary *errorData))failure
+
+
+- (void)changePassword:(NSString *)password confirmPassword:(NSString *)passwordConfirmation currentPassword:(NSString *)currentPassword success:(void (^)())success failure:(void (^)(NSString *message))failure
 {
-    self.jobTitle = userDictionary[JOB_PROFILE][JOB_PROFILE_TITLE];
-    self.group = [Group groupWithName:userDictionary[GROUP][GROUP_NAME] inManagedObjectContext:self.managedObjectContext];
+    NSDictionary *userDictionary = [NSDictionary dictionaryWithObjectsAndKeys:currentPassword, @"current_password",
+                                    password, @"password",
+                                    passwordConfirmation, @"password_confirmation",nil];
+    NSDictionary *requestDictionary = [NSDictionary dictionaryWithObjectsAndKeys:USER, userDictionary, nil];
     
+    [UserAPI changePassword:requestDictionary forEmail:self.email success:^(NSDictionary *responseDictionary) {
+        success(responseDictionary);
+    } failure:^(NSString *message) {
+        failure(message);
+    }];
+}
+
+- (void)updateUser:(NSDictionary *)userDictionary success:(void (^)(User *user))success failure:(void (^)(NSString *message))failure
+{
     [UserAPI updateUser:self success:^(NSDictionary *responseDictionary) {
         [self setWithDictionary:responseDictionary];
-    } failure:^(NSDictionary *errorData) {
-        failure(errorData);
+    } failure:^(NSString *message) {
+        failure(message);
     }];
-    
-    
-    
 }
 
-- (void)notifications:(void (^)())success failure:(void (^)(NSDictionary *errorData))failure
+- (void)follow:(Organization *)organization success:(void (^)())success failure:(void (^)(NSString *message))failure
 {
-    [UserAPI notificationsForUser:self success:^(NSDictionary *responseDictionary) {
-        for (NSDictionary *notificationDictionary in responseDictionary[@"Notifications"]) {
-            Notification *notification = [Notification notificationWithDictionary:notificationDictionary[NOTIFICATION] inManagedObjectContext:self.managedObjectContext];
-            notification.user = self;
-            
-            success();
-        }
-    } failure:^(NSDictionary *errorData) {
-        failure(errorData);
-    }]; 
+    [OrganizationAPI follow:organization.uid success:^(NSDictionary *reponseDictionary) {
+        organization.is_followed = [NSNumber numberWithBool:YES];
+        organization.followers_count = [NSNumber numberWithInteger:([organization.followers_count integerValue] + 1)];
+        [self addFollowingObject:organization];
+        success();
+    } failure:^(NSString *message) {
+        failure(message);
+    }];
 }
 
-- (void)acknowledgeNotifications:(void (^)())success failure:(void (^)(NSDictionary *errorData))failure
+- (void)unfollow:(Organization *)organization success:(void (^)())success failure:(void (^)(NSString *message))failure
 {
-    [UserAPI acknowledgeNotificationsForUser:self success:^(NSDictionary *responseDictionary) {
-        for (NSDictionary *notificationDictionary in responseDictionary[@"Notifications"]) {
-            success();
-        }
-    } failure:^(NSDictionary *errorData) {
-        failure(errorData);
+    [OrganizationAPI unfollow:organization.uid success:^(NSDictionary *reponseDictionary) {
+        organization.is_followed = [NSNumber numberWithBool:NO];
+        organization.followers_count = [NSNumber numberWithInteger:([organization.followers_count integerValue] - 1)];
+        [self removeFollowingObject:organization];
+        
+        success();
+    } failure:^(NSString *message) {
+        failure(message);
     }];
 }
 
 - (NSData *)toJSON
 {
-    NSDictionary *profileDictionary = [NSDictionary dictionaryWithObjectsAndKeys:self.firstname, PROFILE_FIRST_NAME,
-                                       self.lastname, PROFILE_LAST_NAME,
-                                       self.email, PROFILE_EMAIL,
-                                       self.pictureURL, PROFILE_PICTURE_URL,
-                                       self.thumbnailURL, PROFILE_THUMBNAIL_URL, nil];
+    NSDictionary *profileDictionary = [NSDictionary dictionaryWithObjectsAndKeys:self.firstname, USER_FIRST_NAME,
+                                       self.lastname, USER_LAST_NAME,
+                                       self.email, USER_EMAIL,
+                                       self.thumbnailURL, USER_THUMBNAIL_URL, nil];
     
-    NSString *groupName = self.group ? self.group.name : nil;
-    NSDictionary *groupDictionary = [NSDictionary dictionaryWithObjectsAndKeys:groupName, @"name", nil];
     
-    NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:profileDictionary, PROFILE,
-                                groupDictionary, GROUP, nil];
+    NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:profileDictionary, USER, nil];
     
     NSData *jsonData = [ApplicationHelper constructJSON:dictionary];
     return jsonData;

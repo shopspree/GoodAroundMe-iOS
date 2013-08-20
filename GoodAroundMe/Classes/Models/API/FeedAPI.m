@@ -7,62 +7,30 @@
 //
 
 #import "FeedAPI.h"
-#import "BaseModel.h"
 #import "Newsfeed+Activity.h"
 
 @implementation FeedAPI
 
-+ (void)postNewsfeed:(NSString *)postId success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure
++ (void)postNewsfeed:(NSString *)postId success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure
 {
-    NSURLRequest *request = [BaseAPI getRequestWithURL:[NSString stringWithFormat:API_POST_ACTIVITY, postId] withJSON:nil];
+    NSData *json = nil;
     
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        if ([response statusCode] == 200) {
-            NSDictionary *responseDictionary = (NSDictionary *)JSON;
-            NSLog(@"[DEBUG] [FeedAPI][postNewsfeed] Response from server is: %@", responseDictionary);
-            
-            if (success) {
-                success(responseDictionary);
-            }
-            
-        }
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-        NSLog(@"[DEBUG] [FeedAPI][newsfeeds] %d error!!!", [response statusCode]);
-        
-        NSDictionary *errorData = (NSDictionary *)JSON;
-        failure(errorData);
+    [BaseAPI getRequestWithURL:[NSString stringWithFormat:API_POST_ACTIVITY, postId] json:json success:^(NSDictionary *responseDictionary) {
+        success(responseDictionary);
+    } failure:^(NSString *message) {
+        failure(message);
     }];
-    
-    [operation start];
 }
 
-+ (void)newsfeeds:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure
++ (void)newsfeeds:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure
 {
-    NSURLRequest *request = [BaseAPI getRequestWithURL:API_ACTIVITIES_URL withJSON:nil];
+    NSData *json = nil;
     
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        if ([response statusCode] == 200) {
-            NSDictionary *responseDictionary = (NSDictionary *)JSON;
-            NSLog(@"[DEBUG] [FeedAPI][newsfeeds] Response from server is: %@", responseDictionary);
-            
-            if (success) {
-                success(responseDictionary);
-            }
-            
-        }
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-        NSLog(@"[DEBUG] [FeedAPI][newsfeeds] %d error!!!", [response statusCode]);
-        
-        NSDictionary *errorData = (NSDictionary *)JSON;
-        failure(errorData);
+    [BaseAPI getRequestWithURL:API_ACTIVITIES_URL json:json success:^(NSDictionary *responseDictionary) {
+        success(responseDictionary);
+    } failure:^(NSString *message) {
+        failure(message);
     }];
-    
-    [operation start];
-    
-}
-
-+ (void)newsfeed:(NSString *)newsfeedID success:(void (^)(NSDictionary *newsfeedDictionary))success failure:(void (^)(NSDictionary *errorData))failure
-{
     
 }
 

@@ -28,8 +28,8 @@
     [Category categories:^(NSArray *categories) {
         self.categories = categories;
         [self.categoryCollectionView reloadData];
-    } failure:^(NSDictionary *errorData) {
-        //[self fail:@"Categories" withMessage:@"Error loading categories"];
+    } failure:^(NSString *message) {
+        [self fail:@"Categories" withMessage:@"Error loading categories"];
     }];
     
 }
@@ -44,6 +44,16 @@
         }
     }
 }
+
+#pragma mark - Storyboard
+
+- (IBAction)doneButtonAction:(id)sender
+{
+    [self dismissViewControllerAnimated:YES completion:^{
+        return;
+    }];
+}
+
 
 #pragma mark - UICollectionDataSource
 

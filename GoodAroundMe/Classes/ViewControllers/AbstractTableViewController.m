@@ -2,11 +2,13 @@
 //  AbstractTableViewController.m
 //  GoodAroundMe
 //
-//  Created by asaf ahi-mordehai on 8/10/13.
+//  Created by asaf ahi-mordehai on 8/11/13.
 //  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
 #import "AbstractTableViewController.h"
+#import "UIViewController+Utility.h"
+#import "StoryboardConstants.h"
 
 @interface AbstractTableViewController ()
 
@@ -14,29 +16,19 @@
 
 @implementation AbstractTableViewController
 
-- (void)fail:(NSString *)title withMessage:(NSString *)message
+- (void)viewDidLoad
 {
-    if (title && message) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
-                                                        message:message
-                                                       delegate:self
-                                              cancelButtonTitle:nil
-                                              otherButtonTitles:@"OK", nil];
-        [alert show];
-        
-    }
+    [super viewDidLoad];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(performLoginIfRequired:)
+                                                 name:@"Unauthorized"
+                                               object:nil];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (void) performLoginIfRequired:(UIViewController *)source
 {
-    //abstract
-    return 0;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // abstract
-    return nil;
+    [self navigateStoryboardWithIdentifier:SIGNUP_SIGNIN];
 }
 
 @end

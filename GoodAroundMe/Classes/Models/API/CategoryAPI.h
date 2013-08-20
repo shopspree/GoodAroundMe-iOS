@@ -12,6 +12,6 @@
 @interface CategoryAPI : BaseAPI
 
 + (void)categories:(void (^)(NSDictionary *reponseDictionary))success
-           failure:(void (^)(NSDictionary *errorData))failure;
+           failure:(void (^)(NSString *message))failure;
 
 @end

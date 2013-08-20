@@ -42,10 +42,4 @@
     return YES;
 }
 
-- (void)authenticatedFirstTime:(BOOL)isInitialAuthentication
-{
-    NSString *identifier = (isInitialAuthentication) ? @"Explore" : @"Newsfeed";
-    [self navigateStoryboardWithIdentifier:identifier];
-}
-
 @end

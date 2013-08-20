@@ -19,10 +19,10 @@ typedef NS_ENUM(NSInteger, ServerRequestType) {
     ServerRequestDelete
 };
 
-+ (void)getRequestWithURL:(NSString *)url json:(NSData *)json success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure;
-+ (void)postRequestWithURL:(NSString *)url json:(NSData *)json success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure;
-+ (void)putRequestWithURL:(NSString *)url json:(NSData *)json success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure;
-+ (void)deleteRequestWithURL:(NSString *)url json:(NSData *)json success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure;
++ (void)getRequestWithURL:(NSString *)url json:(NSData *)json success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure;
++ (void)postRequestWithURL:(NSString *)url json:(NSData *)json success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure;
++ (void)putRequestWithURL:(NSString *)url json:(NSData *)json success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure;
++ (void)deleteRequestWithURL:(NSString *)url json:(NSData *)json success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure;
 
 
 + (NSURLRequest *)getRequestWithURL:(NSString *)urlString withJSON:(NSData *)jsonData;

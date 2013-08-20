@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UserViewController.h"
 
-@interface UserSettingsViewController : UITableViewController
+@interface UserSettingsViewController : UserViewController <UIAlertViewDelegate>
 
 @end

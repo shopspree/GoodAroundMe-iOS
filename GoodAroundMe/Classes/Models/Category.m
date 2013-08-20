@@ -2,7 +2,7 @@
 //  Category.m
 //  GoodAroundMe
 //
-//  Created by asaf ahi-mordehai on 8/10/13.
+//  Created by asaf ahi-mordehai on 8/15/13.
 //  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
@@ -12,8 +12,8 @@
 
 @implementation Category
 
-@dynamic name;
 @dynamic imageURL;
+@dynamic name;
 @dynamic uid;
 @dynamic organizations;
 

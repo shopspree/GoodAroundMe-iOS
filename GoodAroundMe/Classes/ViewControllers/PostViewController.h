@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AbstractViewController.h"
 #import "Post+Create.h"
 #import "NewsfeedPostViewDelegate.h"
 
 
-@interface PostViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, NewsfeedPostViewDelegate>
+@interface PostViewController : AbstractViewController <NewsfeedPostViewDelegate>
 
 @property (nonatomic, strong) Post *post;
 @property (nonatomic) BOOL keyboardIsShown;

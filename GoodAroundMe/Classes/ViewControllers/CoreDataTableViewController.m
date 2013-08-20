@@ -6,6 +6,7 @@
 //
 
 #import "CoreDataTableViewController.h"
+#import "UIViewController+Utility.h"
 
 @interface CoreDataTableViewController()
 @property (nonatomic) BOOL beganUpdates;
@@ -73,7 +74,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     NSUInteger numberOfRowsInSection = [[[self.fetchedResultsController sections] objectAtIndex:section] numberOfObjects];
-    NSLog(@"number of rows = %d", numberOfRowsInSection);
+    NSLog(@"[DEBUG] number of rows = %d", numberOfRowsInSection);
     return numberOfRowsInSection;
 }
 
