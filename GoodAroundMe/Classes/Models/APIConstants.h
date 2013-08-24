@@ -10,8 +10,8 @@
 
 #define SERVER_GENERIC_API_KEY @""
 #define SERVER_PROTOCOL @"http"
-#define SERVER_HOST @"localhost"
-#define SERVER_PORT @"3000"
+#define SERVER_HOST @"goodaroundme.herokuapp.com"
+#define SERVER_PORT @"80"
 
 #define DEFAULT_TIMEOUT 60.0
 

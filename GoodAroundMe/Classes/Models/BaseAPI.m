@@ -166,17 +166,10 @@
         NSString *messageTopic = [[errorData[@"errors"] allKeys] lastObject];
         NSString *messageContent = [[errorData[@"errors"] allValues] lastObject][0];
         message = (messageTopic && messageContent) ? [NSString stringWithFormat:@"%@ %@", messageTopic, messageContent] : @"Oops, an error occured. Please try later";
-        
     }
     
     return message;
 }
-
-
-
-
-
-
 
 + (NSURLRequest *)getRequestWithURL:(NSString *)urlString withJSON:(NSData *)jsonData
 {

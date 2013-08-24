@@ -22,11 +22,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
 	// Do any additional setup after loading the view.
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
     
     [self.activityIndicator startAnimating];
     [self loadUser];
-    
 }
 
 - (void)loadCategories
@@ -54,18 +59,20 @@
 {
     NSString *email = [[NSUserDefaults standardUserDefaults] stringForKey:USER_EMAIL];
     if (!email) {
-        [self navigateStoryboardWithIdentifier:SIGNUP_SIGNIN];
-    }
-    
-    [[CoreDataFactory getInstance] context:^(NSManagedObjectContext *managedObjectContext) {
-        [User userByEmail:email inManagedObjectContext:managedObjectContext success:^(User *user) {
-            [self loadCategories];
-            
-        } failure:^(NSString *message) {
-            [self fail:@"Good Around Me" withMessage:@"Error loading application"];
+        //[self navigateStoryboardWithIdentifier:SIGNUP_SIGNIN];
+        [self performSegueWithIdentifier:SIGNUP_SIGNIN sender:self];
+    } else {
+        [[CoreDataFactory getInstance] context:^(NSManagedObjectContext *managedObjectContext) {
+            [User userByEmail:email inManagedObjectContext:managedObjectContext success:^(User *user) {
+                self.managedObjectContext = managedObjectContext;
+                [self loadCategories];
+                
+            } failure:^(NSString *message) {
+                [self fail:@"Good Around Me" withMessage:@"Error loading application"];
+                
+            }];
         }];
-    }];
-
+    }
 }
 
 @end

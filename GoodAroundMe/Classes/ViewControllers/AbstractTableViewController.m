@@ -31,4 +31,11 @@
     [self navigateStoryboardWithIdentifier:SIGNUP_SIGNIN];
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.destinationViewController respondsToSelector:@selector(setManagedObjectContext:)]) {
+        [segue.destinationViewController performSelector:@selector(setManagedObjectContext:) withObject:self.managedObjectContext];
+    }
+}
+
 @end

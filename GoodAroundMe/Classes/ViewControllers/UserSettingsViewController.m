@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 asaf ahi-mordehai. All rights reserved.
 //
 
+#import <AWSS3/AWSS3.h>
+#import <MobileCoreServices/MobileCoreServices.h>
 #import <QuartzCore/QuartzCore.h>
 #import <SDWebImage/UIButton+WebCache.h>
 #import "UserSettingsViewController.h"
@@ -49,14 +51,18 @@
     [alert show];
 }
 
+#define MY_SECRET_KEY @"Hg1vYx8K/+IcntjgTScefb4ox7TxRETuuQ+YKkF7"
+#define MY_ACCESS_KEY_ID @"AKIAIYFCVLE2OKFN4FUQ"
+#define MY_PICTURE_BUCKET @"goodaroundme/media"
+#define MY_PICTURE_NAME @""
+
 - (void)changeImage
 {
     // TO DO!!!
     UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+    imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     imagePicker.delegate = self;
-    [self presentModalViewController:imagePicker animated:YES];
-    AmazonS3Client *s3 = [[[AmazonS3Client alloc] initWithAccessKey:MY_ACCESS_KEY_ID withSecretKey:MY_SECRET_KEY] autorelease];
-    
+    [self presentViewController:imagePicker animated:YES completion:nil];
 }
 
 
@@ -110,5 +116,50 @@
         }];
     }
 }
+
+#pragma mark - UIImagePickerControllerDelegate
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
+    UIImage *originalImage, *editedImage, *image;
+    
+    // Handle a still image capture
+    if (CFStringCompare ((CFStringRef)mediaType, kUTTypeImage, 0) == kCFCompareEqualTo) {
+        editedImage = (UIImage *) [info objectForKey:UIImagePickerControllerEditedImage];
+        originalImage = (UIImage *) [info objectForKey:UIImagePickerControllerOriginalImage];
+        
+        image = editedImage ? editedImage : originalImage;
+        [self uploadImage:image];
+        
+    }
+}
+
+- (void)uploadImage:(UIImage *)image
+{
+    AmazonS3Client *s3 = [[AmazonS3Client alloc] initWithAccessKey:MY_ACCESS_KEY_ID withSecretKey:MY_SECRET_KEY];
+    
+    NSString *s3BucketPath = [NSString stringWithFormat:@""];
+    [s3 getBucketLocation:s3BucketPath];
+    [s3 createBucket:[[S3CreateBucketRequest alloc] initWithName:s3BucketPath]];
+    
+    S3PutObjectRequest *por = [[S3PutObjectRequest alloc] initWithKey:MY_PICTURE_NAME inBucket:MY_PICTURE_BUCKET];
+    por.contentType = @"image/jpeg";
+    //por.data = imageData;
+    por.cannedACL = [S3CannedACL publicRead];
+    [s3 putObject:por];
+    
+    S3ResponseHeaderOverrides *override = [[S3ResponseHeaderOverrides alloc] init];
+    override.contentType = @"image/jpeg";
+    S3GetPreSignedURLRequest *gpsur = [[S3GetPreSignedURLRequest alloc] init];
+    gpsur.key     = MY_PICTURE_NAME;
+    gpsur.bucket  = MY_PICTURE_BUCKET;
+    gpsur.expires = [NSDate dateWithTimeIntervalSinceNow:(NSTimeInterval) 3600];  // Added an hour's worth of seconds to the current time.
+    gpsur.responseHeaderOverrides = override;
+    NSURL *url = [s3 getPreSignedURL:gpsur];
+    [[UIApplication sharedApplication] openURL:url];
+}
+
+
 
 @end

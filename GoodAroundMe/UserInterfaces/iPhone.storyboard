@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="icS-xc-TRO">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="g7e-52-UqO">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
@@ -276,7 +276,7 @@
                         </connections>
                     </tableView>
                     <connections>
-                        <outlet property="emailTextField" destination="mnY-vh-NoD" id="GNb-LJ-Ubi"/>
+                        <outlet property="emailTextField" destination="gOB-Ai-EtI" id="k8w-7i-eBn"/>
                         <outlet property="firstNameTextField" destination="mnY-vh-NoD" id="fMB-fp-bIH"/>
                         <outlet property="lastNameTextField" destination="euN-GK-0Nj" id="wps-Lk-lNt"/>
                         <outlet property="passwordTextField" destination="J0P-gf-0eS" id="6Os-Pe-LxC"/>
@@ -635,6 +635,54 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                             </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="UploadPostCell" id="E72-yo-Fen" customClass="UploadPostCell">
+                                <rect key="frame" x="0.0" y="66" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="DMG-n8-jls"/>
+                                        <progressView opaque="NO" contentMode="scaleToFill" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="NJE-KA-WFh"/>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wdX-wi-fa1">
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="51" id="qIe-gD-oLi"/>
+                                            </constraints>
+                                        </imageView>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RxT-GQ-OPU">
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                            <state key="normal" title="🔄">
+                                                <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <state key="highlighted">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                        </button>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <constraints>
+                                    <constraint firstItem="RxT-GQ-OPU" firstAttribute="trailing" secondItem="E72-yo-Fen" secondAttribute="trailing" type="default" id="0Hq-Xe-pch"/>
+                                    <constraint firstAttribute="trailing" secondItem="DMG-n8-jls" secondAttribute="trailing" constant="20" type="default" id="4cf-Hn-TY8"/>
+                                    <constraint firstItem="wdX-wi-fa1" firstAttribute="leading" secondItem="E72-yo-Fen" secondAttribute="leading" type="default" id="8RN-Bs-HdM"/>
+                                    <constraint firstItem="wdX-wi-fa1" firstAttribute="bottom" secondItem="E72-yo-Fen" secondAttribute="bottom" type="default" id="G2C-91-TZO"/>
+                                    <constraint firstItem="RxT-GQ-OPU" firstAttribute="leading" secondItem="NJE-KA-WFh" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="GW1-RH-vha"/>
+                                    <constraint firstItem="DMG-n8-jls" firstAttribute="leading" secondItem="NJE-KA-WFh" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="SUW-eD-GmZ"/>
+                                    <constraint firstItem="RxT-GQ-OPU" firstAttribute="top" secondItem="E72-yo-Fen" secondAttribute="top" type="default" id="SUZ-D1-1o4"/>
+                                    <constraint firstItem="NJE-KA-WFh" firstAttribute="centerY" secondItem="DMG-n8-jls" secondAttribute="centerY" type="default" id="Tft-xv-MQ6"/>
+                                    <constraint firstItem="wdX-wi-fa1" firstAttribute="top" secondItem="E72-yo-Fen" secondAttribute="top" type="default" id="YGg-iN-N7B"/>
+                                    <constraint firstItem="RxT-GQ-OPU" firstAttribute="centerY" secondItem="DMG-n8-jls" secondAttribute="centerY" type="default" id="lz0-bA-xqW"/>
+                                    <constraint firstItem="RxT-GQ-OPU" firstAttribute="bottom" secondItem="E72-yo-Fen" secondAttribute="bottom" type="default" id="o9Y-FS-ft2"/>
+                                    <constraint firstItem="NJE-KA-WFh" firstAttribute="leading" secondItem="wdX-wi-fa1" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="v4f-jK-les"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="activityIndicator" destination="DMG-n8-jls" id="DnG-BJ-mhg"/>
+                                    <outlet property="postImageView" destination="wdX-wi-fa1" id="aKi-9A-L53"/>
+                                    <outlet property="refreshButton" destination="RxT-GQ-OPU" id="mHZ-Or-5rE"/>
+                                    <outlet property="uploadProgressBar" destination="NJE-KA-WFh" id="KOi-y1-ZLt"/>
+                                </connections>
+                            </tableViewCell>
                         </prototypes>
                         <sections/>
                         <connections>
@@ -657,31 +705,13 @@
                     </navigationItem>
                     <connections>
                         <segue destination="QMC-G8-qVO" kind="push" id="PR7-Pi-mWQ"/>
-                        <segue destination="Kqq-71-AT4" kind="push" identifier="NewPost" id="TOg-Q1-rp3"/>
                         <segue destination="ckE-Fd-V4D" kind="modal" identifier="Explore" id="OGR-wm-x3z"/>
+                        <segue destination="K24-ST-X7f" kind="modal" identifier="NewPostCaption" id="thx-1t-ED1"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="68Q-Eu-37f" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-2454" y="1165"/>
-        </scene>
-        <!--New Post Media Picker View Controller-->
-        <scene sceneID="eev-RX-8Ra">
-            <objects>
-                <viewController id="Kqq-71-AT4" customClass="NewPostMediaPickerViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="6pA-A8-dD1">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="NTd-JS-lLr"/>
-                    <connections>
-                        <segue destination="K24-ST-X7f" kind="push" identifier="NewPost" id="cb2-69-eHv"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ehT-rM-aQV" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1742" y="2137"/>
         </scene>
         <!--Organization Profile View Controller-->
         <scene sceneID="LQb-wV-ZPL">
@@ -1186,6 +1216,101 @@
             </objects>
             <point key="canvasLocation" x="-1430" y="1541"/>
         </scene>
+        <!--Amazon View Controller-->
+        <scene sceneID="793-L9-V4U">
+            <objects>
+                <viewController id="g7e-52-UqO" customClass="AmazonViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5my-tU-DGV">
+                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="bottom" translatesAutoresizingMaskIntoConstraints="NO" id="nZ3-TZ-Vxu">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="173" id="pDF-zf-WVB"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Welcome to Amazon demo " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ddc-fw-dar">
+                                <fontDescription key="fontDescription" name="GillSans-Light" family="Gill Sans" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ip1-DY-Efc">
+                                <color key="backgroundColor" red="1" green="0.40000000596046448" blue="0.40000000596046448" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="zxE-B8-pL3"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="GillSans-Bold" family="Gill Sans" pointSize="15"/>
+                                <state key="normal" title="Upload to Amazon">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="uploadToAmazonButtonAction:" destination="g7e-52-UqO" eventType="touchUpInside" id="H0b-zr-9uh"/>
+                                </connections>
+                            </button>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Bucket name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Wv3-NS-BeN">
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ODu-uO-Jgt">
+                                <color key="backgroundColor" red="1" green="0.50196081399917603" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="119" id="iMA-Ns-hmd"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="GillSans-Bold" family="Gill Sans" pointSize="15"/>
+                                <state key="normal" title="Check  bucket">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="checkBucketButtonAction:" destination="g7e-52-UqO" eventType="touchUpInside" id="g7e-0G-ltQ"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="Wv3-NS-BeN" firstAttribute="leading" secondItem="5my-tU-DGV" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="GCa-GV-fqW"/>
+                            <constraint firstItem="ddc-fw-dar" firstAttribute="top" secondItem="5my-tU-DGV" secondAttribute="top" constant="20" symbolic="YES" type="default" id="HZa-ue-736"/>
+                            <constraint firstItem="ddc-fw-dar" firstAttribute="leading" secondItem="5my-tU-DGV" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="Kr2-83-Wbh"/>
+                            <constraint firstItem="nZ3-TZ-Vxu" firstAttribute="top" secondItem="ddc-fw-dar" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="L2s-7H-KFI"/>
+                            <constraint firstItem="nZ3-TZ-Vxu" firstAttribute="trailing" secondItem="5my-tU-DGV" secondAttribute="trailing" type="default" id="Xn3-oE-r1d"/>
+                            <constraint firstItem="Wv3-NS-BeN" firstAttribute="top" secondItem="nZ3-TZ-Vxu" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="cXN-9b-2Xf"/>
+                            <constraint firstItem="ODu-uO-Jgt" firstAttribute="bottom" secondItem="Wv3-NS-BeN" secondAttribute="bottom" type="default" id="clJ-Oi-mu5"/>
+                            <constraint firstAttribute="trailing" secondItem="ip1-DY-Efc" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="fPx-PD-T5w"/>
+                            <constraint firstItem="nZ3-TZ-Vxu" firstAttribute="leading" secondItem="5my-tU-DGV" secondAttribute="leading" type="default" id="oYX-cx-zjL"/>
+                            <constraint firstAttribute="trailing" secondItem="ODu-uO-Jgt" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="osn-Rx-HoA"/>
+                            <constraint firstItem="ODu-uO-Jgt" firstAttribute="leading" secondItem="Wv3-NS-BeN" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="pg9-BD-Ahi"/>
+                            <constraint firstAttribute="bottom" secondItem="ip1-DY-Efc" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="qNH-eX-pH9"/>
+                            <constraint firstAttribute="trailing" secondItem="ddc-fw-dar" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="rV8-Hd-t8n"/>
+                            <constraint firstItem="ip1-DY-Efc" firstAttribute="leading" secondItem="5my-tU-DGV" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="ttr-bm-pgC"/>
+                            <constraint firstItem="ODu-uO-Jgt" firstAttribute="top" secondItem="nZ3-TZ-Vxu" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="uRC-dr-RvP"/>
+                        </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="qNV-9M-g7B" appends="YES" id="kQd-r8-aC7"/>
+                            <outletCollection property="gestureRecognizers" destination="qNV-9M-g7B" appends="YES" id="1F0-1l-Smu"/>
+                        </connections>
+                    </view>
+                    <connections>
+                        <outlet property="bucketTextField" destination="Wv3-NS-BeN" id="nq2-Sh-VOd"/>
+                        <outlet property="imageView" destination="nZ3-TZ-Vxu" id="aq8-Ul-I6O"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="eLE-Fu-6eX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="qNV-9M-g7B">
+                    <connections>
+                        <action selector="tap:" destination="g7e-52-UqO" id="7C8-k1-ESQ"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="-760" y="2015"/>
+        </scene>
         <!--Likes Table View Controller-->
         <scene sceneID="sFt-1q-AqF">
             <objects>
@@ -1246,15 +1371,15 @@
             </objects>
             <point key="canvasLocation" x="-913" y="1165"/>
         </scene>
-        <!--View Controller-->
+        <!--New Post Caption View Controller-->
         <scene sceneID="Chq-QY-P49">
             <objects>
-                <viewController id="K24-ST-X7f" sceneMemberID="viewController">
+                <viewController id="K24-ST-X7f" customClass="NewPostCaptionViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="0jQ-8Y-Xox">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" image="animal1.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="aJm-ej-aOF"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="aJm-ej-aOF"/>
                             <textField opaque="NO" clipsSubviews="YES" alpha="0.80000000000000004" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Tap to add title" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ULZ-lN-Yqg">
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -1267,7 +1392,6 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="eVO-nW-VYL"/>
-                                    <constraint firstAttribute="width" constant="273" id="hKt-RT-Bw0"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="17"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -1285,15 +1409,18 @@
                                 <state key="highlighted">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="shareButtonAction:" destination="K24-ST-X7f" eventType="touchUpInside" id="Ng0-yz-tI4"/>
+                                </connections>
                             </button>
                             <button opaque="NO" alpha="0.80000001192092896" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sKm-CZ-Wey">
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="43" id="QRY-eW-LZ8"/>
-                                    <constraint firstAttribute="height" constant="36" id="aUg-dO-KHa"/>
+                                    <constraint firstAttribute="height" constant="36" id="xUf-pN-wOZ"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                <size key="titleShadowOffset" width="1" height="1"/>
+                                <size key="titleShadowOffset" width="2" height="2"/>
                                 <state key="normal" title="x">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -1301,31 +1428,51 @@
                                 <state key="highlighted">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="cancelButtonAction:" destination="K24-ST-X7f" eventType="touchUpInside" id="Xm6-La-KSz"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="ULZ-lN-Yqg" firstAttribute="top" secondItem="0jQ-8Y-Xox" secondAttribute="top" constant="134" id="2m4-f4-plL"/>
+                            <constraint firstItem="sKm-CZ-Wey" firstAttribute="leading" secondItem="0jQ-8Y-Xox" secondAttribute="leading" type="default" id="0V5-fa-lEK"/>
                             <constraint firstItem="vtf-g6-gQ3" firstAttribute="leading" secondItem="0jQ-8Y-Xox" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="BKb-FO-pEU"/>
                             <constraint firstAttribute="trailing" secondItem="ULZ-lN-Yqg" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="HAB-Ww-fLh"/>
                             <constraint firstItem="aJm-ej-aOF" firstAttribute="trailing" secondItem="0jQ-8Y-Xox" secondAttribute="trailing" type="default" id="J4m-ib-sHt"/>
-                            <constraint firstItem="sKm-CZ-Wey" firstAttribute="trailing" secondItem="0jQ-8Y-Xox" secondAttribute="trailing" type="default" id="PeT-oh-jD1"/>
                             <constraint firstItem="aJm-ej-aOF" firstAttribute="leading" secondItem="0jQ-8Y-Xox" secondAttribute="leading" type="default" id="S4p-Uy-bNJ"/>
                             <constraint firstItem="0bp-PJ-Dgl" firstAttribute="leading" secondItem="0jQ-8Y-Xox" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="ZId-rY-ir8"/>
-                            <constraint firstItem="0bp-PJ-Dgl" firstAttribute="top" secondItem="0jQ-8Y-Xox" secondAttribute="top" constant="191" id="c8v-hU-p1M"/>
-                            <constraint firstAttribute="bottom" secondItem="vtf-g6-gQ3" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="dBV-e5-8C5"/>
-                            <constraint firstItem="sKm-CZ-Wey" firstAttribute="top" secondItem="0jQ-8Y-Xox" secondAttribute="top" type="default" id="oJa-gq-OC9"/>
+                            <constraint firstItem="ULZ-lN-Yqg" firstAttribute="top" secondItem="0jQ-8Y-Xox" secondAttribute="top" constant="133" id="aLo-mh-uH4"/>
+                            <constraint firstAttribute="bottom" secondItem="vtf-g6-gQ3" secondAttribute="bottom" constant="22" id="adC-lW-xma"/>
+                            <constraint firstItem="sKm-CZ-Wey" firstAttribute="top" secondItem="0jQ-8Y-Xox" secondAttribute="top" type="default" id="mKL-h0-706"/>
                             <constraint firstItem="aJm-ej-aOF" firstAttribute="bottom" secondItem="0jQ-8Y-Xox" secondAttribute="bottom" type="default" id="s1s-Zd-2nq"/>
                             <constraint firstAttribute="trailing" secondItem="vtf-g6-gQ3" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="tPf-Fv-QLb"/>
                             <constraint firstItem="ULZ-lN-Yqg" firstAttribute="leading" secondItem="0jQ-8Y-Xox" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="u45-aU-AU3"/>
+                            <constraint firstItem="0bp-PJ-Dgl" firstAttribute="top" secondItem="0jQ-8Y-Xox" secondAttribute="top" constant="188" id="vHx-JC-ptO"/>
                             <constraint firstItem="aJm-ej-aOF" firstAttribute="top" secondItem="0jQ-8Y-Xox" secondAttribute="top" type="default" id="xUD-W2-vTw"/>
+                            <constraint firstAttribute="trailing" secondItem="0bp-PJ-Dgl" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="znp-jb-ewF"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="119-sa-eMq" appends="YES" id="Wrl-ck-93p"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" id="s1O-do-1kj"/>
+                    <connections>
+                        <outlet property="backgroundImageView" destination="aJm-ej-aOF" id="Lpk-It-fCQ"/>
+                        <outlet property="captionTextField" destination="0bp-PJ-Dgl" id="h4x-cO-ZxV"/>
+                        <outlet property="shareButton" destination="vtf-g6-gQ3" id="Ta4-dq-OdE"/>
+                        <outlet property="tap" destination="119-sa-eMq" id="6Pt-hp-wVz"/>
+                        <outlet property="titleTextField" destination="ULZ-lN-Yqg" id="Sne-kK-U5D"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oQy-QP-dQd" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="119-sa-eMq">
+                    <connections>
+                        <action selector="tapAction:" destination="K24-ST-X7f" id="U16-g0-61i"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="-913" y="2137"/>
+            <point key="canvasLocation" x="-1917" y="2257"/>
         </scene>
         <!--User Profile View Controller-->
         <scene sceneID="kKd-SU-zbv">
@@ -2102,7 +2249,6 @@
                         </connections>
                     </tableView>
                     <connections>
-                        <outlet property="emailTextField" destination="3Rq-7e-Bn2" id="LIn-vN-rMK"/>
                         <outlet property="firstNameTextField" destination="3Rq-7e-Bn2" id="Nbn-BA-H73"/>
                         <outlet property="lastNameTextField" destination="aKo-E5-rLJ" id="X9z-fX-aEY"/>
                         <outlet property="passwordTextField" destination="taw-h1-9gc" id="Jss-e9-u0S"/>
@@ -2122,240 +2268,14 @@
         <image name="tagLogo.jpeg" width="48" height="48"/>
         <image name="twitterLogo.jpeg" width="50" height="50"/>
     </resources>
-    <classes>
-        <class className="AbstractTableViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/AbstractTableViewController.h"/>
-        </class>
-        <class className="AbstractUserAuthenticationViewController" superclassName="AbstractViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/AbstractUserAuthenticationViewController.h"/>
-        </class>
-        <class className="AbstractViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/AbstractViewController.h"/>
-        </class>
-        <class className="CategoryCell" superclassName="UICollectionViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/CategoryCell.h"/>
-            <relationships>
-                <relationship kind="outlet" name="categoryImage" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="categoryLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="CommentCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/CommentCell.h"/>
-            <relationships>
-                <relationship kind="outlet" name="contentLabel" candidateClass="STTweetLabel"/>
-                <relationship kind="outlet" name="tap" candidateClass="UIGestureRecognizer"/>
-                <relationship kind="outlet" name="thumbnailImage" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="timestampLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="usernameLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="CoreDataTableViewController" superclassName="AbstractTableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/CoreDataTableViewController.h"/>
-        </class>
-        <class className="DiscoverOrganizationCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/DiscoverOrganizationCell.h"/>
-            <relationships>
-                <relationship kind="outlet" name="discoverOrganizationButton" candidateClass="UIButton"/>
-            </relationships>
-        </class>
-        <class className="LandingPageViewController" superclassName="AbstractViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/LandingPageViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="activityIndicator" candidateClass="UIActivityIndicatorView"/>
-            </relationships>
-        </class>
-        <class className="LikeCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/LikeCell.h"/>
-            <relationships>
-                <relationship kind="outlet" name="imageView" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="usernameLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="LikesTableViewController" superclassName="CoreDataTableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/LikesTableViewController.h"/>
-        </class>
-        <class className="MenuCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MenuCell.h"/>
-            <relationships>
-                <relationship kind="outlet" name="settingLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="MenuViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MenuViewController.h"/>
-        </class>
-        <class className="NSLayoutConstraint" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
-        </class>
-        <class className="NewPostMediaPickerViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/NewPostMediaPickerViewController.h"/>
-        </class>
-        <class className="NewsfeedCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/NewsfeedCell.h"/>
-        </class>
-        <class className="NewsfeedTableViewController" superclassName="CoreDataTableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/NewsfeedTableViewController.h"/>
-        </class>
-        <class className="OrganizationCategoryViewController" superclassName="AbstractViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/OrganizationCategoryViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="categoryCollectionView" candidateClass="UICollectionView"/>
-                <relationship kind="outlet" name="titleLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="OrganizationCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/OrganizationCell.h"/>
-            <relationships>
-                <relationship kind="outlet" name="followButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="organizationImage" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="organizationName" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="subtitle" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="OrganizationProfileCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/OrganizationProfileCell.h"/>
-            <relationships>
-                <relationship kind="outlet" name="categoryLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="descriptionTextArea" candidateClass="UITextView"/>
-                <relationship kind="outlet" name="followersLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="fundsLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="image1" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="image2" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="image3" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="locationLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="logoImage" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="nameLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="updatesLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="OrganizationProfileViewController" superclassName="AbstractViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/OrganizationProfileViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="followButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="giveButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="settingsButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
-            </relationships>
-        </class>
-        <class className="OrganizationsTableViewController" superclassName="CoreDataTableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/OrganizationsTableViewController.h"/>
-        </class>
-        <class className="PostTableViewController" superclassName="CoreDataTableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/PostTableViewController.h"/>
-        </class>
-        <class className="PostViewController" superclassName="AbstractViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/PostViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="commentInputPostButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="commentInputTextField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="commentInputTextView" candidateClass="UITextView"/>
-                <relationship kind="outlet" name="commentInputView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="mainView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="postView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="sendCommentButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
-                <relationship kind="outlet" name="tap" candidateClass="UITapGestureRecognizer"/>
-            </relationships>
-        </class>
-        <class className="STTweetLabel" superclassName="UILabel">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/STTweetLabel.h"/>
-        </class>
-        <class className="SignInTableController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/SignInTableController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="emailTextField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="passwordTextField" candidateClass="UITextField"/>
-            </relationships>
-        </class>
-        <class className="SignInViewController" superclassName="AbstractUserAuthenticationViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/SignInViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="errorLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="passwordTextField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="workEmailTextField" candidateClass="UITextField"/>
-            </relationships>
-        </class>
-        <class className="SignUpSignInViewController" superclassName="AbstractViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/SignUpSignInViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="imageView" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="loginButton" candidateClass="UIView"/>
-                <relationship kind="outlet" name="signupButton" candidateClass="UIView"/>
-            </relationships>
-        </class>
-        <class className="SignUpTableController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/SignUpTableController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="emailTextField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="firstNameTextField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="lastNameTextField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="passwordTextField" candidateClass="UITextField"/>
-            </relationships>
-        </class>
-        <class className="SignUpViewController" superclassName="AbstractUserAuthenticationViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/SignUpViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="activityIndicator" candidateClass="UIActivityIndicatorView"/>
-                <relationship kind="outlet" name="emailTextField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="firstNameTextField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="lastNameTextField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="passwordTextField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="signUpbutton" candidateClass="UIButton"/>
-            </relationships>
-        </class>
-        <class className="UICollectionReusableView" superclassName="UIView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionReusableView.h"/>
-        </class>
-        <class className="UICollectionViewCell" superclassName="UICollectionReusableView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewCell.h"/>
-        </class>
-        <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
-        </class>
-        <class className="UserCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UserCell.h"/>
-            <relationships>
-                <relationship kind="outlet" name="followingLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="nameLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="userImageButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="userThumbnailImage" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="usernameLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="UserChangePasswordViewController" superclassName="UserEditViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UserChangePasswordViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="confirmedPasswordTextField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="currentPasswordTextField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="passwordTextField" candidateClass="UITextField"/>
-                <relationship kind="outletCollection" name="textFieldCollection" candidateClass="UITextField"/>
-            </relationships>
-        </class>
-        <class className="UserEditViewController" superclassName="UserViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UserEditViewController.h"/>
-        </class>
-        <class className="UserProfileViewController" superclassName="UserViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UserProfileViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="settingsButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="tap" candidateClass="UITapGestureRecognizer"/>
-                <relationship kind="outlet" name="teamTextField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="titleTextField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="userImage" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="usernameLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="UserViewController" superclassName="AbstractTableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UserViewController.h"/>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="fNW-y1-sLO"/>
-        <segue reference="6iC-x3-Qu0"/>
+        <segue reference="PR7-Pi-mWQ"/>
+        <segue reference="OGR-wm-x3z"/>
         <segue reference="tVZ-xG-BkR"/>
     </inferredMetricsTieBreakers>
 </document>

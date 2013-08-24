@@ -114,7 +114,7 @@
     }];
 }
 
-+ (void)inappropriatePost:(Post *)post success:(void (^)())success failure:(void (^)(NSDictionary *errorData))failure
++ (void)inappropriatePost:(Post *)post success:(void (^)())success failure:(void (^)(NSString *message))failure
 {
     NSData *json = nil;
     

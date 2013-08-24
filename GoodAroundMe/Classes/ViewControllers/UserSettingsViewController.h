@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "UserViewController.h"
 
-@interface UserSettingsViewController : UserViewController <UIAlertViewDelegate>
+@interface UserSettingsViewController : UserViewController <UIAlertViewDelegate, UINavigationControllerDelegate,UIImagePickerControllerDelegate>
 
 @end

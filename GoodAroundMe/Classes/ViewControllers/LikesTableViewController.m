@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 asaf ahi-mordehai. All rights reserved.
 //
 
-#import <SDWebImage/UIImageView+WebCache.h>
 #import "LikesTableViewController.h"
 #import "LikeCell.h"
 #import "CoreDataFactory.h"

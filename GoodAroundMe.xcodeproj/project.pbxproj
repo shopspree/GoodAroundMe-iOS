@@ -9,10 +9,6 @@
 /* Begin PBXBuildFile section */
 		D80F805C17B7DBAC00CC6303 /* UIViewController+Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = D80F805B17B7DBAA00CC6303 /* UIViewController+Utility.m */; };
 		D80F805F17B7DDEF00CC6303 /* AbstractTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D80F805E17B7DDEB00CC6303 /* AbstractTableViewController.m */; };
-		D86BE00017BCD3960045D2E1 /* Picture.m in Sources */ = {isa = PBXBuildFile; fileRef = D86BDFFF17BCD3960045D2E1 /* Picture.m */; };
-		D86BE00317BCD3970045D2E1 /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = D86BE00217BCD3960045D2E1 /* Post.m */; };
-		D86BE00617BCD3980045D2E1 /* Like.m in Sources */ = {isa = PBXBuildFile; fileRef = D86BE00517BCD3970045D2E1 /* Like.m */; };
-		D86BE00F17BCD3990045D2E1 /* Category.m in Sources */ = {isa = PBXBuildFile; fileRef = D86BE00E17BCD3990045D2E1 /* Category.m */; };
 		D86BE01217BCD39A0045D2E1 /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = D86BE01117BCD39A0045D2E1 /* Comment.m */; };
 		D86BE01517BCD39A0045D2E1 /* Newsfeed.m in Sources */ = {isa = PBXBuildFile; fileRef = D86BE01417BCD39A0045D2E1 /* Newsfeed.m */; };
 		D86BE02117BF90F50045D2E1 /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D86BE02017BF90F20045D2E1 /* UserViewController.m */; };
@@ -22,8 +18,17 @@
 		D86BE03717C111F40045D2E1 /* LikeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D86BE03617C111F30045D2E1 /* LikeCell.m */; };
 		D86BE03A17C114520045D2E1 /* OrganizationProfileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D86BE03917C114500045D2E1 /* OrganizationProfileCell.m */; };
 		D86BE04017C116010045D2E1 /* OrganizationProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D86BE03F17C115FB0045D2E1 /* OrganizationProfileViewController.m */; };
-		D86BE04617C26A7E0045D2E1 /* Organization.m in Sources */ = {isa = PBXBuildFile; fileRef = D86BE04517C26A7A0045D2E1 /* Organization.m */; };
 		D86BE04917C2794B0045D2E1 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = D86BE04817C279490045D2E1 /* User.m */; };
+		D86BE04B17C399A10045D2E1 /* AWSS3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D86BE04A17C399A10045D2E1 /* AWSS3.framework */; };
+		D86BE04D17C399DD0045D2E1 /* AWSRuntime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D86BE04C17C399DD0045D2E1 /* AWSRuntime.framework */; };
+		D86BE05617C63F2E0045D2E1 /* AmazonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D86BE05517C63F220045D2E1 /* AmazonViewController.m */; };
+		D86BE05917C65E860045D2E1 /* UploadPostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D86BE05817C65E830045D2E1 /* UploadPostCell.m */; };
+		D86BE05F17C7399F0045D2E1 /* AmazonAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = D86BE05E17C7399D0045D2E1 /* AmazonAPI.m */; };
+		D86BE06217C876260045D2E1 /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = D86BE06117C876200045D2E1 /* Post.m */; };
+		D86BE06517C876400045D2E1 /* Picture.m in Sources */ = {isa = PBXBuildFile; fileRef = D86BE06417C876390045D2E1 /* Picture.m */; };
+		D86BE06817C876660045D2E1 /* Like.m in Sources */ = {isa = PBXBuildFile; fileRef = D86BE06717C8765F0045D2E1 /* Like.m */; };
+		D86BE06B17C876820045D2E1 /* Organization.m in Sources */ = {isa = PBXBuildFile; fileRef = D86BE06A17C8767A0045D2E1 /* Organization.m */; };
+		D86BE06E17C876B90045D2E1 /* Category.m in Sources */ = {isa = PBXBuildFile; fileRef = D86BE06D17C876B30045D2E1 /* Category.m */; };
 		D8B1212717B2B21E00F68F59 /* OrganizationCategoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D8B1212617B2B21D00F68F59 /* OrganizationCategoryViewController.m */; };
 		D8B1212917B3D08500F68F59 /* Untitled-2.png in Resources */ = {isa = PBXBuildFile; fileRef = D8B1212817B3D08500F68F59 /* Untitled-2.png */; };
 		D8B1212C17B3ED0B00F68F59 /* facebookLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = D8B1212A17B3ED0B00F68F59 /* facebookLogo.png */; };
@@ -82,8 +87,6 @@
 		D8C5EF9D17AEA788008CFF51 /* LikesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C5EF5217AEA788008CFF51 /* LikesTableViewController.m */; };
 		D8C5EF9F17AEA788008CFF51 /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C5EF5617AEA788008CFF51 /* MenuViewController.m */; };
 		D8C5EFA017AEA788008CFF51 /* MoreOptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C5EF5817AEA788008CFF51 /* MoreOptionsViewController.m */; };
-		D8C5EFA317AEA788008CFF51 /* NewPostMediaPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C5EF5E17AEA788008CFF51 /* NewPostMediaPickerViewController.m */; };
-		D8C5EFA617AEA788008CFF51 /* NewPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C5EF6417AEA788008CFF51 /* NewPostViewController.m */; };
 		D8C5EFAB17AEA788008CFF51 /* NewsfeedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C5EF6F17AEA788008CFF51 /* NewsfeedTableViewController.m */; };
 		D8C5EFB017AEA788008CFF51 /* PostTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C5EF7917AEA788008CFF51 /* PostTableViewController.m */; };
 		D8C5EFB117AEA788008CFF51 /* PostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C5EF7B17AEA788008CFF51 /* PostViewController.m */; };
@@ -137,14 +140,6 @@
 		D80F805B17B7DBAA00CC6303 /* UIViewController+Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Utility.m"; sourceTree = "<group>"; };
 		D80F805D17B7DDE300CC6303 /* AbstractTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractTableViewController.h; sourceTree = "<group>"; };
 		D80F805E17B7DDEB00CC6303 /* AbstractTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbstractTableViewController.m; sourceTree = "<group>"; };
-		D86BDFFE17BCD3950045D2E1 /* Picture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Picture.h; sourceTree = "<group>"; };
-		D86BDFFF17BCD3960045D2E1 /* Picture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Picture.m; sourceTree = "<group>"; };
-		D86BE00117BCD3960045D2E1 /* Post.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Post.h; sourceTree = "<group>"; };
-		D86BE00217BCD3960045D2E1 /* Post.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Post.m; sourceTree = "<group>"; };
-		D86BE00417BCD3970045D2E1 /* Like.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Like.h; sourceTree = "<group>"; };
-		D86BE00517BCD3970045D2E1 /* Like.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Like.m; sourceTree = "<group>"; };
-		D86BE00D17BCD3990045D2E1 /* Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Category.h; sourceTree = "<group>"; };
-		D86BE00E17BCD3990045D2E1 /* Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Category.m; sourceTree = "<group>"; };
 		D86BE01017BCD39A0045D2E1 /* Comment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Comment.h; sourceTree = "<group>"; };
 		D86BE01117BCD39A0045D2E1 /* Comment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Comment.m; sourceTree = "<group>"; };
 		D86BE01317BCD39A0045D2E1 /* Newsfeed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Newsfeed.h; sourceTree = "<group>"; };
@@ -163,10 +158,26 @@
 		D86BE03917C114500045D2E1 /* OrganizationProfileCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrganizationProfileCell.m; sourceTree = "<group>"; };
 		D86BE03E17C115F80045D2E1 /* OrganizationProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrganizationProfileViewController.h; sourceTree = "<group>"; };
 		D86BE03F17C115FB0045D2E1 /* OrganizationProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrganizationProfileViewController.m; sourceTree = "<group>"; };
-		D86BE04417C26A770045D2E1 /* Organization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Organization.h; sourceTree = "<group>"; };
-		D86BE04517C26A7A0045D2E1 /* Organization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Organization.m; sourceTree = "<group>"; };
 		D86BE04717C279450045D2E1 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		D86BE04817C279490045D2E1 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		D86BE04A17C399A10045D2E1 /* AWSS3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSS3.framework; sourceTree = "<group>"; };
+		D86BE04C17C399DD0045D2E1 /* AWSRuntime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSRuntime.framework; sourceTree = "<group>"; };
+		D86BE05417C63F1C0045D2E1 /* AmazonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmazonViewController.h; sourceTree = "<group>"; };
+		D86BE05517C63F220045D2E1 /* AmazonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AmazonViewController.m; sourceTree = "<group>"; };
+		D86BE05717C65E800045D2E1 /* UploadPostCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploadPostCell.h; sourceTree = "<group>"; };
+		D86BE05817C65E830045D2E1 /* UploadPostCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UploadPostCell.m; sourceTree = "<group>"; };
+		D86BE05D17C7399B0045D2E1 /* AmazonAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmazonAPI.h; sourceTree = "<group>"; };
+		D86BE05E17C7399D0045D2E1 /* AmazonAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AmazonAPI.m; sourceTree = "<group>"; };
+		D86BE06017C876180045D2E1 /* Post.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Post.h; sourceTree = "<group>"; };
+		D86BE06117C876200045D2E1 /* Post.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Post.m; sourceTree = "<group>"; };
+		D86BE06317C876330045D2E1 /* Picture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Picture.h; sourceTree = "<group>"; };
+		D86BE06417C876390045D2E1 /* Picture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Picture.m; sourceTree = "<group>"; };
+		D86BE06617C876570045D2E1 /* Like.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Like.h; sourceTree = "<group>"; };
+		D86BE06717C8765F0045D2E1 /* Like.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Like.m; sourceTree = "<group>"; };
+		D86BE06917C876720045D2E1 /* Organization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Organization.h; sourceTree = "<group>"; };
+		D86BE06A17C8767A0045D2E1 /* Organization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Organization.m; sourceTree = "<group>"; };
+		D86BE06C17C876AC0045D2E1 /* Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Category.h; sourceTree = "<group>"; };
+		D86BE06D17C876B30045D2E1 /* Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Category.m; sourceTree = "<group>"; };
 		D8B1212517B2B21D00F68F59 /* OrganizationCategoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrganizationCategoryViewController.h; sourceTree = "<group>"; };
 		D8B1212617B2B21D00F68F59 /* OrganizationCategoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrganizationCategoryViewController.m; sourceTree = "<group>"; };
 		D8B1212817B3D08500F68F59 /* Untitled-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Untitled-2.png"; sourceTree = "<group>"; };
@@ -265,10 +276,6 @@
 		D8C5EF5617AEA788008CFF51 /* MenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuViewController.m; sourceTree = "<group>"; };
 		D8C5EF5717AEA788008CFF51 /* MoreOptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoreOptionsViewController.h; sourceTree = "<group>"; };
 		D8C5EF5817AEA788008CFF51 /* MoreOptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoreOptionsViewController.m; sourceTree = "<group>"; };
-		D8C5EF5D17AEA788008CFF51 /* NewPostMediaPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewPostMediaPickerViewController.h; sourceTree = "<group>"; };
-		D8C5EF5E17AEA788008CFF51 /* NewPostMediaPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewPostMediaPickerViewController.m; sourceTree = "<group>"; };
-		D8C5EF6317AEA788008CFF51 /* NewPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewPostViewController.h; sourceTree = "<group>"; };
-		D8C5EF6417AEA788008CFF51 /* NewPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewPostViewController.m; sourceTree = "<group>"; };
 		D8C5EF6D17AEA788008CFF51 /* NewsfeedPostViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsfeedPostViewDelegate.h; sourceTree = "<group>"; };
 		D8C5EF6E17AEA788008CFF51 /* NewsfeedTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsfeedTableViewController.h; sourceTree = "<group>"; };
 		D8C5EF6F17AEA788008CFF51 /* NewsfeedTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsfeedTableViewController.m; sourceTree = "<group>"; };
@@ -377,6 +384,8 @@
 				D8C5EE7817AEA184008CFF51 /* Foundation.framework in Frameworks */,
 				D8C5EE7A17AEA184008CFF51 /* CoreGraphics.framework in Frameworks */,
 				D8C5EF3817AEA635008CFF51 /* SDWebImage.framework in Frameworks */,
+				D86BE04B17C399A10045D2E1 /* AWSS3.framework in Frameworks */,
+				D86BE04D17C399DD0045D2E1 /* AWSRuntime.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -403,6 +412,8 @@
 		D8C5EE7417AEA184008CFF51 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D86BE04C17C399DD0045D2E1 /* AWSRuntime.framework */,
+				D86BE04A17C399A10045D2E1 /* AWSS3.framework */,
 				D8C5EF4117AEA74E008CFF51 /* MapKit.framework */,
 				D8C5EF3F17AEA708008CFF51 /* MobileCoreServices.framework */,
 				D8C5EF3D17AEA6F2008CFF51 /* CoreData.framework */,
@@ -484,23 +495,23 @@
 				D8C5F01517AEAA2C008CFF51 /* CoreDataFactory.m */,
 				D8C5F01617AEAA2C008CFF51 /* CurrentUser.h */,
 				D8C5F01717AEAA2C008CFF51 /* CurrentUser.m */,
-				D86BE04417C26A770045D2E1 /* Organization.h */,
-				D86BE04517C26A7A0045D2E1 /* Organization.m */,
 				D8C5F01817AEAA2C008CFF51 /* DataModel.xcdatamodeld */,
+				D86BE06917C876720045D2E1 /* Organization.h */,
+				D86BE06A17C8767A0045D2E1 /* Organization.m */,
+				D86BE06C17C876AC0045D2E1 /* Category.h */,
+				D86BE06D17C876B30045D2E1 /* Category.m */,
+				D86BE06617C876570045D2E1 /* Like.h */,
+				D86BE06717C8765F0045D2E1 /* Like.m */,
+				D86BE06317C876330045D2E1 /* Picture.h */,
+				D86BE06417C876390045D2E1 /* Picture.m */,
+				D86BE06017C876180045D2E1 /* Post.h */,
+				D86BE06117C876200045D2E1 /* Post.m */,
 				D86BE04717C279450045D2E1 /* User.h */,
 				D86BE04817C279490045D2E1 /* User.m */,
 				D86BE01317BCD39A0045D2E1 /* Newsfeed.h */,
 				D86BE01417BCD39A0045D2E1 /* Newsfeed.m */,
 				D86BE01017BCD39A0045D2E1 /* Comment.h */,
 				D86BE01117BCD39A0045D2E1 /* Comment.m */,
-				D86BE00D17BCD3990045D2E1 /* Category.h */,
-				D86BE00E17BCD3990045D2E1 /* Category.m */,
-				D86BE00417BCD3970045D2E1 /* Like.h */,
-				D86BE00517BCD3970045D2E1 /* Like.m */,
-				D86BE00117BCD3960045D2E1 /* Post.h */,
-				D86BE00217BCD3960045D2E1 /* Post.m */,
-				D86BDFFE17BCD3950045D2E1 /* Picture.h */,
-				D86BDFFF17BCD3960045D2E1 /* Picture.m */,
 				D8C5F02217AEAA2C008CFF51 /* IJSON.h */,
 				D8C5F02317AEAA2C008CFF51 /* ILike.h */,
 				D8C5F02617AEAA2C008CFF51 /* Like+Create.h */,
@@ -546,10 +557,6 @@
 				D8C5EF5817AEA788008CFF51 /* MoreOptionsViewController.m */,
 				D8EB950B17B81FB200D47D54 /* NewPostCaptionViewController.h */,
 				D8EB950C17B81FB200D47D54 /* NewPostCaptionViewController.m */,
-				D8C5EF5D17AEA788008CFF51 /* NewPostMediaPickerViewController.h */,
-				D8C5EF5E17AEA788008CFF51 /* NewPostMediaPickerViewController.m */,
-				D8C5EF6317AEA788008CFF51 /* NewPostViewController.h */,
-				D8C5EF6417AEA788008CFF51 /* NewPostViewController.m */,
 				D8C5EF6D17AEA788008CFF51 /* NewsfeedPostViewDelegate.h */,
 				D8C5EF6E17AEA788008CFF51 /* NewsfeedTableViewController.h */,
 				D8C5EF6F17AEA788008CFF51 /* NewsfeedTableViewController.m */,
@@ -588,6 +595,8 @@
 				D8C5EF8B17AEA788008CFF51 /* UserSettingsViewController.m */,
 				D86BE01F17BF90F00045D2E1 /* UserViewController.h */,
 				D86BE02017BF90F20045D2E1 /* UserViewController.m */,
+				D86BE05417C63F1C0045D2E1 /* AmazonViewController.h */,
+				D86BE05517C63F220045D2E1 /* AmazonViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -619,6 +628,8 @@
 				D86BE03617C111F30045D2E1 /* LikeCell.m */,
 				D86BE03817C1144F0045D2E1 /* OrganizationProfileCell.h */,
 				D86BE03917C114500045D2E1 /* OrganizationProfileCell.m */,
+				D86BE05717C65E800045D2E1 /* UploadPostCell.h */,
+				D86BE05817C65E830045D2E1 /* UploadPostCell.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -733,6 +744,8 @@
 				D8C5F00017AEAA2C008CFF51 /* UserAPI.m */,
 				D8B1215617B5B4EC00F68F59 /* OrganizationAPI.h */,
 				D8B1215717B5B4EC00F68F59 /* OrganizationAPI.m */,
+				D86BE05D17C7399B0045D2E1 /* AmazonAPI.h */,
+				D86BE05E17C7399D0045D2E1 /* AmazonAPI.m */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -845,8 +858,6 @@
 				D8C5EF9D17AEA788008CFF51 /* LikesTableViewController.m in Sources */,
 				D8C5EF9F17AEA788008CFF51 /* MenuViewController.m in Sources */,
 				D8C5EFA017AEA788008CFF51 /* MoreOptionsViewController.m in Sources */,
-				D8C5EFA317AEA788008CFF51 /* NewPostMediaPickerViewController.m in Sources */,
-				D8C5EFA617AEA788008CFF51 /* NewPostViewController.m in Sources */,
 				D8C5EFAB17AEA788008CFF51 /* NewsfeedTableViewController.m in Sources */,
 				D8C5EFB017AEA788008CFF51 /* PostTableViewController.m in Sources */,
 				D8C5EFB117AEA788008CFF51 /* PostViewController.m in Sources */,
@@ -897,10 +908,6 @@
 				D8EB950D17B81FB300D47D54 /* NewPostCaptionViewController.m in Sources */,
 				D8EB951817B923E400D47D54 /* AAMLabel.m in Sources */,
 				D8EB951E17BB9DBA00D47D54 /* UserProfileViewController.m in Sources */,
-				D86BE00017BCD3960045D2E1 /* Picture.m in Sources */,
-				D86BE00317BCD3970045D2E1 /* Post.m in Sources */,
-				D86BE00617BCD3980045D2E1 /* Like.m in Sources */,
-				D86BE00F17BCD3990045D2E1 /* Category.m in Sources */,
 				D86BE01217BCD39A0045D2E1 /* Comment.m in Sources */,
 				D86BE01517BCD39A0045D2E1 /* Newsfeed.m in Sources */,
 				D86BE02117BF90F50045D2E1 /* UserViewController.m in Sources */,
@@ -910,8 +917,15 @@
 				D86BE03717C111F40045D2E1 /* LikeCell.m in Sources */,
 				D86BE03A17C114520045D2E1 /* OrganizationProfileCell.m in Sources */,
 				D86BE04017C116010045D2E1 /* OrganizationProfileViewController.m in Sources */,
-				D86BE04617C26A7E0045D2E1 /* Organization.m in Sources */,
 				D86BE04917C2794B0045D2E1 /* User.m in Sources */,
+				D86BE05617C63F2E0045D2E1 /* AmazonViewController.m in Sources */,
+				D86BE05917C65E860045D2E1 /* UploadPostCell.m in Sources */,
+				D86BE05F17C7399F0045D2E1 /* AmazonAPI.m in Sources */,
+				D86BE06217C876260045D2E1 /* Post.m in Sources */,
+				D86BE06517C876400045D2E1 /* Picture.m in Sources */,
+				D86BE06817C876660045D2E1 /* Like.m in Sources */,
+				D86BE06B17C876820045D2E1 /* Organization.m in Sources */,
+				D86BE06E17C876B90045D2E1 /* Category.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

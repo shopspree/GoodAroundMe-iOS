@@ -10,6 +10,8 @@
 
 @interface UIViewController (Utility)
 
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+
 - (void)fail:(NSString *)title withMessage:(NSString *)message;
 - (void)navigateStoryboardWithIdentifier:(NSString *)identifier;
 

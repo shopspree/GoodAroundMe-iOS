@@ -7,6 +7,7 @@
 //
 
 #import "AbstractViewController.h"
+#import "User+Create.h"
 
 @interface LandingPageViewController : AbstractViewController
 

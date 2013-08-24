@@ -14,10 +14,10 @@
 
 @implementation CoreDataFactory
 
+static CoreDataFactory *instance;
+
 + (CoreDataFactory *)getInstance
 {
-    static CoreDataFactory *instance;
-    
     if(!instance) {
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{                 // all threads will block here until the block executes

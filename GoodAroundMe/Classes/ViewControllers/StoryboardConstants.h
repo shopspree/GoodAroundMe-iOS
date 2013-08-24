@@ -14,7 +14,6 @@
 #define NEWSFEED @"Newsfeed"
 #define EXPLORE @"Explore"
 #define POST_PAGE @"Post"
-#define NEW_POST @"NewPost"
 #define USER_PROFILE @"UserProfile"
 #define USER_SETTINGS @"UserSettings"
 #define USER_SETTINGS_CHANGE_PASSWORD @"ChangePassword"
@@ -26,6 +25,8 @@
 #define EDIT_NAME @"Edit name"
 #define CHANGE_PASSWORD @"Change password"
 #define STORYBOARD_LIKES @"Likes"
+#define STORYBOARD_NEW_POST @"NewPost"
+#define STORYBOARD_NEW_POST_CAPTION @"NewPostCaption"
 
 @protocol StoryboardConstants <NSObject>
 

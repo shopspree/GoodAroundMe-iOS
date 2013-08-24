@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "NewPostViewController.h"
+#import "AbstractViewController.h"
 
-@interface NewPostCaptionViewController : NewPostViewController
+@interface NewPostCaptionViewController : AbstractViewController
+
+@property (nonatomic, strong) UIImage *image;
 
 @end
