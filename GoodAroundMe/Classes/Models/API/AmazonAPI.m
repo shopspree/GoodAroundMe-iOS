@@ -17,34 +17,31 @@
 
 @implementation AmazonAPI
 
-- (void)uploadImage:(UIImage *)image forOrganization:(NSString *)organizationName delegate:(id<AmazonServiceRequestDelegate>)delegate
+- (void)uploadImage:(UIImage *)image toBucket:(NSString *)bucketName delegate:(id<AmazonServiceRequestDelegate>)delegate
 {
-    NSString *s3BucketPath = [self bucketForOrganization:organizationName];
+    NSString *fullBucketPath = [self fullPathBucket:bucketName];
+    NSString *fileName = [self generateFileName];
     
-    S3PutObjectRequest *por = [[S3PutObjectRequest alloc] initWithKey:MY_PICTURE_NAME inBucket:s3BucketPath];
+    S3PutObjectRequest *por = [[S3PutObjectRequest alloc] initWithKey:fileName inBucket:fullBucketPath];
     por.contentType = @"image/jpeg";
     NSData *imageData = UIImagePNGRepresentation(image);
     por.data = imageData;
     por.cannedACL = [S3CannedACL publicRead];
-    por.delegate = delegate ? delegate : self;
-    //[s3 putObject:por];
-    
-    if (delegate) {
-        
-    }
+    por.delegate = delegate;
+    //[self.s3 putObject:por];
     
     S3TransferManager *transferManager = [S3TransferManager new];
     transferManager.s3 = self.s3;
     [transferManager upload:por];
 }
 
-- (NSURL *)getFileURL:(NSString *)fileName forOrganization:(NSString *)organizationName
+- (NSURL *)getFileURL:(NSString *)fileName fromBucket:(NSString *)bucketName
 {
     S3ResponseHeaderOverrides *override = [[S3ResponseHeaderOverrides alloc] init];
     override.contentType = @"image/jpeg";
     S3GetPreSignedURLRequest *gpsur = [[S3GetPreSignedURLRequest alloc] init];
     gpsur.key     = fileName;
-    gpsur.bucket  = [self bucketForOrganization:organizationName];
+    gpsur.bucket  = [self fullPathBucket:bucketName];
     gpsur.expires = [NSDate dateWithTimeIntervalSinceNow:(NSTimeInterval) 3600];  // Added an hour's worth of seconds to the current time.
     gpsur.responseHeaderOverrides = override;
     NSURL *url = [self.s3 getPreSignedURL:gpsur];
@@ -62,49 +59,17 @@
     return _s3;
 }
 
-- (NSString *)bucketForOrganization:(NSString *)organizationName
+- (NSString *)fullPathBucket:(NSString *)bucketName
 {
-    NSString *bucketPath = [NSString stringWithFormat:@"%@/%@", MY_PICTURE_BUCKET, organizationName];
-    return bucketPath;
+    NSString *fullBucketPath = [NSString stringWithFormat:@"%@/%@", MY_PICTURE_BUCKET, bucketName];
+    return fullBucketPath;
 }
 
-
-
-#pragma mark - AmazonServiceRequestDelegate
-
--(void)request:(AmazonServiceRequest *)request didCompleteWithResponse:(AmazonServiceResponse *)response
+- (NSString *)generateFileName
 {
-    NSLog(@"[DEBUG] Request tag:%@ url:%@", request.requestTag, request.url);
-    [[NSNotificationCenter defaultCenter] postNotificationName:NotificationAmazonUploadCompleted object:request];
-}
-
-/** Sent when the request transmitted data.
- *
- * On requests which are uploading non-trivial amounts of data, this method can be used to
- * get progress feedback.
- *
- * @param request                   The AmazonServiceRequest sending the message.
- * @param bytesWritten              The number of bytes written in the latest write.
- * @param totalBytesWritten         The total number of bytes written for this connection.
- * @param totalBytesExpectedToWrite The number of bytes the connection expects to write.
- */
--(void)request:(AmazonServiceRequest *)request didSendData:(long long)bytesWritten totalBytesWritten:(long long)totalBytesWritten totalBytesExpectedToWrite:(long long)totalBytesExpectedToWrite
-{
-    float progress = totalBytesWritten/totalBytesExpectedToWrite;
-    NSLog(@"[DEBUG] Request tag:%@ url:%@ %f%%!", request.requestTag, request.url, progress);
-}
-
-/** Sent when there was a basic failure with the underlying connection.
- *
- * Receiving this message indicates that the request failed to complete.
- *
- * @param request The AmazonServiceRequest sending the message.
- * @param error   An error object containing details of why the connection failed to load the request successfully.
- */
--(void)request:(AmazonServiceRequest *)request didFailWithError:(NSError *)error
-{
-    NSLog(@"[DEBUG] Request tag:%@ url:%@ Failed!", request.requestTag, request.url);
-    [[NSNotificationCenter defaultCenter] postNotificationName:NotificationAmazonUploadFailed object:self];
+    NSString *uid = [[NSProcessInfo processInfo] globallyUniqueString];
+    NSString *fileName = [NSString stringWithFormat:@"goodaroundme_%@.png", uid];
+    return fileName;
 }
 
 @end

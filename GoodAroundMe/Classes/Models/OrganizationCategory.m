@@ -1,16 +1,16 @@
 //
-//  Category.m
+//  OrganizationCategory.m
 //  GoodAroundMe
 //
-//  Created by asaf ahi-mordehai on 8/24/13.
+//  Created by asaf ahi-mordehai on 8/25/13.
 //  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
-#import "Category.h"
+#import "OrganizationCategory.h"
 #import "Organization.h"
 
 
-@implementation Category
+@implementation OrganizationCategory
 
 @dynamic imageURL;
 @dynamic name;

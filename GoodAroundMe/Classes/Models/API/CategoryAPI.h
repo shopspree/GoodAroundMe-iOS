@@ -7,7 +7,6 @@
 //
 
 #import "BaseAPI.h"
-#import "Category.h"
 
 @interface CategoryAPI : BaseAPI
 

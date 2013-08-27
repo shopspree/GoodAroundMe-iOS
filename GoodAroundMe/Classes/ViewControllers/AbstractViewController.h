@@ -13,4 +13,6 @@
 
 @interface AbstractViewController : UIViewController <UIAlertViewDelegate>
 
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+
 @end

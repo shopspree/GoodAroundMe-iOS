@@ -11,7 +11,8 @@
 #import "NewsfeedPostViewDelegate.h"
 #import "Organization.h"
 #import "Post+Create.h"
-#import "Picture.h"
+#import "Picture+Create.h"
+#import "User+Create.h"
 #import "Like.h"
 #import "CoreDataFactory.h"
 #import "UIResponder+Helper.h"
@@ -61,10 +62,12 @@
 {
     _post = post;
     if (post) {
+        Picture *picture = [[post.pictures allObjects] lastObject];
+        self.pictureURL = picture.url;
         self.thumbnailURL = post.organization.image_thumbnail_url;
         self.nameText = post.organization.name;
         self.titleText = post.title;
-        self.pictureURL = ((Picture *)[post.pictures anyObject]).url;
+        self.contributor = post.contributor.getFullName;
         self.likesCountNumber = post.likes_count;
         self.commentsCountNumber = post.comments_count;
         self.caption = post.caption;
@@ -118,18 +121,16 @@
 - (void)setLikesCountNumber:(NSNumber *)likesCountNumber
 {
     _likesCountNumber = likesCountNumber;
-    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[self likesCountWithNumber:likesCountNumber]];
-    [self.likesCountButton setAttributedTitle:string
-                                     forState:UIControlStateNormal];
+    NSString *count = [likesCountNumber description];
+    [self.likesCountButton setTitle:count forState:UIControlStateNormal];
     self.likesCountButton.tag = NEWSFEED_POST_VIEW_LIKES_COUNT_BUTTON;
 }
 
 - (void)setCommentsCountNumber:(NSNumber *)commentsCountNumber
 {
     _commentsCountNumber = commentsCountNumber;
-    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[self commentsCountWithNumber:commentsCountNumber]];
-    [self.commentsCountButton setAttributedTitle:string
-                                     forState:UIControlStateNormal];
+    NSString *count = [commentsCountNumber description];
+    [self.commentsCountButton setTitle:count forState:UIControlStateNormal];
     self.commentsCountButton.tag = NEWSFEED_POST_VIEW_COMMENTS_COUNT_BUTTON;
 }
 

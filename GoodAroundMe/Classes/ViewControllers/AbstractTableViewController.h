@@ -12,4 +12,6 @@
 
 @interface AbstractTableViewController : UITableViewController
 
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+
 @end

@@ -9,7 +9,7 @@
 #import "Picture.h"
 
 #define PICTURE_ID @"id"
-#define PICTURE_URL @"url"
+#define PICTURE_URL @"url_string"
 #define PICTURE_CREATED_AT @"created_at"
 #define PICTURE_UPDATED_AT @"updated_at"
 

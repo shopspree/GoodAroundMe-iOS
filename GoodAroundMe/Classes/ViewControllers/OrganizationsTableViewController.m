@@ -26,7 +26,7 @@
     
     }
 
-- (void)setCategory:(Category *)category
+- (void)setCategory:(OrganizationCategory *)category
 {
     _category = category;
     self.title = category.name;
@@ -107,6 +107,7 @@
 
 - (void)follow:(Organization *)organization
 {
+    organization.is_followed = [NSNumber numberWithBool:true];
     [self.user
      follow:organization success:^() {
         return;
@@ -117,6 +118,7 @@
 
 - (void)unfollow:(Organization *)organization
 {
+    organization.is_followed = [NSNumber numberWithBool:false];
     [self.user
      unfollow:organization success:^() {
         return;

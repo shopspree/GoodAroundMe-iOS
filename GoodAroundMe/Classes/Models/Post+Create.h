@@ -23,6 +23,7 @@
 
 #define POST_ORGANIZATION @"organization"
 #define POST_MEDIAS @"medias"
+#define POST_MEDIAS_ATTRIBUTES @"medias_attributes"
 #define MEDIA_TYPE @"type"
 #define MEDIA_TYPE_PICTURE @"Picture"
 #define MEDIA_TYPE_VIDEO @"Video"

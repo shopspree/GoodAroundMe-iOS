@@ -2,7 +2,7 @@
 //  Post.h
 //  GoodAroundMe
 //
-//  Created by asaf ahi-mordehai on 8/24/13.
+//  Created by asaf ahi-mordehai on 8/25/13.
 //  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
@@ -22,11 +22,11 @@
 @property (nonatomic, retain) NSString * uid;
 @property (nonatomic, retain) NSDate * updated_at;
 @property (nonatomic, retain) NSSet *comments;
+@property (nonatomic, retain) User *contributor;
 @property (nonatomic, retain) NSSet *likes;
 @property (nonatomic, retain) Newsfeed *newsfeed;
 @property (nonatomic, retain) Organization *organization;
 @property (nonatomic, retain) NSSet *pictures;
-@property (nonatomic, retain) User *contributor;
 @end
 
 @interface Post (CoreDataGeneratedAccessors)

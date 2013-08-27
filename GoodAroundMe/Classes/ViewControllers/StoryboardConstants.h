@@ -15,7 +15,7 @@
 #define EXPLORE @"Explore"
 #define POST_PAGE @"Post"
 #define USER_PROFILE @"UserProfile"
-#define USER_SETTINGS @"UserSettings"
+#define STORYBOARD_USER_SETTINGS @"UserSettings"
 #define USER_SETTINGS_CHANGE_PASSWORD @"ChangePassword"
 #define STORYBOARD_ORGANIZATION_PROFILE @"Orgzniation Profile"
 #define STORYBOARD_ORGANIZATION_SETTINGS @"Orgazniation Settings"

@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "UserViewController.h"
 
-@interface UserSettingsViewController : UserViewController <UIAlertViewDelegate, UINavigationControllerDelegate,UIImagePickerControllerDelegate>
+@interface UserSettingsViewController : UserViewController <UIAlertViewDelegate, UINavigationControllerDelegate,UIImagePickerControllerDelegate, UIActionSheetDelegate>
+
+@property (nonatomic, strong) User *user;
 
 @end

@@ -8,7 +8,7 @@
 
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "OrganizationProfileCell.h"
-#import "Category+Create.h"
+#import "OrganizationCategory+Create.h"
 
 @interface OrganizationProfileCell ()
 

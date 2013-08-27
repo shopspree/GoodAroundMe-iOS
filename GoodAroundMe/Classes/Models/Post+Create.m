@@ -106,9 +106,10 @@
     self.comments_count = [ApplicationHelper numberFromString:[postDictionary[POST_COMMENTS_COUNT] description]];
     self.likes_count = [ApplicationHelper numberFromString:[postDictionary[POST_LIKES_COUNT] description]];
     self.liked_by_user = @([[postDictionary[POST_LIKED_BY_USER] description] intValue]);
-    
+    NSLog(@"[DEBUG] Value of self.liked_by_user is %@", self.liked_by_user);
     if (postDictionary[POST_CONTRIBUTOR]) {
-        User *contributor = [User userWithDictionary:postDictionary[POST_CONTRIBUTOR] inManagedObjectContext:self.managedObjectContext];
+        NSDictionary *userDictionary = postDictionary[POST_CONTRIBUTOR];
+        User *contributor = [User userWithDictionary:userDictionary[USER] inManagedObjectContext:self.managedObjectContext];
         self.contributor = contributor;
     }
     

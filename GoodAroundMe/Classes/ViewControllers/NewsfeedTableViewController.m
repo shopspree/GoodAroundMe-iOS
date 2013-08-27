@@ -29,6 +29,7 @@
 //@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong) Post *postToDelete;
 @property (nonatomic, strong) NSArray *uploads;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *cameraBarButton;
 
 @end
 
@@ -44,7 +45,11 @@
                   forControlEvents:UIControlEventValueChanged];
     
     self.navigationController.navigationBarHidden = NO;
-
+    
+    User *currentUser = [User currentUser:self.managedObjectContext];
+    if (!currentUser.organization) {
+        self.navigationItem.rightBarButtonItem = nil;
+    }
 }
 
 - (void)setManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
@@ -100,6 +105,7 @@
     
     [Newsfeed synchronizeInContext:self.managedObjectContext success:^{
         [self.refreshControl endRefreshing];
+        [self.tableView reloadData];
     } failure:^(NSString *message) {
         [self.refreshControl endRefreshing];
         [self fail:@"Newsfeed" withMessage:message];
@@ -112,7 +118,7 @@
 {
     UIActionSheet *cellActionSheet = [[UIActionSheet alloc] initWithTitle:@"Photo options"
                                                                  delegate:self
-                                                        cancelButtonTitle:nil
+                                                        cancelButtonTitle:@"Cancel"
                                                    destructiveButtonTitle:nil
                                                         otherButtonTitles:@"Take photo", @"From library", nil];
     cellActionSheet.tag = ACTION_SHEET_NEW_POST_TAG;
@@ -127,6 +133,8 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    [super prepareForSegue:segue sender:sender];
+    
     if ([segue.identifier isEqualToString:STORYBOARD_NEW_POST_CAPTION]) {
         if ([segue.destinationViewController isKindOfClass:[NewPostCaptionViewController class]]) {
             NewPostCaptionViewController *newPostCaptionVC = (NewPostCaptionViewController *)segue.destinationViewController;
@@ -302,6 +310,14 @@
         image = editedImage ? editedImage : originalImage;
         //self.imageView.image = image;
         
+        //UIGraphicsBeginImageContext(CGSizeMake(320,269));
+        //CGContextRef context = UIGraphicsGetCurrentContext();
+        //[image drawInRect: CGRectMake(0, 0, 320, 269)];
+        //UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
+        //UIGraphicsEndImageContext();
+        
+        image = [self imageWithImage:image scaledToSize:CGSizeMake(320, 269)];
+        
         // Save the new image (original or edited) to the Camera Roll
         UIImageWriteToSavedPhotosAlbum (image, nil, nil , nil);
     }
@@ -317,8 +333,25 @@
      }
      */
     
-    [self dismissViewControllerAnimated:YES completion:nil];
-    [self performSegueWithIdentifier:STORYBOARD_NEW_POST_CAPTION sender:image];
+    [picker dismissViewControllerAnimated:YES completion:^{
+        [self performSegueWithIdentifier:STORYBOARD_NEW_POST_CAPTION sender:image];
+    }];
+    
+}
+
+- (UIImage*)imageWithImage:(UIImage*)image
+              scaledToSize:(CGSize)newSize;
+{
+    UIGraphicsBeginImageContext( newSize );
+    
+    [image drawInRect:CGRectMake(0,0,newSize.width,newSize.height)];
+    
+    UIImage * newImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    return newImage;
+    
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker

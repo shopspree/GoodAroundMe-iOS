@@ -12,10 +12,9 @@
 #define MY_SECRET_KEY @"Hg1vYx8K/+IcntjgTScefb4ox7TxRETuuQ+YKkF7"
 #define MY_ACCESS_KEY_ID @"AKIAIYFCVLE2OKFN4FUQ"
 #define MY_PICTURE_BUCKET @"GoodAroundMe/media"
-#define MY_PICTURE_NAME @"hapoel_logo.png"
 
 @interface AmazonAPI : NSObject
 
-- (void)uploadImage:(UIImage *)image forOrganization:(NSString *)organizationName delegate:(id<AmazonServiceRequestDelegate>)delegate;
+- (void)uploadImage:(UIImage *)image toBucket:(NSString *)bucketName delegate:(id<AmazonServiceRequestDelegate>)delegate;
 
 @end

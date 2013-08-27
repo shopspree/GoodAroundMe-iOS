@@ -41,13 +41,6 @@
     }
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    
-    [self.tableView reloadData];
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -61,7 +54,7 @@
     
     [self refresh];
 }
-
+/*
 - (NSManagedObjectContext *)managedObjectContext
 {
     if (! _managedObjectContext) {
@@ -71,7 +64,7 @@
     
     return _managedObjectContext;
 }
-
+*/
 - (NSArray *)sections
 {
     if (!_sections) {
@@ -122,7 +115,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:USER_SETTINGS]) {
+    if ([segue.identifier isEqualToString:STORYBOARD_USER_SETTINGS]) {
         if ([segue.destinationViewController isKindOfClass:[UserSettingsViewController class]]) {
             UserSettingsViewController *userSettingsVC = (UserSettingsViewController *)segue.destinationViewController;
             userSettingsVC.user = self.user;
@@ -135,7 +128,7 @@
 
 - (IBAction)settingsButtonAction:(id)sender
 {
-    [self performSegueWithIdentifier:USER_SETTINGS sender:self];
+    [self performSegueWithIdentifier:STORYBOARD_USER_SETTINGS sender:self];
 }
 
 - (IBAction)followMoreOrganizationButton:(id)sender

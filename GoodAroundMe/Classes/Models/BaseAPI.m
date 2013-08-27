@@ -92,6 +92,7 @@
 {
     AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         if ([response statusCode] == 200) {
+            NSLog(@"[DEBUG] Response from server: \n %@", JSON);
             NSDictionary *responseDictionary = (NSDictionary *)JSON;
             
             if (success) {

@@ -41,13 +41,14 @@
 
 - (IBAction)menuButtonAction:(id)sender
 {
-    [self dismissViewControllerAnimated:YES completion:^{
-        return;
-    }];
+    [self.navigationController popViewControllerAnimated:YES];
+   // [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    [super prepareForSegue:segue sender:sender];
+    
     if ([segue.identifier isEqualToString:USER_PROFILE]) {
         UserProfileViewController *userProfileVC = (UserProfileViewController *)segue.destinationViewController;
         

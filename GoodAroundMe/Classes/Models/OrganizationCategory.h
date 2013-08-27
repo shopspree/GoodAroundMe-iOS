@@ -1,8 +1,8 @@
 //
-//  Category.h
+//  OrganizationCategory.h
 //  GoodAroundMe
 //
-//  Created by asaf ahi-mordehai on 8/24/13.
+//  Created by asaf ahi-mordehai on 8/25/13.
 //  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
@@ -11,7 +11,7 @@
 
 @class Organization;
 
-@interface Category : NSManagedObject
+@interface OrganizationCategory : NSManagedObject
 
 @property (nonatomic, retain) NSString * imageURL;
 @property (nonatomic, retain) NSString * name;
@@ -19,7 +19,7 @@
 @property (nonatomic, retain) NSSet *organizations;
 @end
 
-@interface Category (CoreDataGeneratedAccessors)
+@interface OrganizationCategory (CoreDataGeneratedAccessors)
 
 - (void)addOrganizationsObject:(Organization *)value;
 - (void)removeOrganizationsObject:(Organization *)value;

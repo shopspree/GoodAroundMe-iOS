@@ -15,11 +15,15 @@
 #define CHANGE_PASSWORD @"Change password"
 #define LOGOUT @"Log out"
 #define ALERT_VIEW_TAG 666
+#define ACTION_SHEET_CHANGE_PICTURE 12
 
 @interface UserSettingsViewController ()
 
-@property (weak, nonatomic) IBOutlet UITextField *firstNameTextField;
-@property (weak, nonatomic) IBOutlet UITextField *lastNameTextField;
+@property (weak, nonatomic) IBOutlet UIButton *userImageButton;
+@property (weak, nonatomic) IBOutlet UILabel *userFullNameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *userEmailLabel;
+@property (weak, nonatomic) IBOutlet UIView *settingsTableView;
+
 
 @end
 
@@ -29,8 +33,8 @@
 {
     [super setUser:user];
     if (user) {
-        self.firstNameTextField.text = self.user.firstname;
-        self.lastNameTextField.text = self.user.lastname;
+        //self.firstNameTextField.text = self.user.firstname;
+        //self.lastNameTextField.text = self.user.lastname;
     }
 }
 
@@ -51,18 +55,27 @@
     [alert show];
 }
 
-#define MY_SECRET_KEY @"Hg1vYx8K/+IcntjgTScefb4ox7TxRETuuQ+YKkF7"
-#define MY_ACCESS_KEY_ID @"AKIAIYFCVLE2OKFN4FUQ"
-#define MY_PICTURE_BUCKET @"goodaroundme/media"
-#define MY_PICTURE_NAME @""
+- (IBAction)changeImageButtonAction:(id)sender
+{
+    [self changeImage];
+}
+
+- (IBAction)imageButtonAction:(id)sender
+{
+    [self changeImage];
+}
+
 
 - (void)changeImage
 {
-    // TO DO!!!
-    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
-    imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    imagePicker.delegate = self;
-    [self presentViewController:imagePicker animated:YES completion:nil];
+    
+    UIActionSheet *cellActionSheet = [[UIActionSheet alloc] initWithTitle:@"Photo options"
+                                                                 delegate:self
+                                                        cancelButtonTitle:nil
+                                                   destructiveButtonTitle:nil
+                                                        otherButtonTitles:@"Take photo", @"From library", nil];
+    cellActionSheet.tag = ACTION_SHEET_CHANGE_PICTURE;
+    [cellActionSheet showInView:self.tableView];
 }
 
 
@@ -117,6 +130,67 @@
     }
 }
 
+#pragma mark - UIActionSheetDelegate
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (actionSheet.tag == ACTION_SHEET_CHANGE_PICTURE) {
+        switch (buttonIndex) {
+            case 0:
+                [self takePhoto];
+                break;
+                
+            case 1:
+                [self choosePhotoFromLibrary];
+                break;
+                
+            default:
+                break;
+        }
+    }
+}
+
+- (void)takePhoto
+{
+    [self startImagePickerFromViewController:self usingDelegate:self sourceType:UIImagePickerControllerSourceTypeCamera ];
+}
+
+- (void)choosePhotoFromLibrary
+{
+    [self startImagePickerFromViewController:self usingDelegate:self sourceType:UIImagePickerControllerSourceTypePhotoLibrary ];
+}
+
+- (BOOL) startImagePickerFromViewController:(UIViewController*)controller
+                              usingDelegate:(id <UIImagePickerControllerDelegate, UINavigationControllerDelegate>) delegate
+                                 sourceType:(UIImagePickerControllerSourceType)sourceType
+
+{
+    if (([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO)
+        || (delegate == nil)
+        || (controller == nil)) {
+        NSLog(@"[ERROR] Cannot access device camera");
+        return NO;
+    }
+    
+    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+    imagePicker.sourceType = sourceType;//UIImagePickerControllerSourceTypeCamera;
+    
+    // Displays a control that allows the user to choose picture or movie capture, if both are available:
+    //cameraUI.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
+    imagePicker.mediaTypes = @[(NSString *)kUTTypeImage];
+    
+    // Hides the controls for moving & scaling pictures, or for trimming movies. To instead show the controls, use YES.
+    imagePicker.allowsEditing = YES;
+    imagePicker.delegate = delegate;
+    
+    [controller presentViewController:imagePicker animated:YES completion:^{
+        NSLog(@"[DEBUG] Presenting device camera completed");
+    }];
+    
+    return YES;
+    
+}
+
 #pragma mark - UIImagePickerControllerDelegate
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
@@ -130,34 +204,29 @@
         originalImage = (UIImage *) [info objectForKey:UIImagePickerControllerOriginalImage];
         
         image = editedImage ? editedImage : originalImage;
-        [self uploadImage:image];
+        //self.imageView.image = image;
         
+        // Save the new image (original or edited) to the Camera Roll
+        UIImageWriteToSavedPhotosAlbum (image, nil, nil , nil);
     }
+    
+    // Handle a movie capture
+    /*
+     if (CFStringCompare ((CFStringRef)mediaType, kUTTypeMovie, 0) == kCFCompareEqualTo) {
+     NSString *moviePath = [[info objectForKey:UIImagePickerControllerMediaURL] path];
+     
+     if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(moviePath)) {
+     UISaveVideoAtPathToSavedPhotosAlbum(moviePath, nil, nil, nil);
+     }
+     }
+     */
+    
+    [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)uploadImage:(UIImage *)image
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
-    AmazonS3Client *s3 = [[AmazonS3Client alloc] initWithAccessKey:MY_ACCESS_KEY_ID withSecretKey:MY_SECRET_KEY];
-    
-    NSString *s3BucketPath = [NSString stringWithFormat:@""];
-    [s3 getBucketLocation:s3BucketPath];
-    [s3 createBucket:[[S3CreateBucketRequest alloc] initWithName:s3BucketPath]];
-    
-    S3PutObjectRequest *por = [[S3PutObjectRequest alloc] initWithKey:MY_PICTURE_NAME inBucket:MY_PICTURE_BUCKET];
-    por.contentType = @"image/jpeg";
-    //por.data = imageData;
-    por.cannedACL = [S3CannedACL publicRead];
-    [s3 putObject:por];
-    
-    S3ResponseHeaderOverrides *override = [[S3ResponseHeaderOverrides alloc] init];
-    override.contentType = @"image/jpeg";
-    S3GetPreSignedURLRequest *gpsur = [[S3GetPreSignedURLRequest alloc] init];
-    gpsur.key     = MY_PICTURE_NAME;
-    gpsur.bucket  = MY_PICTURE_BUCKET;
-    gpsur.expires = [NSDate dateWithTimeIntervalSinceNow:(NSTimeInterval) 3600];  // Added an hour's worth of seconds to the current time.
-    gpsur.responseHeaderOverrides = override;
-    NSURL *url = [s3 getPreSignedURL:gpsur];
-    [[UIApplication sharedApplication] openURL:url];
+    [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
 

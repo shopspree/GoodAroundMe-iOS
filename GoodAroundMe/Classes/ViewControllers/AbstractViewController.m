@@ -40,7 +40,8 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.destinationViewController respondsToSelector:@selector(setManagedObjectContext::)]) {
+    NSLog(@"[DEBUG] segueing to %@", [[segue.destinationViewController class] description]);
+    if ([segue.destinationViewController respondsToSelector:@selector(setManagedObjectContext:)]) {
         [segue.destinationViewController performSelector:@selector(setManagedObjectContext:) withObject:self.managedObjectContext];
     }
 }

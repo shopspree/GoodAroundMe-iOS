@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UIViewController+Utility.h"
+#import "AbstractTableViewController.h"
 
-@interface MenuViewController : UITableViewController
+@interface MenuViewController : AbstractTableViewController
 
 @property (nonatomic, strong) NSArray *menuItems;
 

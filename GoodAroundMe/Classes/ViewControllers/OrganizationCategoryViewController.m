@@ -9,7 +9,7 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "OrganizationCategoryViewController.h"
 #import "CategoryCell.h"
-#import "Category+Create.h"
+#import "OrganizationCategory+Create.h"
 #import "OrganizationsTableViewController.h"
 
 @interface OrganizationCategoryViewController ()
@@ -25,7 +25,7 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
-    [Category categories:^(NSArray *categories) {
+    [OrganizationCategory categories:self.managedObjectContext success:^(NSArray *categories) {
         self.categories = categories;
         [self.categoryCollectionView reloadData];
     } failure:^(NSString *message) {
@@ -39,7 +39,7 @@
     if ([segue.identifier isEqualToString:@"Organizations"]) {
         if ([segue.destinationViewController isKindOfClass:[OrganizationsTableViewController class]]) {
             OrganizationsTableViewController *organizationTableViewController = (OrganizationsTableViewController *)segue.destinationViewController;
-            Category *category = (Category *)sender;
+            OrganizationCategory *category = (OrganizationCategory *)sender;
             organizationTableViewController.category = category;
         }
     }
@@ -70,7 +70,7 @@
     
     CategoryCell *cell = [self.categoryCollectionView dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    Category *category = [self.categories objectAtIndex:indexPath.item];
+    OrganizationCategory *category = [self.categories objectAtIndex:indexPath.item];
     
     cell.categoryLabel.text = category.name;
     [cell.categoryImage setImageWithURL:[NSURL URLWithString:category.imageURL] placeholderImage:[UIImage imageNamed:@"Default.png"]];
@@ -83,7 +83,7 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    Category *category = [self.categories objectAtIndex:indexPath.item];
+    OrganizationCategory *category = [self.categories objectAtIndex:indexPath.item];
     [self performSegueWithIdentifier:@"Organizations" sender:category];
 
 }

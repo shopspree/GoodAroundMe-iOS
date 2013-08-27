@@ -7,7 +7,7 @@
 //
 
 #import "LandingPageViewController.h"
-#import "Category+Create.h" 
+#import "OrganizationCategory+Create.h" 
 #import "User+Create.h"
 #import "StoryboardConstants.h"
 #import "CoreDataFactory.h"
@@ -24,6 +24,7 @@
     [super viewDidLoad];
     
 	// Do any additional setup after loading the view.
+    self.navigationController.navigationBarHidden = YES;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -34,16 +35,21 @@
     [self loadUser];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+   self.navigationController.navigationBarHidden = NO;
+}
+
 - (void)loadCategories
 {  
-    [Category categories:^(NSArray *categories) {
+    [OrganizationCategory categories:self.managedObjectContext success:^(NSArray *categories) {
         
         NSString *email = [[NSUserDefaults standardUserDefaults] stringForKey:USER_EMAIL];
         if (!email) {
             NSLog(@"[DEBUG] User has no stored mail, performing Modal segue to Sign In Sign Up");
             [self performSegueWithIdentifier:SIGNUP_SIGNIN sender:self];
         } else {
-            NSLog(@"[DEBUG] Everything is normal, performing Modal segue to Newsfeed");
+            NSLog(@"[DEBUG] [loadCategories] Everything is normal, performing Modal segue to Newsfeed");
             [self performSegueWithIdentifier:NEWSFEED sender:self];
         }
         

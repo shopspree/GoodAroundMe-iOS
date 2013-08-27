@@ -22,6 +22,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *captionTextField;
 @property (weak, nonatomic) IBOutlet UIButton *shareButton;
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *tap;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 
 @end
@@ -32,7 +33,6 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -41,15 +41,16 @@
     if (self.image) {
         self.backgroundImageView.image = self.image;
     }
+    self.activityIndicator.hidden = YES;
 }
 
 - (void)uploadtoAmazon
 {
     User *currentUser = [User currentUser:self.managedObjectContext];
-    NSString *organziationName = currentUser.organization.name;
+    NSString *bucketName = currentUser.organization.uid;
     
     AmazonAPI *api = [[AmazonAPI alloc] init];
-    [api uploadImage:self.image forOrganization:organziationName delegate:nil];
+    [api uploadImage:self.image toBucket:bucketName delegate:self];
 }
 
 - (void)newPost:(NSString *)imageURL
@@ -58,14 +59,17 @@
     NSString *postTitle = self.titleTextField.text;
     NSString *postImageURL = imageURL;
     
-    NSDictionary *postDictionary = [NSDictionary dictionaryWithObjectsAndKeys:postCaption, POST_CAPTION,
-                                    postTitle, POST_TITLE,
-                                    @[[NSDictionary dictionaryWithObjectsAndKeys:postImageURL, PICTURE_URL , nil]], POST_MEDIAS, nil];
+    NSDictionary *pictureDictionary = [NSDictionary dictionaryWithObjectsAndKeys:postImageURL, PICTURE_URL, nil];
+    NSArray *mediasArray = [NSArray arrayWithObjects:pictureDictionary, nil];
+    NSDictionary *postAttributesDictionary = [NSDictionary dictionaryWithObjectsAndKeys:postCaption, POST_CAPTION,
+                                              postTitle, POST_TITLE,
+                                              mediasArray, POST_MEDIAS_ATTRIBUTES, nil];
+    NSDictionary *postDictionary = [NSDictionary dictionaryWithObjectsAndKeys:postAttributesDictionary, POST, nil];
     
     [Post newPost:postDictionary managedObjectContext:self.managedObjectContext success:^(Post *post) {
-        // TO DO
+        [self dismissViewControllerAnimated:YES completion:nil];
     } failure:^(NSString *message) {
-        [self fail:" withMessage:<#(NSString *)#>]
+        [self fail:@"Failed to create new post" withMessage:message];
     }];
 }
 
@@ -84,6 +88,9 @@
 - (IBAction)shareButtonAction:(id)sender
 {
     [self.view endEditing:YES];
+    self.activityIndicator.hidden = NO;
+    [self.activityIndicator startAnimating];
+    self.shareButton.enabled = NO;
     
     [self uploadtoAmazon];
 }
@@ -106,6 +113,7 @@
 {
     NSLog(@"[DEBUG] Request tag:%@ url:%@", request.requestTag, request.url);
     [self newPost:request.url.absoluteString];
+    [self.activityIndicator stopAnimating];
 }
     
 /** Sent when the request transmitted data.
@@ -120,7 +128,7 @@
  */
     -(void)request:(AmazonServiceRequest *)request didSendData:(long long)bytesWritten totalBytesWritten:(long long)totalBytesWritten totalBytesExpectedToWrite:(long long)totalBytesExpectedToWrite
 {
-    float progress = totalBytesWritten/totalBytesExpectedToWrite;
+    float progress = (float)totalBytesWritten / (float)totalBytesExpectedToWrite;
     NSLog(@"[DEBUG] Request tag:%@ url:%@ %f%%!", request.requestTag, request.url, progress);
 }
     

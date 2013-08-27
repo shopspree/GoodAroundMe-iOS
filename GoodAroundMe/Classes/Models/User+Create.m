@@ -189,6 +189,11 @@
                 [self addFollowingObject:organization];
             }
         }
+        
+        if (userDictionary[ORGANIZATION]) {
+            Organization *organization = [Organization organizationWithDictionary:userDictionary[ORGANIZATION] inManagedObjectContext:self.managedObjectContext];
+            self.organization = organization;
+        }
     }
 }
 
@@ -254,6 +259,12 @@
     
     NSData *jsonData = [ApplicationHelper constructJSON:dictionary];
     return jsonData;
+}
+
+- (NSString *)getFullName
+{
+    NSString *fullName = [NSString stringWithFormat:@"%@ %@", self.firstname, self.lastname];
+    return fullName;
 }
 
 @end
