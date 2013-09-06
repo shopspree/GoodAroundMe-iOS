@@ -92,12 +92,12 @@
     }];
 }
 
-+ (void)comment:(NSString *)content onPost:(Post *)post success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure
++ (void)comment:(Comment *)comment onPost:(Post *)post success:(void (^)(NSDictionary *responseDictionary, Comment *comment))success failure:(void (^)(NSString *message))failure
 {
-    NSData *json = [PostAPI jsonRequestForComment:content onPost:post];
+    NSData *json = [PostAPI jsonRequestForComment:comment.content onPost:post];
     
     [BaseAPI postRequestWithURL:[NSString stringWithFormat:API_POST_COMMENT, post.uid] json:json success:^(NSDictionary *responseDictionary) {
-        success(responseDictionary);
+        success(responseDictionary, comment);
     } failure:^(NSString *message) {
         failure(message);
     }];

@@ -40,9 +40,19 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    NSLog(@"[DEBUG] segueing to %@", [[segue.destinationViewController class] description]);
-    if ([segue.destinationViewController respondsToSelector:@selector(setManagedObjectContext:)]) {
-        [segue.destinationViewController performSelector:@selector(setManagedObjectContext:) withObject:self.managedObjectContext];
+    NSLog(@"[DEBUG] <AbstractViewController> Segue to %@", [segue.destinationViewController class]);
+    
+    UIViewController *destinationViewController = segue.destinationViewController;
+    if ([destinationViewController isKindOfClass:[UINavigationController class]]) {
+        UINavigationController *navigationController = (UINavigationController *)destinationViewController;
+        destinationViewController = navigationController.viewControllers[0];
+    }
+    
+    if ([destinationViewController respondsToSelector:@selector(setManagedObjectContext:)]) {
+        [destinationViewController performSelector:@selector(setManagedObjectContext:) withObject:self.managedObjectContext];
+        if (!self.managedObjectContext) {
+            NSLog(@"[ERROR] <AbstractViewController> Self managedObjectContext is empty on segue from %@", segue.identifier);
+        }
     }
 }
 

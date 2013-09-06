@@ -93,9 +93,9 @@
     
     if(!jsonSerializationError) {
         NSString *serJSON = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-        NSLog(@"Serialized JSON: %@", serJSON);
+        NSLog(@"[DEBUG] <ApplicationHelper> Serialized JSON: %@", serJSON);
     } else {
-        NSLog(@"JSON Encoding Failed: %@", [jsonSerializationError localizedDescription]);
+        NSLog(@"[ERROR] <ApplicationHelper> JSON Encoding Failed: %@", [jsonSerializationError localizedDescription]);
     }
     
     return jsonData;

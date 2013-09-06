@@ -12,7 +12,7 @@
 #import "NewsfeedPostViewDelegate.h"
 
 
-@interface PostViewController : AbstractViewController <NewsfeedPostViewDelegate>
+@interface PostViewController : AbstractViewController <NewsfeedPostViewDelegate, UIActionSheetDelegate>
 
 @property (nonatomic, strong) Post *post;
 @property (nonatomic) BOOL keyboardIsShown;

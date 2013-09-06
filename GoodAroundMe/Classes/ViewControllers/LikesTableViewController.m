@@ -11,6 +11,7 @@
 #import "CoreDataFactory.h"
 #import "Like.h"
 #import "User.h"
+#import "UserProfileViewController.h"
 
 #define ROW_HEIGHT 60.0
 
@@ -26,7 +27,6 @@
     if (post) {
         [post likes:^(NSArray *likes) {
             [self setupFetchedResultsController];
-            [self.tableView reloadData];
             self.title = [NSString stringWithFormat:@"%@ Likes", post.likes_count];
         } failure:^(NSString *message) {
             [self fail:@"Retrieving likes list failed" withMessage:message];
@@ -65,14 +65,17 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:USER_PROFILE]) {
-        Like *like = [self.fetchedResultsController objectAtIndexPath:(NSIndexPath *)sender];
-        User *user = like.user;
-        if (user) {
-            if ([segue.destinationViewController respondsToSelector:@selector(setEmail:)]) {
-                [segue.destinationViewController performSelector:@selector(setEmail:) withObject:user.email];
-            }
+    [super prepareForSegue:segue sender:sender];
+    
+    if ([segue.identifier isEqualToString:STORYBOARD_USER_PROFILE]) {
+        if ([segue.destinationViewController isKindOfClass:[UserProfileViewController class]]) {
+            UserProfileViewController *userProfileVC = (UserProfileViewController *)segue.destinationViewController;
+            Like *like = [self.fetchedResultsController objectAtIndexPath:(NSIndexPath *)sender];
+            User *user = like.user;
+            userProfileVC.email = user.email;
         }
+        
+        
     }
 }
 
@@ -95,7 +98,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self performSegueWithIdentifier:@"UserProfile" sender:indexPath];
+    [self performSegueWithIdentifier:STORYBOARD_USER_PROFILE sender:indexPath];
 }
 
 

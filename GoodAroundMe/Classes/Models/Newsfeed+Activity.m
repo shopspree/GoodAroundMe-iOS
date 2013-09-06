@@ -51,7 +51,7 @@ failure:(void (^)(NSString *message))failure
     // Check what happened in the fetch
     
     if (!matches || ([matches count] > 1)) {  // nil means fetch failed; more than one impossible (unique!)
-        NSLog(@"[DEBUG] [Newsfeed(Activity)][newsfeedWithActivity] not found for id = %@!!", [activityDictionary[ACTIVITY_ID] description]);
+        NSLog(@"[DEBUG] <Newsfeed+Activity> Newsfeed object not found for id = %@!!", [activityDictionary[ACTIVITY_ID] description]);
 
         // handle error
     } else if (![matches count]) { // none found, so let's create a Photo for that Flickr photo
@@ -76,6 +76,7 @@ failure:(void (^)(NSString *message))failure
     
     Post *post = [Post postWithDictionary:activityDictionary[ACTIVITY_POST] inManagedObjectContext:context];
     self.post = post;
+    self.organization = post.organization;
     
     if (activityDictionary[ACTIVITY_COMMENT]) {
         Comment *comment = [Comment commentWithDictionary:activityDictionary[ACTIVITY_COMMENT] inManagedObjectContext:context];

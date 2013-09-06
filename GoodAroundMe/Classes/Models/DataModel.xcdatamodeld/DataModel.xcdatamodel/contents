@@ -27,6 +27,7 @@
         <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="comment" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Comment" inverseName="newsfeed" inverseEntity="Comment" syncable="YES"/>
         <relationship name="like" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Like" inverseName="newsfeed" inverseEntity="Like" syncable="YES"/>
+        <relationship name="organization" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Organization" inverseName="newsfeeds" inverseEntity="Organization" syncable="YES"/>
         <relationship name="post" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Post" inverseName="newsfeed" inverseEntity="Post" syncable="YES"/>
     </entity>
     <entity name="Organization" representedClassName="Organization" syncable="YES">
@@ -42,6 +43,7 @@
         <relationship name="admins" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="organization" inverseEntity="User" syncable="YES"/>
         <relationship name="category" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="OrganizationCategory" inverseName="organizations" inverseEntity="OrganizationCategory" syncable="YES"/>
         <relationship name="followers" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="following" inverseEntity="User" syncable="YES"/>
+        <relationship name="newsfeeds" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Newsfeed" inverseName="organization" inverseEntity="Newsfeed" syncable="YES"/>
         <relationship name="posts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Post" inverseName="organization" inverseEntity="Post" syncable="YES"/>
     </entity>
     <entity name="OrganizationCategory" representedClassName="OrganizationCategory" syncable="YES">
@@ -80,6 +82,7 @@
         <attribute name="firstname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lastname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="thumbnailURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="comments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Comment" inverseName="user" inverseEntity="Comment" syncable="YES"/>
         <relationship name="following" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Organization" inverseName="followers" inverseEntity="Organization" syncable="YES"/>
@@ -90,11 +93,11 @@
     <elements>
         <element name="Comment" positionX="187" positionY="1622" width="128" height="178"/>
         <element name="Like" positionX="153" positionY="1469" width="128" height="133"/>
-        <element name="Newsfeed" positionX="-110" positionY="1235" width="128" height="163"/>
-        <element name="Organization" positionX="-362" positionY="1535" width="128" height="238"/>
-        <element name="OrganizationCategory" positionX="-342" positionY="1323" width="128" height="103"/>
+        <element name="Newsfeed" positionX="-110" positionY="1235" width="128" height="178"/>
+        <element name="Organization" positionX="-362" positionY="1535" width="128" height="253"/>
+        <element name="OrganizationCategory" positionX="-360" positionY="1314" width="128" height="103"/>
         <element name="Picture" positionX="135" positionY="1835" width="128" height="118"/>
         <element name="Post" positionX="-146" positionY="1476" width="128" height="253"/>
-        <element name="User" positionX="-180" positionY="1787" width="128" height="223"/>
+        <element name="User" positionX="-180" positionY="1787" width="128" height="238"/>
     </elements>
 </model>

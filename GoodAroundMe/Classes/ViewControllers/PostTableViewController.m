@@ -20,6 +20,13 @@
 
 @implementation PostTableViewController
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self setupFetchedResultsController];
+}
+
 - (void)setPost:(Post *)post
 {
     _post = post;
@@ -28,7 +35,7 @@
         [post newsfeedForPost:^(Newsfeed *newsfeed) {
             [self setup];
         } failure:^(NSString *message) {
-            // TO DO
+            [self fail:[NSString stringWithFormat:@"Post: %@", post.title] withMessage:message];
         }];
     } else {
         [self setup];
@@ -75,7 +82,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:USER_PROFILE]) {
+    if ([segue.identifier isEqualToString:STORYBOARD_USER_PROFILE]) {
         if ([segue.destinationViewController isKindOfClass:[UserProfileViewController class]] && [sender isKindOfClass:[Comment class]]) {
             UserProfileViewController *userProfileVC = (UserProfileViewController *)segue.destinationViewController;
             Comment *comment = (Comment *)sender;
@@ -90,7 +97,6 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     NSInteger rows = [super tableView:tableView numberOfRowsInSection:section];
-    NSLog(@"comments count = %d", [self.post.comments count]);
     rows += 1;
     
     return rows;
@@ -99,7 +105,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0) {
-        static NSString *CellIdentifier = @"NewsfeedCell";
+        static NSString *CellIdentifier = @"NewsfeedPostCell";
         NewsfeedCell *newsfeedCell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
         newsfeedCell.newsfeed = self.post.newsfeed;
         

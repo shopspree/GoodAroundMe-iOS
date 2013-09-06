@@ -32,7 +32,17 @@
     [super viewDidAppear:animated];
     
     [self.activityIndicator startAnimating];
-    [self loadUser];
+    
+    NSString *email = [[NSUserDefaults standardUserDefaults] stringForKey:USER_EMAIL];
+    NSString *authToken = [[NSUserDefaults standardUserDefaults] stringForKey:USER_AUTHENTICATION];
+    
+    if (email && authToken) {
+        [self loadUser];
+    } else {
+        NSLog(@"[DEBUG] User has no stored mail, performing Modal segue to Sign In Sign Up");
+        [self performSegueWithIdentifier:SIGNUP_SIGNIN sender:self];
+    }
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -43,15 +53,8 @@
 - (void)loadCategories
 {  
     [OrganizationCategory categories:self.managedObjectContext success:^(NSArray *categories) {
-        
-        NSString *email = [[NSUserDefaults standardUserDefaults] stringForKey:USER_EMAIL];
-        if (!email) {
-            NSLog(@"[DEBUG] User has no stored mail, performing Modal segue to Sign In Sign Up");
-            [self performSegueWithIdentifier:SIGNUP_SIGNIN sender:self];
-        } else {
-            NSLog(@"[DEBUG] [loadCategories] Everything is normal, performing Modal segue to Newsfeed");
-            [self performSegueWithIdentifier:NEWSFEED sender:self];
-        }
+        NSLog(@"[DEBUG] [loadCategories] Everything is normal, performing Modal segue to Newsfeed");
+        [self performSegueWithIdentifier:NEWSFEED sender:self];
         
         [self.activityIndicator stopAnimating];
         
@@ -65,7 +68,6 @@
 {
     NSString *email = [[NSUserDefaults standardUserDefaults] stringForKey:USER_EMAIL];
     if (!email) {
-        //[self navigateStoryboardWithIdentifier:SIGNUP_SIGNIN];
         [self performSegueWithIdentifier:SIGNUP_SIGNIN sender:self];
     } else {
         [[CoreDataFactory getInstance] context:^(NSManagedObjectContext *managedObjectContext) {
@@ -74,11 +76,16 @@
                 [self loadCategories];
                 
             } failure:^(NSString *message) {
-                [self fail:@"Good Around Me" withMessage:@"Error loading application"];
+                [self fail:@"Good Around Me" withMessage:message];
                 
             }];
         }];
     }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    [super prepareForSegue:segue sender:sender];
 }
 
 @end

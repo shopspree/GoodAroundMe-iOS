@@ -11,12 +11,12 @@
 
 @protocol NewsfeedPostViewDelegate <NSObject>
 
-- (void)likeButtonClicked:(id)sender;
-- (void)commentButtonClicked:(id)sender;
-- (void)likesCountButtonClicked:(id)sender;
-- (void)commentsCountButtonClicked:(id)sender;
-- (void)usernameLabelTapped:(id)sender;
-- (void)deleteButtonClicked:(id)sender;
-- (void)moreButtonClicked:(id)sender;
+- (void)likePost:(id)sender;
+- (void)commentOnPost:(id)sender;
+- (void)likesOnPost:(id)sender;
+- (void)goToPost:(id)sender;
+- (void)goToOrganization:(id)sender;
+- (void)deletePost:(id)sender;
+- (void)more:(id)sender;
 
 @end

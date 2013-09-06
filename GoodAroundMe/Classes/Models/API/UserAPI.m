@@ -121,8 +121,13 @@
 
 + (void)signOut:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure
 {
-    NSData *json = nil;
-    [BaseAPI putRequestWithURL:API_SIGN_OUT json:json success:^(NSDictionary *responseDictionary) {
+    NSString *email = [[NSUserDefaults standardUserDefaults] objectForKey:USER_EMAIL];
+    NSString *authToken = [[NSUserDefaults standardUserDefaults] objectForKey:USER_AUTHENTICATION];
+    NSDictionary *userDictionary = [NSDictionary dictionaryWithObjectsAndKeys:[NSDictionary dictionaryWithObjectsAndKeys:email, USER_EMAIL,
+                                                                               authToken, USER_AUTHENTICATION, nil], USER_LOGIN, nil];
+    
+    NSData *json = [ApplicationHelper constructJSON:userDictionary];
+    [BaseAPI deleteRequestWithURL:API_SIGN_OUT json:json success:^(NSDictionary *responseDictionary) {
         success(responseDictionary);
     } failure:^(NSString *message) {
         failure(message);

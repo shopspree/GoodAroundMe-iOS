@@ -92,7 +92,7 @@
 {
     AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         if ([response statusCode] == 200) {
-            NSLog(@"[DEBUG] Response from server: \n %@", JSON);
+            //NSLog(@"[DEBUG] <BaseAPI> Response from server: \n %@", JSON);
             NSDictionary *responseDictionary = (NSDictionary *)JSON;
             
             if (success) {
@@ -100,9 +100,8 @@
             }  
         }
     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-        NSLog(@"[DEBUG] [%@] %d error for %@!!!", [[self class] description], [response statusCode], request.URL.path);
-        
-        NSString *message = [BaseAPI error:JSON withStatusCode:[response statusCode]];
+        NSLog(@"[DEBUG] <%@> %d error for %@!!!", [[self class] description], [response statusCode], request.URL.path);
+        NSString *message = [BaseAPI error:JSON onRequest:request withStatusCode:[response statusCode]];
         failure(message);
     }];
     
@@ -126,7 +125,7 @@
     [request setValue:[NSString stringWithFormat:@"%d", [jsonData length]] forHTTPHeaderField:@"Content-Length"];
     [request setHTTPBody: jsonData];
     
-    NSLog(@"[BaseAPI] call for url: %@", [url description]);
+    NSLog(@"[BaseAPI] <BaseAPI> Call for url:%@ %@", httpMethod, [url description]);
     
     return request;
 }
@@ -153,19 +152,23 @@
     return [NSString stringWithFormat:@"%@%@", [BaseAPI baseURL], apiURL];
 }
 
-+ (NSString *)error:(NSDictionary *)errorData withStatusCode:(NSInteger)statusCode
++ (NSString *)error:(NSDictionary *)errorData onRequest:(NSURLRequest *)request withStatusCode:(NSInteger)statusCode
 {
     NSString *message = nil;
     
     if (statusCode == 401) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"Unauthorized" object:self];
+        // check if the user is getting a 401 but is not changing password where in this process 
+        if ([request.URL.absoluteString rangeOfString:@"update_password.json"].location == NSNotFound) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Unauthorized" object:self];
+        }
+    
         
     } else if (statusCode == 500) {
         message = @"Oops, we have a problem and we are working to fix it";
         
     } else {
-        NSString *messageTopic = [[errorData[@"errors"] allKeys] lastObject];
-        NSString *messageContent = [[errorData[@"errors"] allValues] lastObject][0];
+        NSString *messageTopic = @"Error with details: ";//[[errorData[@"errors"] allKeys] lastObject];
+        NSString *messageContent = errorData[@"errors"];//[[errorData[@"errors"] allValues] lastObject][0];
         message = (messageTopic && messageContent) ? [NSString stringWithFormat:@"%@ %@", messageTopic, messageContent] : @"Oops, an error occured. Please try later";
     }
     

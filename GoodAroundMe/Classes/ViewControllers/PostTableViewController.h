@@ -15,4 +15,6 @@
 //@property (nonatomic, strong) UIViewController *masterController;
 @property (nonatomic, strong) Post *post;
 
+- (void)setupFetchedResultsController;
+
 @end

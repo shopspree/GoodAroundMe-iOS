@@ -26,7 +26,7 @@
 
 @interface User (Create) <IJSON>
 
-+ (void)userByEmail:(NSString *)email inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext success:(void (^)(User *user))success failure:(void (^)(NSString *message))failure;
++ (User *)userByEmail:(NSString *)email inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext success:(void (^)(User *user))success failure:(void (^)(NSString *message))failure;
 + (User *)userWithDictionary:(NSDictionary *)userDictionary inManagedObjectContext:(NSManagedObjectContext *)context;
 + (User *)currentUser:(NSManagedObjectContext *)context;
 
@@ -41,7 +41,7 @@
 
 - (void)setWithDictionary:(NSDictionary *)userDictionary;
 - (void)changePassword:(NSString *)password confirmPassword:(NSString *)passwordConfirmation currentPassword:(NSString *)currentPassword success:(void (^)())success failure:(void (^)(NSString *message))failure;
-- (void)updateUser:(NSDictionary *)userDictionary success:(void (^)(User *user))success failure:(void (^)(NSString *message))failure;
+- (void)updateUser:(void (^)(User *user))success failure:(void (^)(NSString *message))failure;
 - (void)follow:(Organization *)organization success:(void (^)())success failure:(void (^)(NSString *message))failure;
 - (void)unfollow:(Organization *)organization success:(void (^)())success failure:(void (^)(NSString *message))failure;
 - (NSData *)toJSON;

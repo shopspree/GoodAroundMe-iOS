@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "NewsfeedView.h"
+#import "UIImage+Resize.h"
 
 #define NEWSFEED_POST_VIEW  100
 #define NEWSFEED_POST_VIEW_THUMBNAIL_IMAGE          101
@@ -25,5 +26,20 @@
 #define NEWSFEED_POST_VIEW_TIMESTAMP_LABEL          113
 
 @interface NewsfeedPostView : NewsfeedView
+
+@property (weak, nonatomic) IBOutlet UIImageView *logoImage;
+@property (weak, nonatomic) IBOutlet UIButton *nameButton;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *pictureImage;
+@property (weak, nonatomic) IBOutlet UILabel *captionLabel;
+@property (weak, nonatomic) IBOutlet UIButton *likeButton;
+@property (weak, nonatomic) IBOutlet UIButton *commentButton;
+@property (weak, nonatomic) IBOutlet UIButton *giveButon;
+@property (weak, nonatomic) IBOutlet UIButton *likesCountButton;
+@property (weak, nonatomic) IBOutlet UIButton *commentsCountButton;
+@property (weak, nonatomic) IBOutlet UILabel *timestampLabel;
+@property (weak, nonatomic) IBOutlet UILabel *contributorLabel;
+@property (weak, nonatomic) IBOutlet UIButton *deleteButton;
+@property (weak, nonatomic) IBOutlet UIButton *moreButton;
 
 @end

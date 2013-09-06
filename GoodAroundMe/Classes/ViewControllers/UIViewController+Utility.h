@@ -11,6 +11,7 @@
 @interface UIViewController (Utility)
 
 - (void)fail:(NSString *)title withMessage:(NSString *)message;
+- (void)info:(NSString *)title withMessage:(NSString *)message;
 - (void)navigateStoryboardWithIdentifier:(NSString *)identifier;
 
 @end

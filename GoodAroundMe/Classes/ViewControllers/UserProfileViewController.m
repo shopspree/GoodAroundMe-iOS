@@ -22,10 +22,11 @@
 
 @interface UserProfileViewController ()
 
-@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+//@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong) NSArray *sections;
 @property (nonatomic, strong) NSArray *following;
 @property (weak, nonatomic) IBOutlet UIButton *settingsButton;
+@property (nonatomic) BOOL isCurrentUser;
 
 @end
 
@@ -36,7 +37,9 @@
     [super viewDidLoad];
     
     User *currentUser = [User currentUser:self.user.managedObjectContext];
-    if (self.user != currentUser) {
+    self.isCurrentUser = (self.user == currentUser);
+    
+    if (!self.isCurrentUser){
         self.settingsButton.hidden = YES;
     }
 }
@@ -46,25 +49,41 @@
     [super viewWillAppear:animated];
     
     [self refresh];
+    
+    NSLog(@"[DEBUG] <UserProfileViewController> Started for user with attribtues: \nname: %@ %@ \nemail: %@ \nurl: %@ ", self.user.firstname, self.user.lastname, self.user.email, self.user.thumbnailURL);
 }
 
 - (void)setEmail:(NSString *)email
 {
     _email = email;
     
-    [self refresh];
-}
-/*
-- (NSManagedObjectContext *)managedObjectContext
-{
-    if (! _managedObjectContext) {
-        _managedObjectContext = [CoreDataFactory getInstance].managedObjectContext;
-        
+    if (email) {
+        [self refresh];
     }
-    
-    return _managedObjectContext;
 }
-*/
+
+- (void)setUser:(User *)user
+{
+    [super setUser:user];
+    if (user) {
+        if (!self.email) {
+            self.email = user.email;
+        }
+        
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Organization"];
+        request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"uid" ascending:YES selector:@selector(localizedCaseInsensitiveCompare:)]];
+        request.predicate = [NSPredicate predicateWithFormat:@"%@ in followers", user];
+        
+        // Execute the fetch
+        NSError *error = nil;
+        NSArray *matches = [self.managedObjectContext executeFetchRequest:request error:&error];
+        
+        // Check what happened in the fetch
+        NSLog(@"[DEBUG] <UserProfileViewController> Matches count = %d", [matches count]);
+        self.following = matches;
+    }
+}
+
 - (NSArray *)sections
 {
     if (!_sections) {
@@ -85,40 +104,27 @@
 
 - (void)refresh
 {
-    if (self.email) {
-        [User userByEmail:self.email inManagedObjectContext:self.managedObjectContext success:^(User *user) {
-            self.user = user;
-            
-            if (self.user) {
-                NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Organization"];
-                request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"uid" ascending:YES selector:@selector(localizedCaseInsensitiveCompare:)]];
-                request.predicate = [NSPredicate predicateWithFormat:@"%@ in followers", self.user];
-                
-                // Execute the fetch
-                NSError *error = nil;
-                NSArray *matches = [self.managedObjectContext executeFetchRequest:request error:&error];
-                
-                // Check what happened in the fetch
-                NSLog(@"matches count = %d", [matches count]);
-                
-                self.following = matches;
-            }
-            
-            [self.tableView reloadData];
-        } failure:^(NSString *message) {
-            [self fail:@"User Profile" withMessage:message];
-        }];
-    }
+    self.user = [User userByEmail:self.email inManagedObjectContext:self.managedObjectContext success:^(User *user) {
+        self.user = user;
+        
+        [self.tableView reloadData];
+    } failure:^(NSString *message) {
+        [self fail:@"User Profile" withMessage:message];
+    }];
     
     [self.tableView reloadData];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    [super prepareForSegue:segue sender:sender];
+    
     if ([segue.identifier isEqualToString:STORYBOARD_USER_SETTINGS]) {
-        if ([segue.destinationViewController isKindOfClass:[UserSettingsViewController class]]) {
-            UserSettingsViewController *userSettingsVC = (UserSettingsViewController *)segue.destinationViewController;
+        if ([segue.destinationViewController isKindOfClass:[UINavigationController class]]) {
+            UINavigationController *navigationController = (UINavigationController *) segue.destinationViewController;
+            UserSettingsViewController *userSettingsVC = (UserSettingsViewController *)[navigationController.viewControllers objectAtIndex:0];
             userSettingsVC.user = self.user;
+            NSLog(@"[DEBUG] <UserProfileViewController> Segueing to %@ with User: \nname: %@ %@ \nemail: %@ \nurl: %@", segue.identifier, self.user.firstname, self.user.lastname, self.user.email, self.user.thumbnailURL);
         }
     }
 }
@@ -144,13 +150,14 @@
     {
         Organization *organization = [self.following objectAtIndex:indexPath.row];
         ([organization.is_followed boolValue]) ? [self unfollow:organization] : [self follow:organization];
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
 
 - (void)follow:(Organization *)organization
 {
-    [self.user
-     follow:organization success:^() {
+    organization.is_followed = [NSNumber numberWithBool:true];
+    [self.user follow:organization success:^() {
          [self refresh];
     } failure:^(NSString *message) {
         [self fail:@"Follow" withMessage:message];
@@ -159,8 +166,8 @@
 
 - (void)unfollow:(Organization *)organization
 {
-    [self.user
-     unfollow:organization success:^() {
+    organization.is_followed = [NSNumber numberWithBool:false];
+    [self.user unfollow:organization success:^() {
         [self refresh];
     } failure:^(NSString *message) {
         [self fail:@"Follow" withMessage:message];
@@ -184,7 +191,7 @@
             break;
 
         case ORGANIZATION_SECTION_INDEX:
-            numberOfRowsInSection = [self.following count] + 1;
+            numberOfRowsInSection = self.isCurrentUser ? [self.following count] + 1 : [self.following count];
             break;
 
         default:
@@ -207,13 +214,13 @@
         
     } else if (indexPath.section == ORGANIZATION_SECTION_INDEX) {
         NSInteger lastRow = [self.following count];
-        if (indexPath.row < lastRow)  {
+        if (self.isCurrentUser && indexPath.row == lastRow) {
+            cell = [tableView dequeueReusableCellWithIdentifier:AddOrganizationCellIdentifier forIndexPath:indexPath];
+        } else {
             cell = [tableView dequeueReusableCellWithIdentifier:OrganizationCellIdentifier forIndexPath:indexPath];
             OrganizationCell *organizationCell = (OrganizationCell *)cell;
             Organization *organization = [self.following objectAtIndex:indexPath.row];
             organizationCell.organization = organization;
-        } else {
-            cell = [tableView dequeueReusableCellWithIdentifier:AddOrganizationCellIdentifier forIndexPath:indexPath];
         }
     } 
     
@@ -244,7 +251,7 @@
         return;
     } else if (indexPath.section == ORGANIZATION_SECTION_INDEX) {
         NSInteger lastRow = [self.following count] - 1;
-        if (indexPath.row == lastRow)  {
+        if (indexPath.row == lastRow) {
             [self performSegueWithIdentifier:EXPLORE sender:self];
         }
     } 

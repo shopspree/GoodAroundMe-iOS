@@ -25,13 +25,20 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
-    [OrganizationCategory categories:self.managedObjectContext success:^(NSArray *categories) {
+    self.categories = [OrganizationCategory categories:self.managedObjectContext success:^(NSArray *categories) {
         self.categories = categories;
-        [self.categoryCollectionView reloadData];
     } failure:^(NSString *message) {
         [self fail:@"Categories" withMessage:@"Error loading categories"];
     }];
     
+}
+
+- (void)setCategories:(NSArray *)categories
+{
+    _categories = categories;
+    if (categories) {
+        [self.categoryCollectionView reloadData];
+    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

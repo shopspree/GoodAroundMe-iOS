@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "Newsfeed.h"
+#import "NewsfeedView.h"
 
 @interface NewsfeedCell : UITableViewCell
 
 @property (nonatomic, strong) Newsfeed *newsfeed;
+@property (nonatomic, strong) NewsfeedView *newsfeedView;
 
 @end

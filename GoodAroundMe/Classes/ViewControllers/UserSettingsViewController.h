@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UserViewController.h"
+#import <AWSS3/AWSS3.h>
+#import "AbstractViewController.h"
 
-@interface UserSettingsViewController : UserViewController <UIAlertViewDelegate, UINavigationControllerDelegate,UIImagePickerControllerDelegate, UIActionSheetDelegate>
+@interface UserSettingsViewController : AbstractViewController <UINavigationControllerDelegate,UIImagePickerControllerDelegate, AmazonServiceRequestDelegate>
 
 @property (nonatomic, strong) User *user;
 

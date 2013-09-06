@@ -2,14 +2,14 @@
 //  Organization.h
 //  GoodAroundMe
 //
-//  Created by asaf ahi-mordehai on 8/25/13.
+//  Created by asaf ahi-mordehai on 8/31/13.
 //  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class OrganizationCategory, Post, User;
+@class Newsfeed, OrganizationCategory, Post, User;
 
 @interface Organization : NSManagedObject
 
@@ -26,6 +26,7 @@
 @property (nonatomic, retain) OrganizationCategory *category;
 @property (nonatomic, retain) NSSet *followers;
 @property (nonatomic, retain) NSSet *posts;
+@property (nonatomic, retain) NSSet *newsfeeds;
 @end
 
 @interface Organization (CoreDataGeneratedAccessors)
@@ -44,5 +45,10 @@
 - (void)removePostsObject:(Post *)value;
 - (void)addPosts:(NSSet *)values;
 - (void)removePosts:(NSSet *)values;
+
+- (void)addNewsfeedsObject:(Newsfeed *)value;
+- (void)removeNewsfeedsObject:(Newsfeed *)value;
+- (void)addNewsfeeds:(NSSet *)values;
+- (void)removeNewsfeeds:(NSSet *)values;
 
 @end

@@ -26,6 +26,7 @@
 {
     _comment = comment;
     if (comment) {
+        NSLog(@"[DEBUG] <CommentCell> Comment user is %@ %@ %@", comment.user.firstname, comment.user.lastname, comment.user.thumbnailURL);
         self.imageURL = comment.user.thumbnailURL;
         self.username = [NSString stringWithFormat:@"%@ %@", comment.user.firstname, comment.user.lastname];
         self.content = comment.content;
@@ -51,6 +52,12 @@
 {
     _content = content;
     self.contentLabel.text = content;
+}
+
+- (void)setTimestamp:(NSString *)timestamp
+{
+    _timestamp = timestamp;
+    self.timestampLabel.text = timestamp;
 }
 
 - (void)layoutSubviews

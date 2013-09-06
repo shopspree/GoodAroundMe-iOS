@@ -15,8 +15,10 @@
 
 @implementation User (Create)
 
-+ (void)userByEmail:(NSString *)email inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext success:(void (^)(User *user))success failure:(void (^)(NSString *message))failure
++ (User *)userByEmail:(NSString *)email inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext success:(void (^)(User *user))success failure:(void (^)(NSString *message))failure
 {
+    User *user = [User fetchUserByEmail:email managedObjectContext:managedObjectContext];
+    
     [UserAPI userByEmail:email success:^(NSDictionary *responseDictionary) {
         NSDictionary *userDictionary = responseDictionary[USER];
         User *user = [User userWithDictionary:userDictionary inManagedObjectContext:managedObjectContext];
@@ -25,6 +27,27 @@
     } failure:^(NSString *message) {
         failure(message);
     }];
+    
+    return user;
+}
+
++ (User *)fetchUserByEmail:(NSString *)email managedObjectContext:(NSManagedObjectContext *)managedObjectContext
+{
+    User *user = nil;
+    
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
+    request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"email" ascending:YES]];
+    request.predicate = [NSPredicate predicateWithFormat:@"email = %@", email];
+    
+    // Execute the fetch
+    NSError *error = nil;
+    NSArray *matches = [managedObjectContext executeFetchRequest:request error:&error];
+    
+    if ([matches count] == 1){
+        user = [matches lastObject];
+    }
+    
+    return user;
 }
 
 + (User *)userWithDictionary:(NSDictionary *)userDictionary inManagedObjectContext:(NSManagedObjectContext *)context
@@ -91,7 +114,7 @@
 + (void)signOut:(void (^)())success failure:(void (^)(NSString *message))failure
 {
     [UserAPI signOut:^(NSDictionary *responseDictionary) {
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_EMAIL];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:USER_AUTHENTICATION];
         success();
     } failure:^(NSString *message) {
         failure(message);
@@ -204,19 +227,22 @@
     NSDictionary *userDictionary = [NSDictionary dictionaryWithObjectsAndKeys:currentPassword, @"current_password",
                                     password, @"password",
                                     passwordConfirmation, @"password_confirmation",nil];
-    NSDictionary *requestDictionary = [NSDictionary dictionaryWithObjectsAndKeys:USER, userDictionary, nil];
+    NSDictionary *requestDictionary = [NSDictionary dictionaryWithObjectsAndKeys:userDictionary, USER, nil];
     
     [UserAPI changePassword:requestDictionary forEmail:self.email success:^(NSDictionary *responseDictionary) {
+        NSLog(@"[DEBUG] <UserAPI> Password changed successfully for %@ %@", self.firstname, self.lastname);
         success(responseDictionary);
     } failure:^(NSString *message) {
         failure(message);
     }];
 }
 
-- (void)updateUser:(NSDictionary *)userDictionary success:(void (^)(User *user))success failure:(void (^)(NSString *message))failure
+- (void)updateUser:(void (^)(User *user))success failure:(void (^)(NSString *message))failure
 {
     [UserAPI updateUser:self success:^(NSDictionary *responseDictionary) {
-        [self setWithDictionary:responseDictionary];
+        NSDictionary *userDictionary = responseDictionary[USER];
+        [self setWithDictionary:userDictionary];
+        success(self);
     } failure:^(NSString *message) {
         failure(message);
     }];

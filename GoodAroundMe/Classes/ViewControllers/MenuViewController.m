@@ -29,9 +29,9 @@
                       [NSDictionary dictionaryWithObjectsAndKeys:@"Explore", NAME,
                        EXPLORE, SEGUE_IDENTIFIER, nil],
                       [NSDictionary dictionaryWithObjectsAndKeys:@"Profile", NAME,
-                       USER_PROFILE, SEGUE_IDENTIFIER, nil],
+                       STORYBOARD_USER_PROFILE, SEGUE_IDENTIFIER, nil],
                       [NSDictionary dictionaryWithObjectsAndKeys:@"About us", NAME,
-                       ABOUT_US, SEGUE_IDENTIFIER, nil],
+                       STORYBOARD_ABOUT_US, SEGUE_IDENTIFIER, nil],
                       [NSDictionary dictionaryWithObjectsAndKeys:@"Send feedback", NAME,
                        FEEDBACK, SEGUE_IDENTIFIER, nil], nil];
     }
@@ -41,15 +41,14 @@
 
 - (IBAction)menuButtonAction:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
-   // [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     [super prepareForSegue:segue sender:sender];
     
-    if ([segue.identifier isEqualToString:USER_PROFILE]) {
+    if ([segue.identifier isEqualToString:STORYBOARD_USER_PROFILE]) {
         UserProfileViewController *userProfileVC = (UserProfileViewController *)segue.destinationViewController;
         
         NSString *email = [[NSUserDefaults standardUserDefaults] objectForKey:USER_EMAIL];

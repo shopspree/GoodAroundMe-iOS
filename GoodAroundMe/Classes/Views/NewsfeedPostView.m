@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 asaf ahi-mordehai. All rights reserved.
 //
 
+#import <SDWebImage/UIImageView+WebCache.h>
 #import "NewsfeedPostView.h"
 #import "ApplicationHelper.h"
 #import "NewsfeedPostViewDelegate.h"
@@ -20,32 +21,7 @@
 @interface NewsfeedPostView()
 
 @property (nonatomic, strong) Post *post;
-
-@property (weak, nonatomic) IBOutlet UIImageView *thumbnailImage;
-@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UIImageView *pictureImage;
-@property (weak, nonatomic) IBOutlet UILabel *captionLabel;
-@property (weak, nonatomic) IBOutlet UIButton *likeButton;
-@property (weak, nonatomic) IBOutlet UIButton *commentButton;
-@property (weak, nonatomic) IBOutlet UIButton *giveButon;
-@property (weak, nonatomic) IBOutlet UIButton *likesCountButton;
-@property (weak, nonatomic) IBOutlet UIButton *commentsCountButton;
-@property (weak, nonatomic) IBOutlet UILabel *timestampLabel;
-@property (weak, nonatomic) IBOutlet UILabel *contributorLabel;
-@property (weak, nonatomic) IBOutlet UIButton *deleteButton;
-@property (weak, nonatomic) IBOutlet UIButton *moreButton;
-
-@property (nonatomic, strong) NSString *thumbnailURL;
-@property (nonatomic, strong) NSString *nameText;
-@property (nonatomic, strong) NSString *titleText;
-@property (nonatomic, strong) NSString *pictureURL;
-@property (nonatomic, strong) NSNumber *likesCountNumber;
-@property (nonatomic, strong) NSNumber *commentsCountNumber;
-@property (nonatomic, strong) NSString *caption;
-@property (nonatomic, strong) NSDate *timestampDate;
-@property (nonatomic, strong) NSString *contributor;
-@property (nonatomic) BOOL isLiked;
+@property (nonatomic, strong) id <NewsfeedPostViewDelegate> delegate;
 
 @end
 
@@ -56,6 +32,8 @@
     if (newsfeed) {
         self.post = newsfeed.post;
     }
+    
+    self.delegate = [self traverseResponderChainForProtocol:@protocol(NewsfeedPostViewDelegate)];
 }
 
 - (void)setPost:(Post *)post
@@ -85,42 +63,61 @@
 
 - (void)setThumbnailURL:(NSString *)thumbnailURL
 {
-    _thumbnailURL = thumbnailURL;
+    [super setThumbnailURL:thumbnailURL];
     if (thumbnailURL) {
-        [self.thumbnailImage setImageWithURL:[NSURL URLWithString:_thumbnailURL] placeholderImage:[UIImage imageNamed:@"Default.png"]];
+        [self.logoImage setImageWithURL:[NSURL URLWithString:thumbnailURL] placeholderImage:[UIImage imageNamed:@"Default.png"]];
+        self.logoImage.image = [self.logoImage.image scaleToSize:self.logoImage.frame.size];
+        self.logoImage.tag = NEWSFEED_POST_VIEW_THUMBNAIL_IMAGE;
+        self.logoImage.userInteractionEnabled = YES;
+        
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+        tapGesture.numberOfTapsRequired = 1;
+        [self.logoImage addGestureRecognizer:tapGesture];
     }
 }
 
 - (void)setNameText:(NSString *)nameText
 {
-    _nameText = nameText;
+    [super setNameText:nameText];
     if (nameText) {
-        self.nameLabel.text = _nameText;
-        [self.nameLabel setUserInteractionEnabled:YES];
-        UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(usernameLabelTapped:)];
-        [tapGestureRecognizer setNumberOfTapsRequired:1];
-        [self.nameLabel addGestureRecognizer:tapGestureRecognizer];
+        [self.nameButton setTitle:nameText forState:UIControlStateNormal];
+        self.nameButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        self.nameButton.contentEdgeInsets = UIEdgeInsetsMake(0, 5, 0, 0);
+        
+        UIFont *font = self.nameButton.titleLabel.font;
+        CGSize stringsize = [nameText sizeWithFont:font];
+        
+        CGRect buttonFrame = self.nameButton.frame;
+        self.nameButton.frame = CGRectMake(buttonFrame.origin.x, buttonFrame.origin.y, stringsize.width, buttonFrame.size.height);
     }
     
 }
 
 - (void)setTitleText:(NSString *)titleText
 {
-    _titleText = titleText;
+    [super setTitleText:titleText];
     self.titleLabel.text = titleText;
 }
 
 - (void)setPictureURL:(NSString *)pictureURL
 {
-    _pictureURL = pictureURL;
+    [super setPictureURL:pictureURL];
     if (pictureURL) {
-        [self.pictureImage setImageWithURL:[NSURL URLWithString:_pictureURL] placeholderImage:[UIImage imageNamed:@"Default.png"]];
+        [self.pictureImage setImageWithURL:[NSURL URLWithString:pictureURL] placeholderImage:[UIImage imageNamed:@"Default.png"]];
+        self.pictureImage.image = [self.pictureImage.image scaleToSize:self.pictureImage.frame.size];
+        self.pictureImage.tag = NEWSFEED_POST_VIEW_PICTURE_IMAGE;
+        self.pictureImage.userInteractionEnabled = YES;
+        
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+        tapGesture.numberOfTapsRequired = 1;
+        [self.pictureImage addGestureRecognizer:tapGesture];
+        
     }
 }
 
 - (void)setLikesCountNumber:(NSNumber *)likesCountNumber
 {
-    _likesCountNumber = likesCountNumber;
+    [super setLikesCountNumber:likesCountNumber];
     NSString *count = [likesCountNumber description];
     [self.likesCountButton setTitle:count forState:UIControlStateNormal];
     self.likesCountButton.tag = NEWSFEED_POST_VIEW_LIKES_COUNT_BUTTON;
@@ -128,7 +125,7 @@
 
 - (void)setCommentsCountNumber:(NSNumber *)commentsCountNumber
 {
-    _commentsCountNumber = commentsCountNumber;
+    [super setCommentsCountNumber:commentsCountNumber];
     NSString *count = [commentsCountNumber description];
     [self.commentsCountButton setTitle:count forState:UIControlStateNormal];
     self.commentsCountButton.tag = NEWSFEED_POST_VIEW_COMMENTS_COUNT_BUTTON;
@@ -136,19 +133,19 @@
 
 - (void)setCaption:(NSString *)caption
 {
-    _caption = caption;
+    [super setCaption:caption];
     self.captionLabel.text = caption;
 }
 
 - (void)setTimestampDate:(NSDate *)timestampDate
 {
-    _timestampDate = timestampDate;
+    [super setTimestampDate:timestampDate];
     self.timestampLabel.text = [ApplicationHelper timeSinceNow:timestampDate];
 }
 
 - (void)setContributor:(NSString *)contributor
 {
-    _contributor = contributor;
+    [super setContributor:contributor];
     self.contributorLabel.text = contributor ? [NSString stringWithFormat:@"By %@", contributor] : @"By unknown";
 }
 
@@ -193,51 +190,77 @@
 
 - (void)setIsLiked:(BOOL)isLiked
 {
-    _isLiked = isLiked;
+    [super setIsLiked:isLiked];
     self.likeButton.highlighted = isLiked;
-    //[self.likeButton setTitle:@"Liked" forState:UIControlStateNormal];
+}
+
+#pragma mark - Storyboard
+
+- (IBAction)tap:(id)sender
+{
+    UITapGestureRecognizer *tapGesture = (UITapGestureRecognizer *)sender;
+    CGPoint point = [tapGesture locationInView:self];
+    UIView *senderView = [self hitTest:point withEvent:nil];
+    
+    switch (senderView.tag) {
+        case NEWSFEED_POST_VIEW_THUMBNAIL_IMAGE:
+            [self logoAction:senderView];
+            break;
+            
+        case NEWSFEED_POST_VIEW_PICTURE_IMAGE:
+            [self pictureAction:senderView];
+            break;
+            
+        default:
+            break;
+    }
+}
+
+
+- (IBAction)logoAction:(id)sender
+{
+    [self.delegate goToOrganization:sender];
+}
+
+- (IBAction)nameAction:(id)sender
+{
+    [self.delegate goToOrganization:sender];
+}
+
+- (IBAction)pictureAction:(id)sender
+{
+    
+    [self.delegate goToPost:sender];
 }
 
 - (IBAction)likeButtonClicked:(id)sender
 {
-    id <NewsfeedPostViewDelegate> delegate = [self traverseResponderChainForProtocol:@protocol(NewsfeedPostViewDelegate)];
-    [delegate likeButtonClicked:sender];
+    [self.delegate likePost:sender];
 }
 
 - (IBAction)commentButtonClicked:(id)sender
 {
-    id <NewsfeedPostViewDelegate> delegate = [self traverseResponderChainForProtocol:@protocol(NewsfeedPostViewDelegate)];
-    [delegate commentButtonClicked:sender];
+    [self.delegate commentOnPost:sender];
 }
 
 - (IBAction)likesCountButtonClicked:(id)sender
 {
-    id <NewsfeedPostViewDelegate> delegate = [self traverseResponderChainForProtocol:@protocol(NewsfeedPostViewDelegate)];
-    [delegate likesCountButtonClicked:sender];
+    [self.delegate likesOnPost:sender];
 }
 
 - (IBAction)commentsCounButtonClicked:(id)sender
 {
-    id <NewsfeedPostViewDelegate> delegate = [self traverseResponderChainForProtocol:@protocol(NewsfeedPostViewDelegate)];
-    [delegate commentsCountButtonClicked:sender];
-}
-
-- (void)usernameLabelTapped:(id)sender
-{
-    id <NewsfeedPostViewDelegate> delegate = [self traverseResponderChainForProtocol:@protocol(NewsfeedPostViewDelegate)];
-    [delegate usernameLabelTapped:sender];
+    [self.delegate goToPost:sender];
 }
 
 - (IBAction)deleteButtonClicked:(id)sender
 {
-    id <NewsfeedPostViewDelegate> delegate = [self traverseResponderChainForProtocol:@protocol(NewsfeedPostViewDelegate)];
-    [delegate deleteButtonClicked:sender];
+    [self.delegate deletePost:sender];
 }
 
 - (IBAction)moreButtonClicked:(id)sender
 {
-    id <NewsfeedPostViewDelegate> delegate = [self traverseResponderChainForProtocol:@protocol(NewsfeedPostViewDelegate)];
-    [delegate moreButtonClicked:sender];
+    [self.delegate goToPost:sender];
 }
 
 @end

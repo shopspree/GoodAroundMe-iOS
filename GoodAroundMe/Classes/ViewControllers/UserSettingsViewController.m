@@ -6,76 +6,113 @@
 //  Copyright (c) 2013 asaf ahi-mordehai. All rights reserved.
 //
 
-#import <AWSS3/AWSS3.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 #import <QuartzCore/QuartzCore.h>
 #import <SDWebImage/UIButton+WebCache.h>
 #import "UserSettingsViewController.h"
+#import "UIImage+Resize.h"
+#import "AmazonAPI.h"
+#import "SettingsViewController.h"
 
-#define CHANGE_PASSWORD @"Change password"
 #define LOGOUT @"Log out"
 #define ALERT_VIEW_TAG 666
-#define ACTION_SHEET_CHANGE_PICTURE 12
 
-@interface UserSettingsViewController ()
+@interface UserSettingsViewController () <UIAlertViewDelegate, UITableViewDelegate>
 
+@property (nonatomic, strong) SettingsViewController *settingsController;
 @property (weak, nonatomic) IBOutlet UIButton *userImageButton;
 @property (weak, nonatomic) IBOutlet UILabel *userFullNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *userEmailLabel;
 @property (weak, nonatomic) IBOutlet UIView *settingsTableView;
-
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *cancelNavButton;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *doneNavButton;
+@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (strong, nonatomic) UIImage *userImage;
 
 @end
 
 @implementation UserSettingsViewController
 
-- (void)setUser:(User *)user
-{
-    [super setUser:user];
-    if (user) {
-        //self.firstNameTextField.text = self.user.firstname;
-        //self.lastNameTextField.text = self.user.lastname;
-    }
-}
-
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
-}
-
-
-- (void)signOut
-{
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
-                                                    message:@"Are you sure?"
-                                                   delegate:self
-                                          cancelButtonTitle:@"Cancel"
-                                          otherButtonTitles:@"Sign out", nil];
-    alert.tag = ALERT_VIEW_TAG;
-    [alert show];
-}
-
-- (IBAction)changeImageButtonAction:(id)sender
-{
-    [self changeImage];
-}
-
-- (IBAction)imageButtonAction:(id)sender
-{
-    [self changeImage];
-}
-
-
-- (void)changeImage
-{
+    NSLog(@"[DEBUG] <UserSEttingsViewController> Started for user with attribtues: \nname: %@ %@ \nemail: %@ \nurl: %@ ", self.user.firstname, self.user.lastname, self.user.email, self.user.thumbnailURL);
     
-    UIActionSheet *cellActionSheet = [[UIActionSheet alloc] initWithTitle:@"Photo options"
-                                                                 delegate:self
-                                                        cancelButtonTitle:nil
-                                                   destructiveButtonTitle:nil
-                                                        otherButtonTitles:@"Take photo", @"From library", nil];
-    cellActionSheet.tag = ACTION_SHEET_CHANGE_PICTURE;
-    [cellActionSheet showInView:self.tableView];
+    [super viewDidLoad];
+    
+    UITableViewController *settingsTable = [self.childViewControllers lastObject];
+    settingsTable.tableView.delegate = self;
+    settingsTable.tableView.backgroundView = nil;
+    settingsTable.tableView.backgroundColor = [UIColor clearColor];
+    
+    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+}
+
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self refresh];
+}
+
+- (void)refresh
+{
+    [self.userImageButton setBackgroundImageWithURL:[NSURL URLWithString:self.user.thumbnailURL] forState:UIControlStateNormal];
+    self.userImageButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
+    self.userImageButton.layer.cornerRadius = 10;
+    self.userImageButton.clipsToBounds = YES;
+    
+    //UIImage *image = self.userImageButton.imageView.image;
+    //image = [image scaleToSize:self.userImageButton.imageView.frame.size];
+    //[self.userImageButton setBackgroundImage:image forState:UIControlStateNormal];
+    
+    self.userFullNameLabel.text = [NSString stringWithFormat:@"%@ %@", self.user.firstname, self.user.lastname];
+    
+    self.userEmailLabel.text = self.user.email;
+}
+
+- (SettingsViewController *)settingsController
+{
+    if (!_settingsController) {
+        _settingsController = [[SettingsViewController alloc] initWithController:self];
+        _settingsController.imagePickerDelegate = self;
+        _settingsController.amazonDelegate = self;
+    }
+    return _settingsController;
+}
+
+- (void)startActivityIndicationInNavigationBar
+{
+    UIBarButtonItem * barButton = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
+    self.navigationItem.rightBarButtonItem = barButton;
+    [self.activityIndicator startAnimating];
+}
+
+- (void)stopActivityIndicationInNavigationBar
+{
+    [self.activityIndicator stopAnimating];
+    self.navigationItem.rightBarButtonItem = self.doneNavButton;
+}
+
+- (void)updateUser
+{
+    NSLog(@"[DEBUG] <UserSEttingsViewController> Update user with attribtues: \nname: %@ %@ \nemail: %@ \nurl: %@ ", self.user.firstname, self.user.lastname, self.user.email, self.user.thumbnailURL);
+    [self.user updateUser:^(User *user) {
+        [self stopActivityIndicationInNavigationBar];
+        [self dismissViewControllerAnimated:YES completion:nil];
+    } failure:^(NSString *message) {
+        [self stopActivityIndicationInNavigationBar];
+        [self fail:@"User preferences" withMessage:message];
+    }];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    [super prepareForSegue:segue sender:sender];
+    
+    if ([segue.destinationViewController respondsToSelector:@selector(setUser:)]) {
+        [segue.destinationViewController performSelector:@selector(setUser:) withObject:self.user];
+    }
 }
 
 
@@ -83,45 +120,53 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0 && indexPath.row == 1) {
-        [self performSegueWithIdentifier:EDIT_NAME sender:self];
+    if (indexPath.section == 0 && indexPath.row == 0) {
+        [self performSegueWithIdentifier:STORYBOARD_USER_EDIT_NAME sender:self];
         
-    } else if (indexPath.section == 0 && indexPath.row == 2) {
-        [self performSegueWithIdentifier:CHANGE_PASSWORD sender:self];
+    } else if (indexPath.section == 0 && indexPath.row == 1) {
+        [self performSegueWithIdentifier:STORYBOARD_USER_CHANGE_PASSWORD sender:self];
         
-    } else if (indexPath.section == 0 && indexPath.row == 0) {
+    } else if (indexPath.section == 1 && indexPath.row == 0) {
         [self signOut];
-    }
+        
+    } 
 }
 
 
 #pragma mark - Storyboard
 
-- (IBAction)imageAction:(id)sender
+- (IBAction)changeImageButtonAction:(id)sender
 {
-    [self changeImage];
+    [self.settingsController changeImage:self.view];
 }
 
-- (IBAction)changeImageAction:(id)sender
+- (IBAction)imageButtonAction:(id)sender
 {
-    [self changeImage];
+    [self.settingsController changeImage:self.view];
 }
 
-- (IBAction)doneButtonAction:(id)sender
+- (IBAction)done:(id)sender
 {
-    NSDictionary *userDictionary = [NSDictionary dictionary];
-    [self.user updateUser:userDictionary success:^(User *user) {
-        [self dismissViewControllerAnimated:YES completion:^{ return; }];
-    } failure:^(NSString *message) {
-        [self fail:@"User preferences" withMessage:message];
-    }];
+    if (self.userImage) {
+        [self startActivityIndicationInNavigationBar];
+        [self.settingsController uploadtoAmazon:self.userImage bucket:self.user.email];
+    } else {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+
+}
+
+- (IBAction)cancel:(id)sender
+{
+    [self dismissViewControllerAnimated:YES completion:^{ return; }];
 }
 
 #pragma mark - UIAlertViewDelegate
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (alertView.tag == ALERT_VIEW_TAG && buttonIndex == 0) {
+    NSLog(@"[DEBUG] <UserSettingsViewController> AlertView %d clickedButtonAtIndex %d", alertView.tag, buttonIndex);
+    if (alertView.tag == ALERT_VIEW_TAG && buttonIndex == 1) {
         [User signOut:^{
             [self navigateStoryboardWithIdentifier:SIGNUP_SIGNIN];
         } failure:^(NSString *message) {
@@ -130,66 +175,6 @@
     }
 }
 
-#pragma mark - UIActionSheetDelegate
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (actionSheet.tag == ACTION_SHEET_CHANGE_PICTURE) {
-        switch (buttonIndex) {
-            case 0:
-                [self takePhoto];
-                break;
-                
-            case 1:
-                [self choosePhotoFromLibrary];
-                break;
-                
-            default:
-                break;
-        }
-    }
-}
-
-- (void)takePhoto
-{
-    [self startImagePickerFromViewController:self usingDelegate:self sourceType:UIImagePickerControllerSourceTypeCamera ];
-}
-
-- (void)choosePhotoFromLibrary
-{
-    [self startImagePickerFromViewController:self usingDelegate:self sourceType:UIImagePickerControllerSourceTypePhotoLibrary ];
-}
-
-- (BOOL) startImagePickerFromViewController:(UIViewController*)controller
-                              usingDelegate:(id <UIImagePickerControllerDelegate, UINavigationControllerDelegate>) delegate
-                                 sourceType:(UIImagePickerControllerSourceType)sourceType
-
-{
-    if (([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO)
-        || (delegate == nil)
-        || (controller == nil)) {
-        NSLog(@"[ERROR] Cannot access device camera");
-        return NO;
-    }
-    
-    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
-    imagePicker.sourceType = sourceType;//UIImagePickerControllerSourceTypeCamera;
-    
-    // Displays a control that allows the user to choose picture or movie capture, if both are available:
-    //cameraUI.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
-    imagePicker.mediaTypes = @[(NSString *)kUTTypeImage];
-    
-    // Hides the controls for moving & scaling pictures, or for trimming movies. To instead show the controls, use YES.
-    imagePicker.allowsEditing = YES;
-    imagePicker.delegate = delegate;
-    
-    [controller presentViewController:imagePicker animated:YES completion:^{
-        NSLog(@"[DEBUG] Presenting device camera completed");
-    }];
-    
-    return YES;
-    
-}
 
 #pragma mark - UIImagePickerControllerDelegate
 
@@ -204,24 +189,16 @@
         originalImage = (UIImage *) [info objectForKey:UIImagePickerControllerOriginalImage];
         
         image = editedImage ? editedImage : originalImage;
-        //self.imageView.image = image;
         
         // Save the new image (original or edited) to the Camera Roll
-        UIImageWriteToSavedPhotosAlbum (image, nil, nil , nil);
+        if (editedImage != originalImage) {
+            UIImageWriteToSavedPhotosAlbum(image, nil, nil , nil);
+        }
     }
     
-    // Handle a movie capture
-    /*
-     if (CFStringCompare ((CFStringRef)mediaType, kUTTypeMovie, 0) == kCFCompareEqualTo) {
-     NSString *moviePath = [[info objectForKey:UIImagePickerControllerMediaURL] path];
-     
-     if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(moviePath)) {
-     UISaveVideoAtPathToSavedPhotosAlbum(moviePath, nil, nil, nil);
-     }
-     }
-     */
-    
-    [picker dismissViewControllerAnimated:YES completion:nil];
+    [picker dismissViewControllerAnimated:YES completion:^{
+        [self changePicture:image];
+    }];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
@@ -229,6 +206,55 @@
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
+#pragma mark - private
 
+- (void)changePicture:(UIImage *)image
+{
+    self.userImage = image;
+    [self.userImageButton setBackgroundImage:image forState:UIControlStateNormal];
+}
+
+- (void)editName
+{
+   [self performSegueWithIdentifier:STORYBOARD_USER_EDIT_NAME sender:self];
+}
+
+- (void)changePassword
+{
+    [self performSegueWithIdentifier:STORYBOARD_USER_CHANGE_PASSWORD sender:self];
+}
+
+- (void)signOut
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
+                                                    message:@"Are you sure?"
+                                                   delegate:self
+                                          cancelButtonTitle:@"Cancel"
+                                          otherButtonTitles:@"Sign out", nil];
+    alert.tag = ALERT_VIEW_TAG;
+    [alert show];
+}
+
+#pragma mark - AmazonServiceRequestDelegate
+
+-(void)request:(AmazonServiceRequest *)request didCompleteWithResponse:(AmazonServiceResponse *)response
+{
+    NSLog(@"[DEBUG] Request tag:%@ url:%@", request.requestTag, request.url);
+    self.user.thumbnailURL = request.url.absoluteString;
+    
+    [self updateUser];
+}
+
+-(void)request:(AmazonServiceRequest *)request didSendData:(long long)bytesWritten totalBytesWritten:(long long)totalBytesWritten totalBytesExpectedToWrite:(long long)totalBytesExpectedToWrite
+{
+    float progress = (float)totalBytesWritten / (float)totalBytesExpectedToWrite;
+    NSLog(@"[DEBUG] Request tag:%@ url:%@ %f%%!", request.requestTag, request.url, progress * 100);
+}
+
+-(void)request:(AmazonServiceRequest *)request didFailWithError:(NSError *)error
+{
+    NSLog(@"[DEBUG] Request tag:%@ url:%@ Failed!", request.requestTag, request.url);
+    [self stopActivityIndicationInNavigationBar];
+}
 
 @end

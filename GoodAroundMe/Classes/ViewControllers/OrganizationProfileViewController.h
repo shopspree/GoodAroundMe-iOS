@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "AbstractViewController.h"
 #import "Organization+Create.h" 
+#import "NewsfeedPostViewDelegate.h"
 
-@interface OrganizationProfileViewController : AbstractViewController <UITableViewDataSource, UITableViewDelegate>
+@interface OrganizationProfileViewController : AbstractViewController <UITableViewDataSource, UITableViewDelegate, NewsfeedPostViewDelegate, UIActionSheetDelegate>
 
 @property (nonatomic, strong) Organization *organization;
 

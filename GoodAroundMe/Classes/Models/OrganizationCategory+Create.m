@@ -42,8 +42,9 @@
     return category;
 }
 
-+ (void)categories:(NSManagedObjectContext *)managedObjectContext success:(void (^)(NSArray *categories))success failure:(void (^)(NSString *message))failure
++ (NSArray *)categories:(NSManagedObjectContext *)managedObjectContext success:(void (^)(NSArray *categories))success failure:(void (^)(NSString *message))failure
 {
+    NSArray *categories = [NSArray array];
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"OrganizationCategory"];
     request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]];
     request.predicate = nil; // all categories
@@ -53,22 +54,35 @@
     NSArray *matches = [managedObjectContext executeFetchRequest:request error:&error];
     
     // Check what happened in the fetch
-    
     if (!matches) {  // nil means fetch failed; more than one impossible (unique!)
         // handle error
         failure(nil);
     } else { // let's fetch and create all categories
-        [CategoryAPI categories:^(NSDictionary *responseDictionary) {
-            NSMutableArray *categories = [NSMutableArray array];
-            for (NSDictionary *categoryDictionary in responseDictionary[@"organization_categories"]) {
-                OrganizationCategory *category = [OrganizationCategory categoryWithDictionary:categoryDictionary inManagedObjectContext:managedObjectContext];
-                [categories addObject:category];
-            }
+        categories = matches;
+        
+        // fetch categories from the server
+        [OrganizationCategory categoriesFromServer:managedObjectContext success:^(NSArray *categories) {
             success(categories);
         } failure:^(NSString *message) {
             failure(message);
         }];
     }
+    
+    return matches;
+}
+
++ (void)categoriesFromServer:(NSManagedObjectContext *)managedObjectContext success:(void (^)(NSArray *categories))success failure:(void (^)(NSString *message))failure
+{
+    [CategoryAPI categories:^(NSDictionary *responseDictionary) {
+        NSMutableArray *categories = [NSMutableArray array];
+        for (NSDictionary *categoryDictionary in responseDictionary[@"organization_categories"]) {
+            OrganizationCategory *category = [OrganizationCategory categoryWithDictionary:categoryDictionary inManagedObjectContext:managedObjectContext];
+            [categories addObject:category];
+        }
+        success(categories);
+    } failure:^(NSString *message) {
+        failure(message);
+    }];
 }
 
 #pragma mark - private methods

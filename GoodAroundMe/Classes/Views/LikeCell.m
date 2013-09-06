@@ -9,6 +9,7 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "LikeCell.h"
 #import "User.h"
+#import "UIImage+Resize.h"
 
 @interface LikeCell ()
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
@@ -22,7 +23,10 @@
 {
     _like = like;
     if (like) {
-        [self.imageView setImageWithURL:[NSURL URLWithString:like.user.thumbnailURL] placeholderImage:[UIImage imageNamed:@"Default.png"]];
+        UIImage *placeholderImage = [[UIImage imageNamed:@"Default.png"] scaleToSize:self.imageView.frame.size];
+        [self.imageView setImageWithURL:[NSURL URLWithString:like.user.thumbnailURL] placeholderImage:placeholderImage];
+        self.imageView.image = [self.imageView.image scaleToSize:self.imageView.frame.size];
+        
         self.usernameLabel.text = [NSString stringWithFormat:@"%@ %@", like.user.firstname, like.user.lastname];
     }
 }

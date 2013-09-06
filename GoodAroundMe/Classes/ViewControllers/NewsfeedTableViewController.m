@@ -20,14 +20,15 @@
 #import "Post+Create.h"
 #import "PostViewController.h"
 #import "NewPostCaptionViewController.h"
+#import "OrganizationProfileViewController.h"
+#import "UIImage+Resize.h"
 
 #define ACTION_SHEET_NEW_POST_TAG 1
 #define ACTION_SHEET_DELETE_POST_TAG 2
 
 @interface NewsfeedTableViewController() <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
-//@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
-@property (nonatomic, strong) Post *postToDelete;
+@property (nonatomic, strong) Post *selectedPost;
 @property (nonatomic, strong) NSArray *uploads;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *cameraBarButton;
 
@@ -52,20 +53,14 @@
     }
 }
 
-- (void)setManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
-{
-    //_managedObjectContext = managedObjectContext;
-    [super setManagedObjectContext:managedObjectContext];
-    [self fetchCoreData:managedObjectContext];
-    
-}
-
 - (void)fetchCoreData:(NSManagedObjectContext *)managedObjectContext
 {
     if (managedObjectContext) {
+        User *currentUser = [User currentUser:self.managedObjectContext];
+        NSArray *following = [currentUser.following allObjects];
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Newsfeed"];
         request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"updated_at" ascending:NO]];
-        request.predicate = nil; // all newsfeeds
+        request.predicate = [NSPredicate predicateWithFormat:@"organization IN %@", following]; // all Organizations the user follows
         
         self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:managedObjectContext sectionNameKeyPath:nil cacheName:nil];
         
@@ -78,19 +73,9 @@
 {
     [super viewWillAppear:animated];
     
-    self.postToDelete = nil;
+    self.selectedPost = nil;
     
-    if (! self.managedObjectContext) {
-        [[CoreDataFactory getInstance] context:^(NSManagedObjectContext *managedObjectContext) {
-            self.managedObjectContext = managedObjectContext;
-            [self refresh];
-        } get:^(NSManagedObjectContext *managedObjectContext) {
-            self.managedObjectContext = managedObjectContext;
-            [self refresh];
-        }];
-    } else {
-        [self refresh];
-    }
+    [self refresh];
 }
 
 - (void)didReceiveMemoryWarning
@@ -102,14 +87,37 @@
 - (IBAction)refresh
 {
     [self.refreshControl beginRefreshing];
+    [self fetchCoreData:self.managedObjectContext];
     
     [Newsfeed synchronizeInContext:self.managedObjectContext success:^{
         [self.refreshControl endRefreshing];
-        [self.tableView reloadData];
+        //[self.tableView reloadData];
+        [self fetchCoreData:self.managedObjectContext];
     } failure:^(NSString *message) {
         [self.refreshControl endRefreshing];
         [self fail:@"Newsfeed" withMessage:message];
     }];
+}
+
+- (Post *)selectPost:(id)sender
+{
+    Post *post = nil;
+    CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
+    if (indexPath != nil)
+    {
+        Newsfeed *newsfeed = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        self.selectedPost = newsfeed.post;
+        post = newsfeed.post;
+    }
+    NSLog(@"[DEBUG] <NewsfeedTableViewController> Post id= %@, likes_count = %@, likes count = %d", self.selectedPost.uid, self.selectedPost.likes_count, [self.selectedPost.likes count]);
+    return post;
+}
+
+- (void)selectPostAndSegue:(NSString *)identifier sender:(id)sender
+{
+    [self selectPost:sender];
+    [self performSegueWithIdentifier:identifier sender:sender];
 }
 
 #pragma mark - Storyboard
@@ -127,7 +135,7 @@
 
 - (IBAction)menuButtonPressed:(id)sender
 {
-    [self performSegueWithIdentifier:MENU sender:sender];
+    [self performSegueWithIdentifier:STORYBOARD_MENU sender:sender];
 }
 
 
@@ -141,30 +149,22 @@
             UIImage *image = (UIImage *)sender;
             newPostCaptionVC.image = image;
         }
-    } else if ([segue.identifier isEqualToString:@"LikesTable"]) {
-        id objectWithPost = [(UIView *)sender traverseResponderChainForSelector:@selector(post)];
-        Post *post = [objectWithPost performSelector:@selector(post)];
-        if (post) {
-            if ([segue.destinationViewController respondsToSelector:@selector(setPost:)]) {
-                [segue.destinationViewController performSelector:@selector(setPost:) withObject:post];
-            }
-        }
-    } else if ([segue.identifier isEqualToString:@"Post"]) {
-        id objectWithPost = [(UIView *)sender traverseResponderChainForSelector:@selector(post)];
-        Post *post = [objectWithPost performSelector:@selector(post)];
+    } else if ([segue.identifier isEqualToString:STORYBOARD_POST]) {
         if ([segue.destinationViewController isKindOfClass:[PostViewController class]]) {
             PostViewController *postViewController = (PostViewController *)segue.destinationViewController;
-            postViewController.post = post;
+            postViewController.post = self.selectedPost;
+    
             if ([sender isKindOfClass:[UIButton class]]) {
                 UIButton *button = (UIButton *)sender;
                 postViewController.keyboardIsShown = (button.tag == NEWSFEED_POST_VIEW_COMMENT_BUTTON);
-            }
-             
+            }       
         }
-    } else if ([segue.identifier isEqualToString:@"UserProfile"]) {
-        id objectWithPost = [(UIView *)sender traverseResponderChainForSelector:@selector(post)];
-        Post *post = [objectWithPost performSelector:@selector(post)];
-        
+    } else if ([segue.identifier isEqualToString:STORYBOARD_ORGANIZATION_PROFILE]) {
+        if ([segue.destinationViewController isKindOfClass:[OrganizationProfileViewController class]]) {
+            OrganizationProfileViewController *organizationProfileVC = (OrganizationProfileViewController *)segue.destinationViewController;
+            Organization *organization = (Organization *)sender;
+            organizationProfileVC.organization = organization;
+        }
     } else if ([segue.identifier isEqualToString:@"MoreOptions"]) {
         id objectWithPost = [(UIView *)sender traverseResponderChainForSelector:@selector(post)];
         Post *post = [objectWithPost performSelector:@selector(post)];
@@ -173,7 +173,7 @@
                 [segue.destinationViewController performSelector:@selector(setPost:) withObject:post];
             }
         }
-    }
+    } 
 }
 
 - (IBAction)unwindFromModal:(UIStoryboardSegue *)segue
@@ -207,6 +207,13 @@
     return height;
 }
 
+#pragma mark - UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    //[self selectPostAndSegue:STORYBOARD_POST sender:tableView];
+}
+
 #pragma mark - UIActionSheetDelegate
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -214,10 +221,10 @@
     if (actionSheet.tag == ACTION_SHEET_DELETE_POST_TAG) {
         switch (buttonIndex) {
             case 0:
-                if (self.postToDelete) {
-                    NSLog(@"[DEBUG] deleted post is %@", [self.postToDelete description]);
-                    [self.postToDelete deletePost:^{
-                        [self.tableView reloadData];
+                if (self.selectedPost) {
+                    NSLog(@"[DEBUG] <NewsfeedTableViewController> deleted post is %@", [self.selectedPost description]);
+                    [self.selectedPost deletePost:^{
+                        //[self.tableView reloadData];
                     } failure:^(NSString *message) {
                         [self fail:@"Delete post failed" withMessage:message];
                     }];
@@ -225,9 +232,13 @@
                 break;
                 
             case 1:
-                if (self.postToDelete) {
-                    NSLog(@"[DEBUG] Reported as inappropriate post is %@", [self.postToDelete description]);
-                    // TO DO
+                if (self.selectedPost) {
+                    NSLog(@"[DEBUG] <NewsfeedTableViewController> Reported as inappropriate post is %@", [self.selectedPost description]);
+                    [self.selectedPost inappropriate:^{
+                        [self info:@"Resport Inappropriate" withMessage:@"Thank you. Our team will review your report and act accordnigly"];
+                    } failure:^(NSString *message) {
+                        [self fail:@"Resport Inappropriate" withMessage:message];
+                    }];
                 }
                 
             default:
@@ -246,12 +257,7 @@
             default:
                 break;
         }
-        
-        //NSString *imageSource = (buttonIndex == 0) ? Camera : PhotoLibrary;
-        //[self performSegueWithIdentifier:STORYBOARD_NEW_POST sender:imageSource];
-        
     }
-    
 }
 
 - (void)takePhoto
@@ -272,7 +278,7 @@
     if (([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO)
         || (delegate == nil)
         || (controller == nil)) {
-        NSLog(@"[ERROR] Cannot access device camera");
+        NSLog(@"[ERROR] <NewsfeedTableViewController> Cannot access device camera");
         return NO;
     }
     
@@ -288,7 +294,7 @@
     imagePicker.delegate = delegate;
     
     [controller presentViewController:imagePicker animated:YES completion:^{
-        NSLog(@"[DEBUG] Presenting device camera completed");
+        NSLog(@"[DEBUG] <NewsfeedTableViewController> Presenting device camera completed");
     }];
     
     return YES;
@@ -308,15 +314,10 @@
         originalImage = (UIImage *) [info objectForKey:UIImagePickerControllerOriginalImage];
         
         image = editedImage ? editedImage : originalImage;
-        //self.imageView.image = image;
         
-        //UIGraphicsBeginImageContext(CGSizeMake(320,269));
-        //CGContextRef context = UIGraphicsGetCurrentContext();
-        //[image drawInRect: CGRectMake(0, 0, 320, 269)];
-        //UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
-        //UIGraphicsEndImageContext();
-        
-        image = [self imageWithImage:image scaledToSize:CGSizeMake(320, 269)];
+        //image = [self imageWithImage:image scaledToSize:CGSizeMake(320, 269)];
+        NewsfeedPostView *view = [[[NSBundle mainBundle] loadNibNamed:@"NewsfeedPostView" owner:self options:nil] lastObject];
+        image = [image scaleToSize:CGSizeMake(view.pictureImage.frame.size.width, view.pictureImage.frame.size.height)];
         
         // Save the new image (original or edited) to the Camera Roll
         UIImageWriteToSavedPhotosAlbum (image, nil, nil , nil);
@@ -339,15 +340,11 @@
     
 }
 
-- (UIImage*)imageWithImage:(UIImage*)image
-              scaledToSize:(CGSize)newSize;
+- (UIImage*)imageWithImage:(UIImage*)image scaledToSize:(CGSize)newSize;
 {
     UIGraphicsBeginImageContext( newSize );
-    
     [image drawInRect:CGRectMake(0,0,newSize.width,newSize.height)];
-    
     UIImage * newImage = UIGraphicsGetImageFromCurrentImageContext();
-    
     UIGraphicsEndImageContext();
     
     return newImage;
@@ -362,54 +359,67 @@
 
 #pragma mark - NewsfeedPostViewDelegate
 
-- (void)likeButtonClicked:(id)sender
+- (void)likePost:(id)sender
 {
-    id objectWithPost = [(UIView *)sender traverseResponderChainForSelector:@selector(post)];
-    Post *post = [objectWithPost performSelector:@selector(post)];
-    if (post) {
-        if (post.liked_by_user) {
-            [post unlike:^{
-                return;
-            } failure:^(NSString *message) {
-                [self fail:@"Failed to unlike" withMessage:message];
-                return;
-            }];
-        } else {
-            [post like:^(Like *like) {
-                return;
-            } failure:^(NSString *message) {
-                [self fail:@"Failed to like" withMessage:message];
-                return;
-            }];
+    Post *post = nil;
+    CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
+    if (indexPath != nil)
+    {
+        Newsfeed *newsfeed = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        post = newsfeed.post;
+        
+        if (post) {
+            if ([post.liked_by_user boolValue]) {
+                NSLog(@"[DEBUG] <NewsfeedTableViewController> Unlike post id = %@ likes_count = %@", post.uid, post.likes_count);
+                [post unlike:^{
+                    return;
+                } failure:^(NSString *message) {
+                    [self fail:@"Failed to unlike" withMessage:message];
+                }];
+                NSLog(@"[DEBUG] <NewsfeedTableViewController> Ater Unlike post id = %@ likes_count = %@", post.uid, post.likes_count);
+            } else {
+                NSLog(@"[DEBUG] <NewsfeedTableViewController> Like post id = %@ likes_count = %@", post.uid, post.likes_count);
+                [post like:^(Like *like) {
+                    return;
+                } failure:^(NSString *message) {
+                    [self fail:@"Failed to like" withMessage:message];
+                }];
+                NSLog(@"[DEBUG] <NewsfeedTableViewController> After Like post id = %@ likes_count = %@", post.uid, post.likes_count);
+            }
+            
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         }
+        
+        
     }
+}
+
+- (void)commentOnPost:(id)sender
+{
+    [self selectPostAndSegue:STORYBOARD_POST sender:sender];
+}
+
+- (void)likesOnPost:(id)sender
+{
+    [self selectPostAndSegue:STORYBOARD_POST sender:sender];
+}
+
+- (void)goToPost:(id)sender
+{
+    [self selectPostAndSegue:STORYBOARD_POST sender:sender];
+}
+
+- (void)goToOrganization:(id)sender
+{
+    Post *post = [self selectPost:sender];
+    [self performSegueWithIdentifier:STORYBOARD_ORGANIZATION_PROFILE sender:post.organization];
+}
+
+- (void)deletePost:(id)sender
+{
+    [self selectPost:sender];
     
-}
-
-- (void)commentButtonClicked:(id)sender
-{
-    [self performSegueWithIdentifier:@"Post" sender:sender];
-}
-
-- (void)likesCountButtonClicked:(id)sender
-{
-    [self performSegueWithIdentifier:@"Post" sender:sender];
-}
-
-- (void)commentsCountButtonClicked:(id)sender
-{
-    [self performSegueWithIdentifier:@"Post" sender:sender];
-}
-
-- (void)usernameLabelTapped:(id)sender
-{
-    [self performSegueWithIdentifier:@"UserProfile" sender:self];
-}
-
-- (void)deleteButtonClicked:(id)sender
-{
-    id objectWithPost = [(UIView *)sender traverseResponderChainForSelector:@selector(post)];
-    self.postToDelete = [objectWithPost performSelector:@selector(post)];
     UIActionSheet *cellActionSheet = [[UIActionSheet alloc] initWithTitle:@""
                                                                  delegate:self
                                                         cancelButtonTitle:@"Cancel"
@@ -419,7 +429,7 @@
     [cellActionSheet showInView:self.tableView];
 }
 
-- (void)moreButtonClicked:(id)sender
+- (void)more:(id)sender
 {
     [self performSegueWithIdentifier:@"MoreOptions" sender:sender];
 }

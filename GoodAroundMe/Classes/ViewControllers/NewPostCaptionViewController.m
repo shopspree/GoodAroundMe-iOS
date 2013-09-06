@@ -106,6 +106,21 @@
     return YES;
 }
 
+-(BOOL)textFieldShouldReturn:(UITextField*)textField;
+{
+    NSInteger nextTag = textField.tag + 1;
+    // Try to find next responder
+    UIResponder* nextResponder = [self.view viewWithTag:nextTag];
+    if (nextResponder) {
+        // Found next responder, so set it.
+        [nextResponder becomeFirstResponder];
+    } else {
+        [self shareButtonAction:textField];
+    }
+    
+    return NO; // We do not want UITextField to insert line-breaks.
+}
+
         
 #pragma mark - AmazonServiceRequestDelegate
         
@@ -142,7 +157,7 @@
     -(void)request:(AmazonServiceRequest *)request didFailWithError:(NSError *)error
 {
     NSLog(@"[DEBUG] Request tag:%@ url:%@ Failed!", request.requestTag, request.url);
-
+    self.shareButton.enabled = YES;
 }
 
 

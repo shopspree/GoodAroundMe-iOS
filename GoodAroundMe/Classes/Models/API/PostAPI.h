@@ -23,7 +23,7 @@
 
 // comments
 + (void)commentsOnPost:(Post *)post success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure;
-+ (void)comment:(NSString *)content onPost:(Post *)post success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure;
++ (void)comment:(Comment *)comment onPost:(Post *)post success:(void (^)(NSDictionary *responseDictionary, Comment *comment))success failure:(void (^)(NSString *message))failure;
 + (void)deleteComment:(Comment *)comment onPost:(Post *)post success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure;
 
 // inappropriate reports

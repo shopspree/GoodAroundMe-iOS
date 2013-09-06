@@ -2,11 +2,12 @@
 //  Organization.m
 //  GoodAroundMe
 //
-//  Created by asaf ahi-mordehai on 8/25/13.
+//  Created by asaf ahi-mordehai on 8/31/13.
 //  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
 #import "Organization.h"
+#import "Newsfeed.h"
 #import "OrganizationCategory.h"
 #import "Post.h"
 #import "User.h"
@@ -27,5 +28,6 @@
 @dynamic category;
 @dynamic followers;
 @dynamic posts;
+@dynamic newsfeeds;
 
 @end

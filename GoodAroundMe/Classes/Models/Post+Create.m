@@ -105,8 +105,16 @@
     self.updated_at = [ApplicationHelper dateFromString:[postDictionary[POST_UPDATED_AT] description]];
     self.comments_count = [ApplicationHelper numberFromString:[postDictionary[POST_COMMENTS_COUNT] description]];
     self.likes_count = [ApplicationHelper numberFromString:[postDictionary[POST_LIKES_COUNT] description]];
-    self.liked_by_user = @([[postDictionary[POST_LIKED_BY_USER] description] intValue]);
-    NSLog(@"[DEBUG] Value of self.liked_by_user is %@", self.liked_by_user);
+
+    if (postDictionary[LIKE]) {
+        NSDictionary *likeDictionary = postDictionary[LIKE];
+        Like *like = [Like likeWithDictionary:likeDictionary inManagedObjectContext:self.managedObjectContext];
+        [self addLikesObject:like];
+        self.liked_by_user = [NSNumber numberWithBool:YES];
+    } else {
+        self.liked_by_user = [NSNumber numberWithBool:NO];
+    }
+    
     if (postDictionary[POST_CONTRIBUTOR]) {
         NSDictionary *userDictionary = postDictionary[POST_CONTRIBUTOR];
         User *contributor = [User userWithDictionary:userDictionary[USER] inManagedObjectContext:self.managedObjectContext];
@@ -114,8 +122,8 @@
     }
     
     if (postDictionary[POST_ORGANIZATION]) {
-        Organization *organiztion = [Organization organizationWithDictionary:postDictionary[POST_ORGANIZATION] inManagedObjectContext:self.managedObjectContext];
-        self.organization = organiztion;
+        Organization *organization = [Organization organizationWithDictionary:postDictionary[POST_ORGANIZATION] inManagedObjectContext:self.managedObjectContext];
+        self.organization = organization;
     }
 
     for (NSDictionary *mediaDictionary in postDictionary[POST_MEDIAS]) {
@@ -166,13 +174,18 @@
 
 - (void)like:(void (^)(Like *like))success failure:(void (^)(NSString *message))failure
 {
+    NSLog(@"[DEBUG] <Post + Create> Pre Like on post %@ likes count is %@", self.uid, self.likes_count);
+    
+    self.liked_by_user = [NSNumber numberWithBool:YES];
+    NSInteger updatedLikesCount = [self.likes_count integerValue] + 1;
+    self.likes_count = [NSNumber numberWithInteger:updatedLikesCount];
+    
+    NSLog(@"[DEBUG] <Post + Create> Post Like on post %@ likes count is %@", self.uid, self.likes_count);
+    
     [PostAPI likePost:self success:^(NSDictionary *responseDictionary) {
-        NSDictionary *postDictionary = [responseDictionary objectForKey:POST];
+        NSDictionary *postDictionary = responseDictionary[POST];
         [self setWithDictionary:postDictionary];
-        
-        NSDictionary *likeDictionary = [responseDictionary objectForKey:LIKE];
-        Like *like = [Like likeWithDictionary:likeDictionary inManagedObjectContext:self.managedObjectContext];
-        success(like);
+        success(nil);
     } failure:^(NSString *message) {
         failure(message);
     }];
@@ -181,19 +194,28 @@
 - (void)unlike:(void (^)())success failure:(void (^)(NSString *message))failure
 {
     Like *like = [Like user:[User currentUser:self.managedObjectContext] likeOnPost:self];
+    if (!like) {
+        return;
+    }
+    [self removeLikesObject:like];
+    
+    NSLog(@"[DEBUG] <Post + Create> Pre-Unlike on post %@ likes count is %@", self.uid, self.likes_count);
+    
+    self.liked_by_user = [NSNumber numberWithBool:NO];
+    NSInteger updatedLikesCount = [self.likes_count integerValue] - 1;
+    self.likes_count = [NSNumber numberWithInteger:updatedLikesCount];
+    
+    NSLog(@"[DEBUG] <Post + Create> Post-Unlike on post %@ likes count is %@", self.uid, self.likes_count);
+    
     [PostAPI unlike:like post:self success:^(NSDictionary *responseDictionary) {
         [self.managedObjectContext deleteObject:like];
-        
-        NSError *error = nil;
-        [self.managedObjectContext save:&error];
-        
         NSDictionary *postDictionary = responseDictionary[POST];
         [self setWithDictionary:postDictionary];
         
         success();
     } failure:^(NSString *message) {
         failure(message);
-    }]; 
+    }];
 }
 
 #pragma mark - comment
@@ -220,12 +242,19 @@
 
 - (void)comment:(NSString *)content success:(void (^)())success failure:(void (^)(NSString *message))failure
 {
-    [PostAPI comment:content onPost:self success:^(NSDictionary *responseDictionary) {
+    Comment *comment = [NSEntityDescription insertNewObjectForEntityForName:@"Comment" inManagedObjectContext:self.managedObjectContext];
+    comment.content = content;
+    comment.user = [User currentUser:self.managedObjectContext];
+    comment.created_at = [NSDate date];
+    comment.updated_at = [NSDate date];
+    comment.post = self;
+    NSLog(@"[DEBUG] <CommentCell> Comment user is %@ %@ %@", comment.user.firstname, comment.user.lastname, comment.user.thumbnailURL);
+    [PostAPI comment:comment onPost:self success:^(NSDictionary *responseDictionary, Comment *comment) {
         NSDictionary *postDictionary = responseDictionary[POST];
         [self setWithDictionary:postDictionary];
         
         NSDictionary *commentDictionary = responseDictionary[COMMENT];
-        Comment *comment = [Comment commentWithDictionary:commentDictionary inManagedObjectContext:self.managedObjectContext];
+        [comment setWithDictionary:commentDictionary];
         comment.post = self;
         success();
     } failure:^(NSString *message) {

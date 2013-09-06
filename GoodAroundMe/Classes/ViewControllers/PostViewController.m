@@ -12,6 +12,11 @@
 #import "UIResponder+Helper.h"
 #import "CommentCell.h"
 #import "User.h"
+#import "OrganizationProfileViewController.h"
+#import "LikesTableViewController.h"
+
+
+#define ACTION_SHEET_DELETE_POST_TAG 2
 
 @interface PostViewController ()
 
@@ -21,6 +26,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *sendCommentButton;
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *tap;
 @property (nonatomic, strong) PostTableViewController *postTableViewController;
+
+@property (nonatomic) BOOL isKeyboardShown;
 
 @end
 
@@ -41,6 +48,20 @@
                                              selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:self.view.window];
+    
+    [self.postTableViewController.tableView reloadData];
+}
+
+- (PostTableViewController *)postTableViewController
+{
+    if (! _postTableViewController) {
+        if (self.post) {
+            _postTableViewController = [self.childViewControllers lastObject];
+            _postTableViewController.post = self.post;
+        }
+    }
+    
+    return _postTableViewController;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -51,31 +72,27 @@
     }
 }
 
-- (void)setPost:(Post *)post
-{
-    _post = post;
-    if (post) {
-        self.postTableViewController = self.childViewControllers.lastObject;
-        self.postTableViewController.post = post;
-    }
-}
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    [super prepareForSegue:segue sender:sender];
+    
     if ([segue.identifier isEqualToString:STORYBOARD_LIKES]) {
-        if ([sender respondsToSelector:@selector(post)]) {
-            Post *post = [sender performSelector:@selector(post)];
-            if (post) {
-                if ([segue.destinationViewController respondsToSelector:@selector(setPost:)]) {
-                    [segue.destinationViewController performSelector:@selector(setPost:) withObject:post];
-                    
-                }
-            }
+        if ([segue.destinationViewController isKindOfClass:[LikesTableViewController class]]) {
+            LikesTableViewController *likesTVC = (LikesTableViewController *)segue.destinationViewController;
+            likesTVC.post = self.post;
         }
-    } else if ([segue.identifier isEqualToString:@"UserProfile"]) {
+
+    } else if ([segue.identifier isEqualToString:STORYBOARD_ORGANIZATION_PROFILE]) {
+        if ([segue.destinationViewController isKindOfClass:[OrganizationProfileViewController class]]) {
+            OrganizationProfileViewController *organizationProfileViewController = (OrganizationProfileViewController *)segue.destinationViewController;
+            organizationProfileViewController.organization = self.post.organization;
+        }
+        
+    } else if ([segue.identifier isEqualToString:STORYBOARD_USER_PROFILE]) {
         User *user;
         if ([sender isKindOfClass:[CommentCell class]]) {
             user = nil;
+            // TO DO
         }
         
         if (user) {
@@ -86,64 +103,12 @@
     }
 }
 
-- (IBAction)unwindFromModal:(UIStoryboardSegue *)segue
-{
-    //MyModalVC *vc = (MyModalVC *)segue.sourceViewController; // get results out of vc, which I presented
-}
-
-#pragma mark - NewsfeedPostViewDelegate
-
-- (void)likeButtonClicked:(id)sender
-{
-    id objectWithPost = [(UIView *)sender traverseResponderChainForSelector:@selector(post)];
-    Post *post = [objectWithPost performSelector:@selector(post)];
-    if (post) {
-        if (post.liked_by_user) {
-            [post unlike:^{
-                return;
-            } failure:^(NSString *message) {
-                [self fail:@"Failed to unlike" withMessage:message];
-                return;
-            }];
-        } else {
-            [post like:^(Like *like) {
-                return;
-            } failure:^(NSString *message) {
-                [self fail:@"Failed to like" withMessage:message];
-                return;
-            }];
-            
-        }
-    }
-}
-
-- (void)commentButtonClicked:(id)sender
-{
-    [self.commentInputTextField becomeFirstResponder];
-}
-
-- (void)likesCountButtonClicked:(id)sender
-{
-    [self performSegueWithIdentifier:@"LikesTable" sender:self];
-}
-
-- (void)commentsCountButtonClicked:(id)sender
-{
-    // do nothing already in comments view
-    return;
-}
-
-- (void)usernameLabelTapped:(id)sender
-{
-    [self performSegueWithIdentifier:@"UserProfile" sender:self];
-}
-
-- (void)deleteButtonClicked:(id)sender
-{
+- (void)deletePost{
     if (self.post) {
-        NSLog(@"[DEBUG] deleted post is %@", [self.post description]);
+        NSLog(@"[DEBUG] <PostViewController> deleted post is %@", [self.post description]);
         [self.post deletePost:^{
-            [self.postTableViewController.tableView reloadData];
+            // TO DO add activity indicator
+            [self.navigationController popViewControllerAnimated:YES];
         } failure:^(NSString *message) {
             [self fail:@"Delete post failed" withMessage:message];
         }];
@@ -151,7 +116,112 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)moreButtonClicked:(id)sender
+- (void)reportInappropriate
+{
+    [self.post inappropriate:^{
+        [self info:@"Resport Inappropriate" withMessage:@"Thank you. Our team will review your report and act accordnigly"];
+    } failure:^(NSString *message) {
+        [self fail:@"Resport Inappropriate" withMessage:message];
+    }];
+}
+
+- (IBAction)unwindFromModal:(UIStoryboardSegue *)segue
+{
+    //MyModalVC *vc = (MyModalVC *)segue.sourceViewController; // get results out of vc, which I presented
+}
+
+#pragma mark - storyboard
+
+- (IBAction)tap:(id)sender
+{
+    [self.view endEditing:YES];
+}
+
+- (IBAction)sendCommentButtonAction:(id)sender
+{
+    NSString *commentText = self.commentInputTextField.text;
+    if (!commentText || commentText.length == 0) {
+        return;
+    }
+    
+    [self.commentInputTextField resignFirstResponder];
+    self.commentInputTextField.text = nil;
+    
+    [self.post comment:commentText success:^{
+        [self.postTableViewController setupFetchedResultsController];
+    } failure:^(NSString *message) {
+        [self fail:@"Comment" withMessage:message];
+    }];
+    
+    [self.postTableViewController setupFetchedResultsController];
+}
+
+#pragma mark - NewsfeedPostViewDelegate
+
+- (void)likePost:(id)sender
+{
+    id objectWithPost = [(UIView *)sender traverseResponderChainForSelector:@selector(post)];
+    Post *post = [objectWithPost performSelector:@selector(post)];
+    if (post) {
+        if ([post.liked_by_user boolValue]) {
+            [post unlike:^{
+                [self.postTableViewController.tableView reloadData];
+            } failure:^(NSString *message) {
+                [self fail:@"Failed to unlike" withMessage:message];
+            }];
+        } else {
+            [post like:^(Like *like) {
+                [self.postTableViewController.tableView reloadData];
+            } failure:^(NSString *message) {
+                [self fail:@"Failed to like" withMessage:message];
+            }];
+            
+        }
+    }
+}
+
+- (void)commentOnPost:(id)sender
+{
+    [self.commentInputTextField becomeFirstResponder];
+}
+
+- (void)likesOnPost:(id)sender
+{
+    [self performSegueWithIdentifier:STORYBOARD_LIKES sender:self];
+}
+
+- (void)goToPost:(id)sender
+{
+    if (self.isKeyboardShown) {
+        [self tap:sender];
+    } else {
+        return; // do nothing already in comments view
+    }
+
+}
+
+- (void)goToOrganization:(id)sender
+{
+    if (self.isKeyboardShown) {
+        [self tap:sender];
+    } else {
+        [self performSegueWithIdentifier:STORYBOARD_ORGANIZATION_PROFILE sender:self];
+    }
+
+}
+
+- (void)deletePost:(id)sender
+{
+    UIActionSheet *cellActionSheet = [[UIActionSheet alloc] initWithTitle:@""
+                                                                 delegate:self
+                                                        cancelButtonTitle:@"Cancel"
+                                                   destructiveButtonTitle:@"Delete"
+                                                        otherButtonTitles:@"Report Inappropriate", nil];
+    cellActionSheet.tag = ACTION_SHEET_DELETE_POST_TAG;
+    [cellActionSheet showInView:self.view];
+}
+
+- (void)more:(id)sender
 {
     [self performSegueWithIdentifier:@"MoreOptions" sender:self];
 }
@@ -160,16 +230,17 @@
 
 - (void)keyboardWillShow:(UITextView *)textView
 {
+    self.isKeyboardShown = YES;
     [self.postTableViewController.tableView addGestureRecognizer:self.tap]; // add tap gesture to tap away from the keyboard
     
     [self animateTextField:textView up:YES];
-    //WithtextView:self.commentInputTextView  containingFrame:self.tableView.frame
 
 }
 
 
 - (void)keyboardWillHide:(UITextView *)textView
 {
+    self.isKeyboardShown = NO;
     [self.postTableViewController.tableView removeGestureRecognizer:self.tap]; // remove tap gesture
     
     [self animateTextField:textView up:NO];
@@ -204,18 +275,27 @@
     }
 }
 
-- (IBAction)commentInputPostButtonClicked:(id)sender
+
+#pragma mark - UIActionSheetDelegate
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    NSString *content = self.commentInputTextField.text;
-    [self.post comment:content success:^(Comment *comment) {
-        [self.postTableViewController.tableView reloadData];
-        [self.commentInputTextField resignFirstResponder];
-        self.commentInputTextField.text = nil; // TODO: capton placeholder
-    } failure:^(NSString *message) {
-        [self fail:@"Failed to comment" withMessage:message];
-    }];
-    
-    return;
+    if (actionSheet.tag == ACTION_SHEET_DELETE_POST_TAG) {
+        switch (buttonIndex) {
+            case 0:
+                NSLog(@"[DEBUG] <PostViewController> deleted post is %@", [self.post description]);
+                [self deletePost];
+                break;
+                
+            case 1:
+                NSLog(@"[DEBUG] <PostViewController> Reported as inappropriate post is %@", [self.post description]);
+                
+                break;
+                
+            default:
+                break;
+        }
+    }
 }
 
 

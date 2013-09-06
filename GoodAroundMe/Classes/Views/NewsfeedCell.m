@@ -7,7 +7,6 @@
 //
 
 #import "NewsfeedCell.h"
-#import "NewsfeedView.h"
 
 @implementation NewsfeedCell
 
@@ -16,13 +15,13 @@
     _newsfeed = newsfeed;
     if (newsfeed) {
         
-        NewsfeedView *newsfeedView = [[[NSBundle mainBundle] loadNibNamed:[NSString stringWithFormat:@"Newsfeed%@View", newsfeed.type] owner:nil options:nil] lastObject];
+        self.newsfeedView = [[[NSBundle mainBundle] loadNibNamed:[NSString stringWithFormat:@"Newsfeed%@View", newsfeed.type] owner:nil options:nil] lastObject];
         
-        newsfeedView.tag = 500;
+        self.newsfeedView.tag = 500;
         [[self.contentView viewWithTag:500] removeFromSuperview];
-        [self.contentView addSubview:newsfeedView];
-        self.contentView.frame = newsfeedView.frame;
-        [newsfeedView initWithNewsfeed:newsfeed];
+        [self.contentView addSubview:self.newsfeedView];
+        self.contentView.frame = self.newsfeedView.frame;
+        [self.newsfeedView initWithNewsfeed:newsfeed];
     }
 }
 

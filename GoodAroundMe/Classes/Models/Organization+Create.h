@@ -23,8 +23,10 @@
 @interface Organization (Create)
 
 + (Organization *)organizationWithDictionary:(NSDictionary *)organizationDictionary inManagedObjectContext:(NSManagedObjectContext *)context;
++ (Organization *)newOrganization:(NSDictionary *)organizationDictionary inManagedObjectContext:(NSManagedObjectContext *)context success:(void (^)())success failure:(void (^)(NSString *message))failure;
 
-- (void)newsfeedForOrganization:(void (^)())success
-                        failure:(void (^)(NSString *message))failure;
+- (void)newsfeedForOrganization:(void (^)())success failure:(void (^)(NSString *message))failure;
+- (NSArray *)postsForOrganization:(void (^)(NSArray *posts))success failure:(void (^)(NSString *message))failure;
+- (NSData *)toJSON;
 
 @end

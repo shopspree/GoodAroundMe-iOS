@@ -7,13 +7,16 @@
 //
 
 #import "Like+Create.h"
-#import "User+Create.h"
-#import "Post+Create.h"
 #import "ApplicationHelper.h"
 
 @implementation Like (Create)
 
 + (Like *)likeWithDictionary:(NSDictionary *)likeDictionary inManagedObjectContext:(NSManagedObjectContext *)context
+{
+    return [Like likeWithDictionary:likeDictionary forUser:nil inManagedObjectContext:context];
+}
+
++ (Like *)likeWithDictionary:(NSDictionary *)likeDictionary forUser:(User *)user inManagedObjectContext:(NSManagedObjectContext *)context
 {
     Like *like = nil;
     
@@ -34,8 +37,8 @@
             like = [NSEntityDescription insertNewObjectForEntityForName:@"Like" inManagedObjectContext:context];
             [like setWithDictionary:likeDictionary];
             
-            User *user = [User userWithDictionary:likeDictionary[LIKE_USER] inManagedObjectContext:context];
-            like.user = user;
+            //User *user = [User userWithDictionary:likeDictionary[LIKE_USER] inManagedObjectContext:context];
+            //like.user = user;
         } else { // found the Photo, just return it from the list of matches (which there will only be one of)
             like = [matches lastObject];
             [like setWithDictionary:likeDictionary];
@@ -67,7 +70,7 @@
         // Execute the fetch
         NSError *error = nil;
         NSArray *matches = [post.managedObjectContext executeFetchRequest:request error:&error];
-        
+        NSLog(@"[DEBUG] <Like+Create> %d likes on post (%@) %@ and is liked by user %@", [post.likes count], post.uid, post.title, post.liked_by_user);
         // Check what happened in the fetch
         
         if (!matches || ([matches count] > 1)) {  // nil means fetch failed; more than one impossible (unique!)

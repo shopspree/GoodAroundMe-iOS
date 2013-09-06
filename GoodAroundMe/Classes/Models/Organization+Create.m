@@ -10,6 +10,7 @@
 #import "OrganizationAPI.h"
 #import "ApplicationHelper.h"
 #import "Newsfeed+Activity.h"
+#import "Post+Create.h"
 
 @implementation Organization (Create)
 
@@ -43,8 +44,22 @@
     return organization;
 }
 
-- (void)newsfeedForOrganization:(void (^)())success
-                        failure:(void (^)(NSString *message))failure
++ (Organization *)newOrganization:(NSDictionary *)organizationDictionary inManagedObjectContext:(NSManagedObjectContext *)context success:(void (^)())success failure:(void (^)(NSString *message))failure
+{
+    Organization *organization = [NSEntityDescription insertNewObjectForEntityForName:@"Organization" inManagedObjectContext:context];
+    [organization setWithDictionary:organizationDictionary];
+    
+    [OrganizationAPI newOrganization:organization success:^(NSDictionary *reponseDictionary) {
+        NSDictionary *organizationDictionary = reponseDictionary[ORGANIZATION];
+        [organization setWithDictionary:organizationDictionary];
+    } failure:^(NSString *message) {
+        failure(message);
+    }];
+    
+    return organization;
+}
+
+- (void)newsfeedForOrganization:(void (^)())success failure:(void (^)(NSString *message))failure
 {
     [OrganizationAPI newsfeedForOrganization:self success:^(NSDictionary *reponseDictionary) {
         NSArray *activities = reponseDictionary[@"activities"];
@@ -59,6 +74,47 @@
     }];
 }
 
+- (NSArray *)postsForOrganization:(void (^)(NSArray *posts))success failure:(void (^)(NSString *message))failure
+{
+    NSMutableArray *posts = [[self fetchOrganizationPosts] mutableCopy];
+    
+    [OrganizationAPI postsForOrganization:self success:^(NSDictionary *reponseDictionary) {
+        NSMutableArray *posts = [reponseDictionary[@"posts"] mutableCopy];
+        
+        for (NSDictionary *postDictionary in posts) {
+            Post *post = [Post postWithDictionary:postDictionary inManagedObjectContext:self.managedObjectContext];
+            post.organization = self;
+        }
+        
+        posts = [[self fetchOrganizationPosts] mutableCopy];
+        success(posts);
+    } failure:^(NSString *message) {
+        failure(message);
+    }];
+    
+    return posts;
+}
+
+- (NSArray *)fetchOrganizationPosts
+{
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Post"];
+    request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"updated_at" ascending:YES]];
+    request.predicate = [NSPredicate predicateWithFormat:@"organization = %@", self];
+    
+    // Execute the fetch
+    NSError *error = nil;
+    NSArray *matches = [self.managedObjectContext executeFetchRequest:request error:&error];
+    
+    NSMutableArray *posts = [matches mutableCopy];
+    
+    NSSortDescriptor *dateDescriptor = [NSSortDescriptor
+                                        sortDescriptorWithKey:@"updated_at"
+                                        ascending:NO];
+    NSArray *sortDescriptors = [NSArray arrayWithObjects:dateDescriptor, nil];
+    [posts sortUsingDescriptors:sortDescriptors];
+    
+    return posts;
+}
 #pragma mark - private methods
 
 - (void)setWithDictionary:(NSDictionary *)organizationDictionary
@@ -75,6 +131,18 @@
         self.is_followed = [NSNumber numberWithBool:[organizationDictionary[ORGANIZATION_IS_FOLLOWED] boolValue]];
         
     }    
+}
+
+- (NSData *)toJSON
+{
+    NSDictionary *jsonDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                              self.name, ORGANIZATION_NAME,
+                              self.location, ORGANIZATION_LOCATION,
+                              self.about, ORGANIZATION_ABOUT,
+                              self.image_thumbnail_url, ORGANIZATION_IMAGE_THUMBNAIL_URL,
+                              nil];
+    NSData *jsonData = [ApplicationHelper constructJSON:jsonDict];
+    return jsonData;
 }
 
 @end

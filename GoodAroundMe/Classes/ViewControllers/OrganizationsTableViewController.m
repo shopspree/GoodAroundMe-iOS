@@ -90,7 +90,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self performSegueWithIdentifier:STORYBOARD_ORGANIZATION_PROFILE sender:indexPath];
+    //[self performSegueWithIdentifier:STORYBOARD_ORGANIZATION_PROFILE sender:indexPath];
 }
 
 - (IBAction)followButton:(id)sender
@@ -108,8 +108,7 @@
 - (void)follow:(Organization *)organization
 {
     organization.is_followed = [NSNumber numberWithBool:true];
-    [self.user
-     follow:organization success:^() {
+    [self.user follow:organization success:^() {
         return;
     } failure:^(NSString *message) {
         [self fail:@"Follow" withMessage:message];
@@ -119,8 +118,7 @@
 - (void)unfollow:(Organization *)organization
 {
     organization.is_followed = [NSNumber numberWithBool:false];
-    [self.user
-     unfollow:organization success:^() {
+    [self.user unfollow:organization success:^() {
         return;
     } failure:^(NSString *message) {
         [self fail:@"Follow" withMessage:message];
