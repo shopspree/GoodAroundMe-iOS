@@ -15,6 +15,8 @@
 
 @interface OrganizationsTableViewController ()
 
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *addNavButton;
+
 @end
 
 @implementation OrganizationsTableViewController
@@ -24,7 +26,13 @@
     [super viewDidLoad];
     self.navigationController.navigationBarHidden = NO;
     
+    User *user = [User currentUser:self.managedObjectContext];
+    if ([user.orgOperator boolValue] && (!user.organization)) {
+        self.navigationItem.rightBarButtonItem = self.addNavButton;
+    } else {
+        self.navigationItem.rightBarButtonItem = nil;
     }
+}
 
 - (void)setCategory:(OrganizationCategory *)category
 {
@@ -70,6 +78,14 @@
             organizationProfileVC.organization = organization;
         }
     }
+}
+
+#pragma mark - Storyboard
+
+
+- (IBAction)newOrganization:(id)sender
+{
+    [self performSegueWithIdentifier:STORYBOARD_ORGANIZATION_SETTINGS sender:self];
 }
 
 #pragma mark - UITableViewDataSource

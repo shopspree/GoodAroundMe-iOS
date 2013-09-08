@@ -23,6 +23,7 @@
 #define USER_CREATED_AT @"created_at"
 #define USER_UPDATED_AT @"updated_at"
 #define USER_FOLLOWING @"following"
+#define USER_OPERATOR @"operator"
 
 @interface User (Create) <IJSON>
 

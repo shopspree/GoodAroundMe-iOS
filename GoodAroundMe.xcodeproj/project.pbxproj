@@ -11,7 +11,7 @@
 		D80F805F17B7DDEF00CC6303 /* AbstractTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D80F805E17B7DDEB00CC6303 /* AbstractTableViewController.m */; };
 		D86BE02117BF90F50045D2E1 /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D86BE02017BF90F20045D2E1 /* UserViewController.m */; };
 		D86BE02417BF921B0045D2E1 /* UserEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D86BE02317BF92190045D2E1 /* UserEditViewController.m */; };
-		D86BE02D17C013BD0045D2E1 /* LandingPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D86BE02C17C013BA0045D2E1 /* LandingPageViewController.m */; };
+		D86BE02D17C013BD0045D2E1 /* LaunchingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D86BE02C17C013BA0045D2E1 /* LaunchingViewController.m */; };
 		D86BE03417C0F68E0045D2E1 /* DiscoverOrganizationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D86BE03317C0F68E0045D2E1 /* DiscoverOrganizationCell.m */; };
 		D86BE03717C111F40045D2E1 /* LikeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D86BE03617C111F30045D2E1 /* LikeCell.m */; };
 		D86BE03A17C114520045D2E1 /* OrganizationProfileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D86BE03917C114500045D2E1 /* OrganizationProfileCell.m */; };
@@ -129,10 +129,11 @@
 		D8DD2E1B17D2887F006B1D07 /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = D8DD2E1A17D2887E006B1D07 /* Post.m */; };
 		D8DD2E1E17D28881006B1D07 /* OrganizationCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = D8DD2E1D17D28880006B1D07 /* OrganizationCategory.m */; };
 		D8DD2E2117D28883006B1D07 /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = D8DD2E2017D28882006B1D07 /* Comment.m */; };
-		D8DD2E2817D4BB27006B1D07 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = D8DD2E2717D4BB25006B1D07 /* User.m */; };
 		D8DD2E2B17D4C6CB006B1D07 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D8DD2E2A17D4C6C8006B1D07 /* SettingsViewController.m */; };
 		D8DD2E2E17D622F0006B1D07 /* UserEditNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D8DD2E2D17D622DB006B1D07 /* UserEditNameViewController.m */; };
 		D8DD2E3117D90E78006B1D07 /* NewOrganizationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D8DD2E3017D90E74006B1D07 /* NewOrganizationViewController.m */; };
+		D8DD2E3417DA0849006B1D07 /* OrganizationSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D8DD2E3317DA0844006B1D07 /* OrganizationSettingsViewController.m */; };
+		D8DD2E3A17DB6D67006B1D07 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = D8DD2E3917DB6D66006B1D07 /* User.m */; };
 		D8E613A217CA0F0B00B2288C /* ImagePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = D8E613A117CA0F0B00B2288C /* ImagePickerController.m */; };
 		D8EB950D17B81FB300D47D54 /* NewPostCaptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D8EB950C17B81FB200D47D54 /* NewPostCaptionViewController.m */; };
 		D8EB950F17B827AC00D47D54 /* tumblr_mlxvr2nHZc1rpcrx8o1_1280.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D8EB950E17B827AC00D47D54 /* tumblr_mlxvr2nHZc1rpcrx8o1_1280.jpg */; };
@@ -149,8 +150,8 @@
 		D86BE02017BF90F20045D2E1 /* UserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserViewController.m; sourceTree = "<group>"; };
 		D86BE02217BF92170045D2E1 /* UserEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserEditViewController.h; sourceTree = "<group>"; };
 		D86BE02317BF92190045D2E1 /* UserEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserEditViewController.m; sourceTree = "<group>"; };
-		D86BE02B17C013B80045D2E1 /* LandingPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LandingPageViewController.h; sourceTree = "<group>"; };
-		D86BE02C17C013BA0045D2E1 /* LandingPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LandingPageViewController.m; sourceTree = "<group>"; };
+		D86BE02B17C013B80045D2E1 /* LaunchingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchingViewController.h; sourceTree = "<group>"; };
+		D86BE02C17C013BA0045D2E1 /* LaunchingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchingViewController.m; sourceTree = "<group>"; };
 		D86BE03217C0F68D0045D2E1 /* DiscoverOrganizationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverOrganizationCell.h; sourceTree = "<group>"; };
 		D86BE03317C0F68E0045D2E1 /* DiscoverOrganizationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverOrganizationCell.m; sourceTree = "<group>"; };
 		D86BE03517C111F20045D2E1 /* LikeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LikeCell.h; sourceTree = "<group>"; };
@@ -366,14 +367,16 @@
 		D8DD2E1D17D28880006B1D07 /* OrganizationCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrganizationCategory.m; sourceTree = "<group>"; };
 		D8DD2E1F17D28881006B1D07 /* Comment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Comment.h; sourceTree = "<group>"; };
 		D8DD2E2017D28882006B1D07 /* Comment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Comment.m; sourceTree = "<group>"; };
-		D8DD2E2617D4BB24006B1D07 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
-		D8DD2E2717D4BB25006B1D07 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		D8DD2E2917D4C6C7006B1D07 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		D8DD2E2A17D4C6C8006B1D07 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		D8DD2E2C17D622C7006B1D07 /* UserEditNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserEditNameViewController.h; sourceTree = "<group>"; };
 		D8DD2E2D17D622DB006B1D07 /* UserEditNameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserEditNameViewController.m; sourceTree = "<group>"; };
 		D8DD2E2F17D90E6F006B1D07 /* NewOrganizationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewOrganizationViewController.h; sourceTree = "<group>"; };
 		D8DD2E3017D90E74006B1D07 /* NewOrganizationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewOrganizationViewController.m; sourceTree = "<group>"; };
+		D8DD2E3217DA083F006B1D07 /* OrganizationSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrganizationSettingsViewController.h; sourceTree = "<group>"; };
+		D8DD2E3317DA0844006B1D07 /* OrganizationSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrganizationSettingsViewController.m; sourceTree = "<group>"; };
+		D8DD2E3817DB6D65006B1D07 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		D8DD2E3917DB6D66006B1D07 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		D8E613A017CA0F0A00B2288C /* ImagePickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImagePickerController.h; sourceTree = "<group>"; };
 		D8E613A117CA0F0B00B2288C /* ImagePickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImagePickerController.m; sourceTree = "<group>"; };
 		D8EB950B17B81FB200D47D54 /* NewPostCaptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewPostCaptionViewController.h; sourceTree = "<group>"; };
@@ -511,8 +514,8 @@
 				D8C5F01617AEAA2C008CFF51 /* CurrentUser.h */,
 				D8C5F01717AEAA2C008CFF51 /* CurrentUser.m */,
 				D8C5F01817AEAA2C008CFF51 /* DataModel.xcdatamodeld */,
-				D8DD2E2617D4BB24006B1D07 /* User.h */,
-				D8DD2E2717D4BB25006B1D07 /* User.m */,
+				D8DD2E3817DB6D65006B1D07 /* User.h */,
+				D8DD2E3917DB6D66006B1D07 /* User.m */,
 				D8DD2E1F17D28881006B1D07 /* Comment.h */,
 				D8DD2E2017D28882006B1D07 /* Comment.m */,
 				D8DD2E1C17D2887F006B1D07 /* OrganizationCategory.h */,
@@ -562,8 +565,8 @@
 				D8C5F07817AED65B008CFF51 /* CoreDataTableViewController.m */,
 				D8C5EF4F17AEA788008CFF51 /* ImageBackgroundViewController.h */,
 				D8C5EF5017AEA788008CFF51 /* ImageBackgroundViewController.m */,
-				D86BE02B17C013B80045D2E1 /* LandingPageViewController.h */,
-				D86BE02C17C013BA0045D2E1 /* LandingPageViewController.m */,
+				D86BE02B17C013B80045D2E1 /* LaunchingViewController.h */,
+				D86BE02C17C013BA0045D2E1 /* LaunchingViewController.m */,
 				D8C5EF5117AEA788008CFF51 /* LikesTableViewController.h */,
 				D8C5EF5217AEA788008CFF51 /* LikesTableViewController.m */,
 				D8C5EF5517AEA788008CFF51 /* MenuViewController.h */,
@@ -620,6 +623,8 @@
 				D8DD2E2A17D4C6C8006B1D07 /* SettingsViewController.m */,
 				D8DD2E2F17D90E6F006B1D07 /* NewOrganizationViewController.h */,
 				D8DD2E3017D90E74006B1D07 /* NewOrganizationViewController.m */,
+				D8DD2E3217DA083F006B1D07 /* OrganizationSettingsViewController.h */,
+				D8DD2E3317DA0844006B1D07 /* OrganizationSettingsViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -935,7 +940,7 @@
 				D8EB951E17BB9DBA00D47D54 /* UserProfileViewController.m in Sources */,
 				D86BE02117BF90F50045D2E1 /* UserViewController.m in Sources */,
 				D86BE02417BF921B0045D2E1 /* UserEditViewController.m in Sources */,
-				D86BE02D17C013BD0045D2E1 /* LandingPageViewController.m in Sources */,
+				D86BE02D17C013BD0045D2E1 /* LaunchingViewController.m in Sources */,
 				D86BE03417C0F68E0045D2E1 /* DiscoverOrganizationCell.m in Sources */,
 				D86BE03717C111F40045D2E1 /* LikeCell.m in Sources */,
 				D86BE03A17C114520045D2E1 /* OrganizationProfileCell.m in Sources */,
@@ -952,10 +957,11 @@
 				D8DD2E1B17D2887F006B1D07 /* Post.m in Sources */,
 				D8DD2E1E17D28881006B1D07 /* OrganizationCategory.m in Sources */,
 				D8DD2E2117D28883006B1D07 /* Comment.m in Sources */,
-				D8DD2E2817D4BB27006B1D07 /* User.m in Sources */,
 				D8DD2E2B17D4C6CB006B1D07 /* SettingsViewController.m in Sources */,
 				D8DD2E2E17D622F0006B1D07 /* UserEditNameViewController.m in Sources */,
 				D8DD2E3117D90E78006B1D07 /* NewOrganizationViewController.m in Sources */,
+				D8DD2E3417DA0849006B1D07 /* OrganizationSettingsViewController.m in Sources */,
+				D8DD2E3A17DB6D67006B1D07 /* User.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

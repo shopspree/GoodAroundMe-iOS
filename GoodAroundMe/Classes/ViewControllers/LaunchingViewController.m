@@ -1,23 +1,24 @@
 //
-//  LandingPageViewController.m
+//  LaunchingViewController.m
 //  GoodAroundMe
 //
 //  Created by asaf ahi-mordehai on 8/17/13.
 //  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
-#import "LandingPageViewController.h"
+#import "LaunchingViewController.h"
 #import "OrganizationCategory+Create.h" 
 #import "User+Create.h"
 #import "StoryboardConstants.h"
 #import "CoreDataFactory.h"
 
-@interface LandingPageViewController ()
+@interface LaunchingViewController ()
+
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 @end
 
-@implementation LandingPageViewController
+@implementation LaunchingViewController
 
 - (void)viewDidLoad
 {
@@ -53,7 +54,7 @@
 - (void)loadCategories
 {  
     [OrganizationCategory categories:self.managedObjectContext success:^(NSArray *categories) {
-        NSLog(@"[DEBUG] [loadCategories] Everything is normal, performing Modal segue to Newsfeed");
+        NSLog(@"[DEBUG] <LaunchingViewController> Everything is normal, performing Modal segue to Newsfeed");
         [self performSegueWithIdentifier:NEWSFEED sender:self];
         
         [self.activityIndicator stopAnimating];

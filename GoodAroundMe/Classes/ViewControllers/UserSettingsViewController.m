@@ -83,6 +83,7 @@
 
 - (void)startActivityIndicationInNavigationBar
 {
+    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
     UIBarButtonItem * barButton = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
     self.navigationItem.rightBarButtonItem = barButton;
     [self.activityIndicator startAnimating];

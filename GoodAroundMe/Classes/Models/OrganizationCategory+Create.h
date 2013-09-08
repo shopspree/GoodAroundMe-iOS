@@ -8,6 +8,7 @@
 
 #import "OrganizationCategory.h"
 
+#define CATEGORY @"organization_category"
 #define CATEGORY_ID @"id"
 #define CATEGORY_NAME @"name"
 #define CATEGORY_IMAGE_URL @"image_url"
@@ -17,5 +18,6 @@
 
 + (OrganizationCategory *)categoryWithDictionary:(NSDictionary *)categoryDictionary inManagedObjectContext:(NSManagedObjectContext *)context;
 + (NSArray *)categories:(NSManagedObjectContext *)managedObjectContext success:(void (^)(NSArray *categories))success failure:(void (^)(NSString *message))failure;
++ (NSArray *)categories:(NSManagedObjectContext *)managedObjectContext;
 
 @end

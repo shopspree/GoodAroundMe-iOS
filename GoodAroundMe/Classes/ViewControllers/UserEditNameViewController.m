@@ -26,11 +26,11 @@
     [super viewDidLoad];
     
     self.firstNameTextField.tag = FIRST_NAME_TAG;
-    if (self.firstNameTextField.text && ![self.firstNameTextField.text isEqual:@"(null)"])
+    if (self.user.firstname && ![self.user.firstname isEqual:@"(null)"])
         self.firstNameTextField.text = self.user.firstname;
     
     self.lastNameTextField.tag = LAST_NAME_TAG;
-    if (self.lastNameTextField.text && ![self.lastNameTextField.text isEqual:@"(null)"])
+    if (self.user.lastname && ![self.user.lastname isEqual:@"(null)"])
         self.lastNameTextField.text = self.user.lastname;
 }
 

@@ -29,10 +29,10 @@
         // Check what happened in the fetch
         
         if (!matches || ([matches count] > 1)) {  // nil means fetch failed; more than one impossible (unique!)
-            // handle error
+            NSLog(@"[ERROR] <OrganizationCategory+Create> Error fetching category by name %@", [categoryDictionary[CATEGORY_NAME] description]);
         } else if (![matches count]) { // none found, so let's create a Photo for that Flickr photo
             category = [NSEntityDescription insertNewObjectForEntityForName:@"OrganizationCategory" inManagedObjectContext:context];
-            [category setWithDictionary:categoryDictionary[@"organization_category"]];
+            [category setWithDictionary:categoryDictionary];
         } else { // found the Photo, just return it from the list of matches (which there will only be one of)
             category = [matches lastObject];
         }
@@ -44,6 +44,22 @@
 
 + (NSArray *)categories:(NSManagedObjectContext *)managedObjectContext success:(void (^)(NSArray *categories))success failure:(void (^)(NSString *message))failure
 {
+    NSArray *categories = [OrganizationCategory categories:managedObjectContext];
+    
+    if(categories) {
+        // fetch categories from the server
+        [OrganizationCategory categoriesFromServer:managedObjectContext success:^(NSArray *categories) {
+            success(categories);
+        } failure:^(NSString *message) {
+            failure(message);
+        }];
+    }
+    
+    return categories;
+}
+
++ (NSArray *)categories:(NSManagedObjectContext *)managedObjectContext
+{
     NSArray *categories = [NSArray array];
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"OrganizationCategory"];
     request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]];
@@ -53,30 +69,17 @@
     NSError *error = nil;
     NSArray *matches = [managedObjectContext executeFetchRequest:request error:&error];
     
-    // Check what happened in the fetch
-    if (!matches) {  // nil means fetch failed; more than one impossible (unique!)
-        // handle error
-        failure(nil);
-    } else { // let's fetch and create all categories
-        categories = matches;
-        
-        // fetch categories from the server
-        [OrganizationCategory categoriesFromServer:managedObjectContext success:^(NSArray *categories) {
-            success(categories);
-        } failure:^(NSString *message) {
-            failure(message);
-        }];
-    }
+    categories = matches;
     
-    return matches;
+    return categories;
 }
-
+    
 + (void)categoriesFromServer:(NSManagedObjectContext *)managedObjectContext success:(void (^)(NSArray *categories))success failure:(void (^)(NSString *message))failure
 {
     [CategoryAPI categories:^(NSDictionary *responseDictionary) {
         NSMutableArray *categories = [NSMutableArray array];
         for (NSDictionary *categoryDictionary in responseDictionary[@"organization_categories"]) {
-            OrganizationCategory *category = [OrganizationCategory categoryWithDictionary:categoryDictionary inManagedObjectContext:managedObjectContext];
+            OrganizationCategory *category = [OrganizationCategory categoryWithDictionary:categoryDictionary[CATEGORY] inManagedObjectContext:managedObjectContext];
             [categories addObject:category];
         }
         success(categories);

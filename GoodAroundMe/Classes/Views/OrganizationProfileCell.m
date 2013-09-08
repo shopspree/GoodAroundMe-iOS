@@ -49,7 +49,7 @@
         
         self.nameLabel.text = organization.name;
         self.categoryLabel.text = organization.category.name;
-        self.updatesLabel.text = [NSString stringWithFormat:@"%d Updates", [organization.posts count]];
+        self.updatesLabel.text = [NSString stringWithFormat:@"%@ Updates", organization.posts_count];
         self.followersLabel.text = [NSString stringWithFormat:@"%@ Followers", organization.followers_count];
         self.descriptionTextArea.text = organization.about;
     }

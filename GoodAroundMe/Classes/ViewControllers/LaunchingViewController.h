@@ -1,5 +1,5 @@
 //
-//  LandingPageViewController.h
+//  LaunchingViewController.h
 //  GoodAroundMe
 //
 //  Created by asaf ahi-mordehai on 8/17/13.
@@ -9,6 +9,6 @@
 #import "AbstractViewController.h"
 #import "User+Create.h"
 
-@interface LandingPageViewController : AbstractViewController
+@interface LaunchingViewController : AbstractViewController
 
 @end

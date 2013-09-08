@@ -52,6 +52,9 @@
 #define API_ORGANIZATION_UNFOLLOW       @"/api/v1/organizations/%@/unfollow.json"
 #define API_ORGANIZATION_NEWSFEED       @"/api/v1/organizations/%@/activities.json"
 #define API_ORGANIZATION_POSTS          @"/api/v1/organizations/%@/posts.json"
+#define API_ORGANIZATION_CREATE         @"/api/v1/organization_categories/%@/organizations.json"
+#define API_ORGANIZATION_UPDATE         @"/api/v1/organizations/%@.json"
+
 
 
 

@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
-#import "AbstractTableViewController.h"
+#import "OrganizationSettingsViewController.h"
 
-@interface NewOrganizationViewController : AbstractTableViewController <UITextViewDelegate>
+@interface NewOrganizationViewController : OrganizationSettingsViewController
 
 @end

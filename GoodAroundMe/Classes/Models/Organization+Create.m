@@ -11,6 +11,8 @@
 #import "ApplicationHelper.h"
 #import "Newsfeed+Activity.h"
 #import "Post+Create.h"
+#import "User+Create.h"
+#import "OrganizationCategory+Create.h"
 
 @implementation Organization (Create)
 
@@ -44,20 +46,51 @@
     return organization;
 }
 
-+ (Organization *)newOrganization:(NSDictionary *)organizationDictionary inManagedObjectContext:(NSManagedObjectContext *)context success:(void (^)())success failure:(void (^)(NSString *message))failure
+- (void)create:(void (^)())success failure:(void (^)(NSString *message))failure
 {
-    Organization *organization = [NSEntityDescription insertNewObjectForEntityForName:@"Organization" inManagedObjectContext:context];
-    [organization setWithDictionary:organizationDictionary];
+    if (!self.name || self.name.length ==0) {
+        failure(@"Name value is missing");
+        return;
+    }
+    else if (!self.category) {
+        failure(@"Invalid category");
+        return;
+    }
     
-    [OrganizationAPI newOrganization:organization success:^(NSDictionary *reponseDictionary) {
-        NSDictionary *organizationDictionary = reponseDictionary[ORGANIZATION];
-        [organization setWithDictionary:organizationDictionary];
+    [OrganizationAPI newOrganization:self success:^(NSDictionary *responseDictionary) {
+        NSDictionary *organizationDictionary = responseDictionary[ORGANIZATION];
+        [self setWithDictionary:organizationDictionary];
+        
+        if (responseDictionary[USER]) {
+            User *user = [User currentUser:self.managedObjectContext];
+            [user setWithDictionary:responseDictionary[USER]];
+            success();
+        }
     } failure:^(NSString *message) {
         failure(message);
     }];
-    
-    return organization;
 }
+
+- (void)update:(void (^)())success failure:(void (^)(NSString *message))failure
+{
+    if (!self.name || self.name.length ==0) {
+        failure(@"Name value is missing");
+        return;
+    }
+    else if (!self.category) {
+        failure(@"Invalid category");
+        return;
+    }
+    
+    [OrganizationAPI updateOrganization:self success:^(NSDictionary *reponseDictionary) {
+        NSDictionary *organizationDictionary = reponseDictionary[ORGANIZATION];
+        [self setWithDictionary:organizationDictionary];
+        success();
+    } failure:^(NSString *message) {
+        failure(message);
+    }];
+}
+
 
 - (void)newsfeedForOrganization:(void (^)())success failure:(void (^)(NSString *message))failure
 {
@@ -135,14 +168,23 @@
 
 - (NSData *)toJSON
 {
-    NSDictionary *jsonDict = [NSDictionary dictionaryWithObjectsAndKeys:
-                              self.name, ORGANIZATION_NAME,
-                              self.location, ORGANIZATION_LOCATION,
-                              self.about, ORGANIZATION_ABOUT,
-                              self.image_thumbnail_url, ORGANIZATION_IMAGE_THUMBNAIL_URL,
-                              nil];
+    NSDictionary *jsonDict = [self toDictionary];
     NSData *jsonData = [ApplicationHelper constructJSON:jsonDict];
     return jsonData;
+}
+
+- (NSDictionary *)toDictionary
+{
+    NSDictionary *organizationDictioanry = [NSDictionary dictionaryWithObjectsAndKeys:
+                                            self.name, ORGANIZATION_NAME,
+                                            self.location, ORGANIZATION_LOCATION,
+                                            self.about, ORGANIZATION_ABOUT,
+                                            self.image_thumbnail_url, ORGANIZATION_IMAGE_THUMBNAIL_URL,
+                                            self.category.uid, CATEGORY , nil];
+    NSDictionary *jsonDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    organizationDictioanry, ORGANIZATION, nil];
+    
+    return jsonDictionary;
 }
 
 @end

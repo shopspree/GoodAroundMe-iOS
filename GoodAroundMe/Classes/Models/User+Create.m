@@ -204,6 +204,7 @@
         self.thumbnailURL = [userDictionary[USER_THUMBNAIL_URL] description];
         self.created_at = [ApplicationHelper dateFromString:[userDictionary[USER_CREATED_AT] description]];
         self.updated_at = [ApplicationHelper dateFromString:[userDictionary[USER_UPDATED_AT] description]];
+        self.orgOperator = [NSNumber numberWithBool:[userDictionary[USER_OPERATOR] isEqualToString:@"true"]];
         
         if (userDictionary[USER_FOLLOWING]) {
             self.following = [NSSet set];

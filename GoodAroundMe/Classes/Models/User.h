@@ -2,7 +2,7 @@
 //  User.h
 //  GoodAroundMe
 //
-//  Created by asaf ahi-mordehai on 9/2/13.
+//  Created by asaf ahi-mordehai on 9/7/13.
 //  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
@@ -19,8 +19,9 @@
 @property (nonatomic, retain) NSString * firstname;
 @property (nonatomic, retain) NSString * lastname;
 @property (nonatomic, retain) NSString * thumbnailURL;
-@property (nonatomic, retain) NSDate * updated_at;
 @property (nonatomic, retain) NSString * uid;
+@property (nonatomic, retain) NSDate * updated_at;
+@property (nonatomic, retain) NSNumber * orgOperator;
 @property (nonatomic, retain) NSSet *comments;
 @property (nonatomic, retain) NSSet *following;
 @property (nonatomic, retain) NSSet *likes;

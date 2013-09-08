@@ -81,6 +81,7 @@
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="firstname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lastname" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="orgOperator" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="thumbnailURL" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
@@ -95,9 +96,9 @@
         <element name="Like" positionX="153" positionY="1469" width="128" height="133"/>
         <element name="Newsfeed" positionX="-110" positionY="1235" width="128" height="178"/>
         <element name="Organization" positionX="-362" positionY="1535" width="128" height="253"/>
-        <element name="OrganizationCategory" positionX="-360" positionY="1314" width="128" height="103"/>
+        <element name="OrganizationCategory" positionX="-369" positionY="1274" width="128" height="103"/>
         <element name="Picture" positionX="135" positionY="1835" width="128" height="118"/>
         <element name="Post" positionX="-146" positionY="1476" width="128" height="253"/>
-        <element name="User" positionX="-180" positionY="1787" width="128" height="238"/>
+        <element name="User" positionX="-180" positionY="1787" width="128" height="253"/>
     </elements>
 </model>

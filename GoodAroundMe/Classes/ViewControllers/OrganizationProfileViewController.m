@@ -12,6 +12,7 @@
 #import "PostViewController.h"
 #import "Post+Create.h"
 #import "User+Create.h"
+#import "OrganizationSettingsViewController.h"
 
 #define SECTION_ORGANIZATION_PROFILE 0
 #define SECTION_ORGANIZATION_POSTS 1
@@ -25,7 +26,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *followButton;
 @property (weak, nonatomic) IBOutlet UIButton *giveButton;
-@property (weak, nonatomic) IBOutlet UIButton *settingsButton;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *editNavButton;
 
 @end
 
@@ -34,19 +35,23 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.settingsButton.hidden = YES;
-    
     self.followButton.selected = [self.organization.is_followed boolValue];
     
     self.title = self.organization.name;
+    
+    User *user = [User currentUser:self.managedObjectContext];
+    if (user.organization && user.organization.uid == self.organization.uid) {
+        self.navigationItem.rightBarButtonItem = self.editNavButton;
+    } else {
+        self.navigationItem.rightBarButtonItem = nil;
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
-    //CGRect frame = self.view.frame;
-    //self.tableView.frame = CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, frame.size.height - self.followButton.frame.size.height);
+    [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:[NSIndexPath indexPathForRow:0 inSection:0], nil] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (void)setOrganization:(Organization *)organization
@@ -56,13 +61,6 @@
     if (organization) {
         NSString *title = ([organization.is_followed boolValue]) ? @"✓Follow" : @"Follow";
         [self.followButton setTitle:title forState:UIControlStateNormal];
-        
-        User *currentUser = [User currentUser:organization.managedObjectContext];
-        if (currentUser && currentUser.organization) {
-            if ([currentUser.organization.uid isEqualToString:organization.uid]) {
-                self.settingsButton.hidden = NO;
-            }
-        }
     }
 }
 
@@ -102,6 +100,8 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    [super prepareForSegue:segue sender:sender];
+    
     if ([segue.identifier isEqualToString:POST_PAGE]) {
         if ([segue.destinationViewController isKindOfClass:[PostViewController class]]) {
             
@@ -115,7 +115,10 @@
             }
         }
     } else if ([segue.identifier isEqualToString:STORYBOARD_ORGANIZATION_SETTINGS]) {
-            
+        if ([segue.destinationViewController isKindOfClass:[OrganizationSettingsViewController class]]) {
+            OrganizationSettingsViewController *organizationSettingsVC = (OrganizationSettingsViewController *)segue.destinationViewController;
+            organizationSettingsVC.organization = self.organization;
+        }
     }
 }
 

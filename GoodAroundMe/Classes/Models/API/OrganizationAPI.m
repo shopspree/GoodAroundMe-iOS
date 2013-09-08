@@ -7,6 +7,7 @@
 //
 
 #import "OrganizationAPI.h"
+#import "OrganizationCategory+Create.h"
 
 @implementation OrganizationAPI
 
@@ -38,7 +39,18 @@
 {
     NSData *json = [organization toJSON];
     
-    [BaseAPI postRequestWithURL:API_ORGANIZATION_POSTS json:json success:^(NSDictionary *responseDictionary) {
+    [BaseAPI postRequestWithURL:[NSString stringWithFormat:API_ORGANIZATION_CREATE, organization.category.uid] json:json success:^(NSDictionary *responseDictionary) {
+        success(responseDictionary);
+    } failure:^(NSString *message) {
+        failure(message);
+    }];
+}
+
++ (void)updateOrganization:(Organization *)organization success:(void (^)(NSDictionary *reponseDictionary))success failure:(void (^)(NSString *message))failure
+{
+    NSData *json = [organization toJSON];
+    
+    [BaseAPI putRequestWithURL:[NSString stringWithFormat:API_ORGANIZATION_UPDATE, organization.uid] json:json success:^(NSDictionary *responseDictionary) {
         success(responseDictionary);
     } failure:^(NSString *message) {
         failure(message);
