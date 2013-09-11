@@ -13,6 +13,7 @@
 
 + (void)newsfeedForOrganization:(Organization *)organization success:(void (^)(NSDictionary *reponseDictionary))success failure:(void (^)(NSString *message))failure;
 + (void)postsForOrganization:(Organization *)organization success:(void (^)(NSDictionary *reponseDictionary))success failure:(void (^)(NSString *message))failure;
++ (void)followersForOrganization:(Organization *)organization success:(void (^)(NSDictionary *reponseDictionary))success failure:(void (^)(NSString *message))failure;
 + (void)newOrganization:(Organization *)organization success:(void (^)(NSDictionary *reponseDictionary))success failure:(void (^)(NSString *message))failure;
 + (void)updateOrganization:(Organization *)organization success:(void (^)(NSDictionary *reponseDictionary))success failure:(void (^)(NSString *message))failure;
 + (void)follow:(NSString *)organizationID success:(void (^)(NSDictionary *reponseDictionary))success

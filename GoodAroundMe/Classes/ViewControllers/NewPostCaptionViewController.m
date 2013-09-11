@@ -15,7 +15,7 @@
 #import "Picture+Create.h"
 #import "StoryboardConstants.h"
 
-@interface NewPostCaptionViewController () <UITextViewDelegate, AmazonServiceRequestDelegate>
+@interface NewPostCaptionViewController () <UITextFieldDelegate, AmazonServiceRequestDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *backgroundImageView;
 @property (weak, nonatomic) IBOutlet UITextField *titleTextField;
@@ -23,7 +23,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *shareButton;
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *tap;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
-
 
 @end
 
@@ -42,6 +41,9 @@
         self.backgroundImageView.image = self.image;
     }
     self.activityIndicator.hidden = YES;
+    
+    self.titleTextField.delegate = self;
+    self.captionTextField.delegate = self;
 }
 
 - (void)uploadtoAmazon
@@ -70,6 +72,7 @@
         [self dismissViewControllerAnimated:YES completion:nil];
     } failure:^(NSString *message) {
         [self fail:@"Failed to create new post" withMessage:message];
+        self.shareButton.userInteractionEnabled = YES;
     }];
 }
 
@@ -87,10 +90,10 @@
 
 - (IBAction)shareButtonAction:(id)sender
 {
+    self.shareButton.userInteractionEnabled = NO;
     [self.view endEditing:YES];
     self.activityIndicator.hidden = NO;
     [self.activityIndicator startAnimating];
-    self.shareButton.enabled = NO;
     
     [self uploadtoAmazon];
 }
@@ -157,7 +160,7 @@
     -(void)request:(AmazonServiceRequest *)request didFailWithError:(NSError *)error
 {
     NSLog(@"[DEBUG] Request tag:%@ url:%@ Failed!", request.requestTag, request.url);
-    self.shareButton.enabled = YES;
+    self.shareButton.userInteractionEnabled = YES;
 }
 
 

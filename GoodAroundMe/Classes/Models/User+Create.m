@@ -294,4 +294,9 @@
     return fullName;
 }
 
+- (NSString *)log
+{
+    return [NSString stringWithFormat:@"User %@: \n\tfirst name: %@ \n\tlast name: %@ \n\temail: %@ \n\turl: %@",  self.uid, self.firstname, self.lastname, self.email, self.thumbnailURL];
+}
+
 @end

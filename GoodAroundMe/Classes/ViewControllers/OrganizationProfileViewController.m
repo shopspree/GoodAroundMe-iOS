@@ -13,6 +13,7 @@
 #import "Post+Create.h"
 #import "User+Create.h"
 #import "OrganizationSettingsViewController.h"
+#import "FollowersTableViewController.h"
 
 #define SECTION_ORGANIZATION_PROFILE 0
 #define SECTION_ORGANIZATION_POSTS 1
@@ -119,6 +120,11 @@
             OrganizationSettingsViewController *organizationSettingsVC = (OrganizationSettingsViewController *)segue.destinationViewController;
             organizationSettingsVC.organization = self.organization;
         }
+    } else if ([segue.identifier isEqualToString:STORYBOARD_ORGANIZATION_FOLLOWERS]) {
+        if ([segue.destinationViewController isKindOfClass:[FollowersTableViewController class]]) {
+            FollowersTableViewController *followersTableVC = (FollowersTableViewController *)segue.destinationViewController;
+            followersTableVC.organization = self.organization;
+        }
     }
 }
 
@@ -176,6 +182,11 @@
 - (IBAction)followButtonAction:(id)sender
 {
     ([self.organization.is_followed boolValue]) ? [self unfollow:self.organization] : [self follow:self.organization];
+}
+
+- (IBAction)followersButtonAction:(id)sender
+{
+    [self performSegueWithIdentifier:STORYBOARD_ORGANIZATION_FOLLOWERS sender:self];
 }
 
 - (IBAction)giveButtonAction:(id)sender

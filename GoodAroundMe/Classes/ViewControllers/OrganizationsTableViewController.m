@@ -80,8 +80,20 @@
     }
 }
 
+- (void)segueToOrganizationProfile:(NSIndexPath *)indexPath
+{
+    [self performSegueWithIdentifier:STORYBOARD_ORGANIZATION_PROFILE sender:indexPath];
+}
+
 #pragma mark - Storyboard
 
+- (IBAction)tapOrganizationAction:(id)sender
+{
+    CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
+    
+    [self segueToOrganizationProfile:indexPath];
+}
 
 - (IBAction)newOrganization:(id)sender
 {

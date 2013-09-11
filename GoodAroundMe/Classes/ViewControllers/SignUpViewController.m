@@ -43,6 +43,7 @@
 {
     self.activityIndicator.hidden = NO;
     [self.activityIndicator startAnimating];
+    self.signUpbutton.hidden = YES;
     [self signUp];
 }
 
@@ -101,6 +102,7 @@
             } failure:^(NSString *message) {
                 [self.activityIndicator stopAnimating];
                 [self fail:@"Sign up" withMessage:message];
+                self.signUpbutton.hidden = NO;
             }];
         }
         

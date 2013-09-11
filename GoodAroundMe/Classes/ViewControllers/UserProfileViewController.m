@@ -8,7 +8,7 @@
 
 #import "UserProfileViewController.h"
 #import "CoreDataFactory.h"
-#import "UserCell.h"
+#import "UserProfileCell.h"
 #import "OrganizationCell.h"
 #import "User+Create.h"
 #import "UserSettingsViewController.h"
@@ -40,7 +40,7 @@
     self.isCurrentUser = (self.user == currentUser);
     
     if (!self.isCurrentUser){
-        self.settingsButton.hidden = YES;
+        self.navigationItem.rightBarButtonItem = nil;
     }
 }
 
@@ -132,7 +132,7 @@
 
 #pragma mark - Storyboard
 
-- (IBAction)settingsButtonAction:(id)sender
+- (IBAction)editButtonAction:(id)sender
 {
     [self performSegueWithIdentifier:STORYBOARD_USER_SETTINGS sender:self];
 }
@@ -209,8 +209,8 @@
     UITableViewCell *cell;
     if (indexPath.section == USER_SECTION_INDEX) {
         cell = [tableView dequeueReusableCellWithIdentifier:UserCellIdentifier forIndexPath:indexPath];
-        UserCell *userCell = (UserCell *)cell;
-        userCell.user = self.user;
+        UserProfileCell *userProfileCell = (UserProfileCell *)cell;
+        userProfileCell.user = self.user;
         
     } else if (indexPath.section == ORGANIZATION_SECTION_INDEX) {
         NSInteger lastRow = [self.following count];

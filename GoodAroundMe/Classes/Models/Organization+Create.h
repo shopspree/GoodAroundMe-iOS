@@ -28,6 +28,7 @@
 - (void)update:(void (^)())success failure:(void (^)(NSString *message))failure;
 - (void)newsfeedForOrganization:(void (^)())success failure:(void (^)(NSString *message))failure;
 - (NSArray *)postsForOrganization:(void (^)(NSArray *posts))success failure:(void (^)(NSString *message))failure;
+- (NSArray *)followersForOrganization:(void (^)(NSArray *followers))success failure:(void (^)(NSString *message))failure;
 - (NSData *)toJSON;
 - (NSDictionary *)toDictionary;
 

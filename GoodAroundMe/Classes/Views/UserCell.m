@@ -1,41 +1,36 @@
 //
 //  UserCell.m
-//  TempName
+//  GoodAroundMe
 //
-//  Created by asaf ahi-mordehai on 7/1/13.
-//  Copyright (c) 2013 asaf ahi-mordehai. All rights reserved.
+//  Created by asaf ahi-mordehai on 9/10/13.
+//  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
 #import <SDWebImage/UIImageView+WebCache.h>
-#import <QuartzCore/QuartzCore.h>
 #import "UserCell.h"
-#import "User+Create.h"
+#import "UIImage+Resize.h"
 
-@interface UserCell()
+@interface UserCell ()
 
-@property (weak, nonatomic) IBOutlet UIImageView *userImageView;
-@property (nonatomic, weak) IBOutlet UILabel *nameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *followingLabel;
+@property (strong, nonatomic) IBOutlet UIImageView *imageView;
+@property (strong, nonatomic) IBOutlet UILabel *usernameLabel;
 
 @end
 
 @implementation UserCell
 
-- (void)setUser:(User *)user
+- (void)layoutSubviews
 {
-    _user = user;
-    if (_user) {
-        NSLog(@"[DEBUG] <UserCell> Started for user: \nname:%@ %@ \nemail:%@ \nurl:%@", user.firstname, user.lastname, user.email, user.thumbnailURL);
-        [self.userImageView setImageWithURL:[NSURL URLWithString:user.thumbnailURL]
-                           placeholderImage:[UIImage imageNamed:@"Default.png"]];
-        self.userImageView.contentMode = UIViewContentModeScaleAspectFill;
-        self.userImageView.layer.cornerRadius = 10; 
-        self.userImageView.clipsToBounds = YES;
-        
-        self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", user.firstname, user.lastname];
-        
-        self.followingLabel.text = [NSString stringWithFormat:@"%@ is following %d organizations", user.firstname, [user.following count]];
+    [super layoutSubviews];
+    
+    if (self.user) {
+        UIImage *placeholderImage = [UIImage imageNamed:@"Default.png"];
+        [self.imageView setImageWithURL:[NSURL URLWithString:self.user.thumbnailURL] placeholderImage:placeholderImage];
+        self.imageView.image = [self.imageView.image scaleToSize:self.imageView.frame.size];
+        self.usernameLabel.text = [NSString stringWithFormat:@"%@ %@", self.user.firstname, self.user.lastname];
     }
+    
+    NSLog(@"[LikeCell] <layoutSubviews> User cell with user: %@", [self.user log]);
 }
 
 @end

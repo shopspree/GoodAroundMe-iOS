@@ -32,6 +32,8 @@
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *tap;
 @property (strong, nonatomic) IBOutlet UIPickerView *categoriesPicker;
+@property (strong, nonatomic) IBOutlet UINavigationItem *customNavigationItem;
+
 
 @end
 
@@ -137,9 +139,9 @@ static NSInteger pickerSize = 216;
 
 - (void)startActivityIndicationInNavigationBar
 {
-    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 30, 20)];
     UIBarButtonItem * barButton = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
-    self.navigationItem.rightBarButtonItem = nil;
+    self.customNavigationItem.rightBarButtonItem = barButton;
     [self.activityIndicator startAnimating];
 }
 

@@ -33,7 +33,7 @@
                       [NSDictionary dictionaryWithObjectsAndKeys:@"About us", NAME,
                        STORYBOARD_ABOUT_US, SEGUE_IDENTIFIER, nil],
                       [NSDictionary dictionaryWithObjectsAndKeys:@"Send feedback", NAME,
-                       FEEDBACK, SEGUE_IDENTIFIER, nil], nil];
+                       STORYBOARD_FEEDBACK, SEGUE_IDENTIFIER, nil], nil];
     }
     
     return _menuItems;

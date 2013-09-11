@@ -11,7 +11,10 @@
 #import "User+Create.h"
 
 @interface SignInViewController ()
-@property (weak, nonatomic) IBOutlet UILabel *errorLabel;
+
+@property (strong, nonatomic) IBOutlet UIButton *logInButton;
+@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+
 @end
 
 @implementation SignInViewController
@@ -19,6 +22,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.activityIndicator.hidden = YES;
     
     if ([[self.childViewControllers lastObject] isKindOfClass:[SignInTableController class]]) {
         SignInTableController *signInTableController= [self.childViewControllers lastObject];
@@ -28,12 +33,12 @@
     }
     
 	// Do any additional setup after loading the view.
-    self.errorLabel.hidden = YES;
 }
 
 - (IBAction)logInButtonClicked:(id)sender 
 {
     [self.view endEditing:YES];
+    
     [self signIn];
 }
 
@@ -77,11 +82,19 @@
             NSDictionary *userDictionary = [NSDictionary dictionaryWithObjectsAndKeys:[NSDictionary dictionaryWithObjectsAndKeys:email, USER_EMAIL,
                                             password, USER_PASSWORD, nil], USER_LOGIN, nil];
             
+            self.logInButton.hidden = YES;
+            [self.activityIndicator startAnimating];
+            
             [User signIn:userDictionary success:^(User *user) {
-                NSString *identifier =  STORYBOARD_LANDING_PAGE; //([user.following count] < 1) ? EXPLORE : NEWSFEED;
+                NSString *identifier =  STORYBOARD_LANDING_PAGE;
                 [self navigateStoryboardWithIdentifier:identifier];
             } failure:^(NSDictionary *errorData) {
                 [self fail:@"Login" withMessage:errorData[@"errors"]];
+                self.logInButton.hidden = NO;
+                
+                self.logInButton.hidden = YES;
+                [self.activityIndicator stopAnimating];
+                self.activityIndicator.hidden = YES;
             }];
         } 
     }

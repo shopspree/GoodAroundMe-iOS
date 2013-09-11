@@ -91,7 +91,6 @@
     
     [Newsfeed synchronizeInContext:self.managedObjectContext success:^{
         [self.refreshControl endRefreshing];
-        //[self.tableView reloadData];
         [self fetchCoreData:self.managedObjectContext];
     } failure:^(NSString *message) {
         [self.refreshControl endRefreshing];
@@ -224,7 +223,7 @@
                 if (self.selectedPost) {
                     NSLog(@"[DEBUG] <NewsfeedTableViewController> deleted post is %@", [self.selectedPost description]);
                     [self.selectedPost deletePost:^{
-                        //[self.tableView reloadData];
+                        return;
                     } failure:^(NSString *message) {
                         [self fail:@"Delete post failed" withMessage:message];
                     }];

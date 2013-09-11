@@ -7,13 +7,9 @@
 //
 
 #import "LikesTableViewController.h"
-#import "LikeCell.h"
-#import "CoreDataFactory.h"
 #import "Like.h"
-#import "User.h"
 #import "UserProfileViewController.h"
 
-#define ROW_HEIGHT 60.0
 
 @interface LikesTableViewController ()
 
@@ -25,18 +21,19 @@
 {
     _post = post;
     if (post) {
+        [self refresh];
         [post likes:^(NSArray *likes) {
-            [self setupFetchedResultsController];
-            self.title = [NSString stringWithFormat:@"%@ Likes", post.likes_count];
+            [self refresh];
         } failure:^(NSString *message) {
             [self fail:@"Retrieving likes list failed" withMessage:message];
         }];
     }
 }
 
-- (void)viewDidLoad
+- (void)refresh
 {
-    [super viewDidLoad];
+    [super refresh];
+    self.title = [NSString stringWithFormat:@"%@ Likes", self.post.likes_count];
 }
 
 
@@ -63,42 +60,15 @@
     }
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+- (User *)userForIndexPath:(NSIndexPath *)indexPath
 {
-    [super prepareForSegue:segue sender:sender];
-    
-    if ([segue.identifier isEqualToString:STORYBOARD_USER_PROFILE]) {
-        if ([segue.destinationViewController isKindOfClass:[UserProfileViewController class]]) {
-            UserProfileViewController *userProfileVC = (UserProfileViewController *)segue.destinationViewController;
-            Like *like = [self.fetchedResultsController objectAtIndexPath:(NSIndexPath *)sender];
-            User *user = like.user;
-            userProfileVC.email = user.email;
-        }
-        
-        
+    User *user = nil;
+    if (indexPath) {
+        Like *like = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        user = like.user;
     }
-}
-
-#pragma mark - UITableViewDataSource
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    LikeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"LikeCell" forIndexPath:indexPath];
- 
-    Like *like = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.like = like;
     
-    return cell;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return ROW_HEIGHT;
-}
-
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [self performSegueWithIdentifier:STORYBOARD_USER_PROFILE sender:indexPath];
+    return user;
 }
 
 

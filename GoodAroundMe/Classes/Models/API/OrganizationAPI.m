@@ -35,6 +35,17 @@
     }];
 }
 
++ (void)followersForOrganization:(Organization *)organization success:(void (^)(NSDictionary *reponseDictionary))success failure:(void (^)(NSString *message))failure
+{
+    NSData *json = nil;
+    
+    [BaseAPI getRequestWithURL:[NSString stringWithFormat:API_ORGANIZATION_FOLLOWERS, organization.uid] json:json success:^(NSDictionary *responseDictionary) {
+        success(responseDictionary);
+    } failure:^(NSString *message) {
+        failure(message);
+    }];
+}
+
 + (void)newOrganization:(Organization *)organization success:(void (^)(NSDictionary *reponseDictionary))success failure:(void (^)(NSString *message))failure
 {
     NSData *json = [organization toJSON];

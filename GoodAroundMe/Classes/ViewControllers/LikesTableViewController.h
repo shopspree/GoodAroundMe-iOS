@@ -6,10 +6,10 @@
 //  Copyright (c) 2013 asaf ahi-mordehai. All rights reserved.
 //
 
-#import "CoreDataTableViewController.h"
+#import "UsersTableViewController.h"
 #import "Post+Create.h"
 
-@interface LikesTableViewController : CoreDataTableViewController
+@interface LikesTableViewController : UsersTableViewController
 
 @property (nonatomic, strong) Post *post;
 

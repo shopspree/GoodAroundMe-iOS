@@ -165,18 +165,20 @@
     if (post) {
         if ([post.liked_by_user boolValue]) {
             [post unlike:^{
-                [self.postTableViewController.tableView reloadData];
+                return;
             } failure:^(NSString *message) {
                 [self fail:@"Failed to unlike" withMessage:message];
             }];
         } else {
             [post like:^(Like *like) {
-                [self.postTableViewController.tableView reloadData];
+                return;
             } failure:^(NSString *message) {
                 [self fail:@"Failed to like" withMessage:message];
             }];
             
         }
+        
+        [self.postTableViewController.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
 

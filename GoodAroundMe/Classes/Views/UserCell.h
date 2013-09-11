@@ -1,13 +1,13 @@
 //
-//  LikeCell.h
-//  TempName
+//  UserCell.h
+//  GoodAroundMe
 //
-//  Created by asaf ahi-mordehai on 7/1/13.
-//  Copyright (c) 2013 asaf ahi-mordehai. All rights reserved.
+//  Created by asaf ahi-mordehai on 9/10/13.
+//  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
-#import "User.h"
+#import "User+Create.h"
 
 @interface UserCell : UITableViewCell
 

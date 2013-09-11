@@ -148,6 +148,51 @@
     
     return posts;
 }
+
+- (NSArray *)followersForOrganization:(void (^)(NSArray *posts))success failure:(void (^)(NSString *message))failure
+{
+    
+    NSMutableArray *followers = [[self fetchOrganizationPosts] mutableCopy];
+    
+    [OrganizationAPI followersForOrganization:self success:^(NSDictionary *reponseDictionary) {
+        NSMutableArray *followers = [reponseDictionary[@"followers"] mutableCopy];
+        
+        for (NSDictionary *userDictionary in followers) {
+            User *user = [User userWithDictionary:userDictionary inManagedObjectContext:self.managedObjectContext];
+            [user addFollowingObject:self];
+        }
+        
+        followers = [[self fetchOrganizationPosts] mutableCopy];
+        success(followers);
+    } failure:^(NSString *message) {
+        failure(message);
+    }];
+    
+    return followers;
+}
+
+- (NSArray *)fetchOrganizationFollowers
+{
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"User"];
+    request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"last_name" ascending:YES]];
+    request.predicate = [NSPredicate predicateWithFormat:@"%@ in followers", self];
+    
+    // Execute the fetch
+    NSError *error = nil;
+    NSArray *matches = [self.managedObjectContext executeFetchRequest:request error:&error];
+    
+    NSMutableArray *followers = [matches mutableCopy];
+    
+    NSSortDescriptor *dateDescriptor = [NSSortDescriptor
+                                        sortDescriptorWithKey:@"last_name"
+                                        ascending:NO];
+    NSArray *sortDescriptors = [NSArray arrayWithObjects:dateDescriptor, nil];
+    [followers sortUsingDescriptors:sortDescriptors];
+    
+    return followers;
+}
+
+
 #pragma mark - private methods
 
 - (void)setWithDictionary:(NSDictionary *)organizationDictionary

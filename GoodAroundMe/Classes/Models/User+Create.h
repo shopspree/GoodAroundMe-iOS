@@ -47,5 +47,6 @@
 - (void)unfollow:(Organization *)organization success:(void (^)())success failure:(void (^)(NSString *message))failure;
 - (NSData *)toJSON;
 - (NSString *)getFullName;
+- (NSString *)log;
 
 @end
