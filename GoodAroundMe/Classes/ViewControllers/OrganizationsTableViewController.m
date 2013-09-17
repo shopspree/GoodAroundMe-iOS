@@ -85,6 +85,27 @@
     [self performSegueWithIdentifier:STORYBOARD_ORGANIZATION_PROFILE sender:indexPath];
 }
 
+
+
+- (void)follow:(Organization *)organization
+{
+    [self.user follow:organization success:^() {
+        return;
+    } failure:^(NSString *message) {
+        [self fail:@"Follow" withMessage:message];
+    }];
+}
+
+- (void)unfollow:(Organization *)organization
+{
+    [self.user unfollow:organization success:^() {
+        return;
+    } failure:^(NSString *message) {
+        [self fail:@"Follow" withMessage:message];
+    }];
+    
+}
+
 #pragma mark - Storyboard
 
 - (IBAction)tapOrganizationButtonAction:(id)sender
@@ -107,8 +128,7 @@
     if (indexPath != nil)
     {
         Organization *organization = [self.fetchedResultsController objectAtIndexPath:indexPath];
-        ([organization.is_followed boolValue]) ? [self unfollow:organization] : [self follow:organization];
-        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        [organization.is_followed boolValue] ? [self unfollow:organization] : [self follow:organization];
     }
 }
 
@@ -131,27 +151,6 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     //[self performSegueWithIdentifier:STORYBOARD_ORGANIZATION_PROFILE sender:indexPath];
-}
-
-- (void)follow:(Organization *)organization
-{
-    organization.is_followed = [NSNumber numberWithBool:true];
-    [self.user follow:organization success:^() {
-        return;
-    } failure:^(NSString *message) {
-        [self fail:@"Follow" withMessage:message];
-    }];
-}
-
-- (void)unfollow:(Organization *)organization
-{
-    organization.is_followed = [NSNumber numberWithBool:false];
-    [self.user unfollow:organization success:^() {
-        return;
-    } failure:^(NSString *message) {
-        [self fail:@"Follow" withMessage:message];
-    }];
-    
 }
 
 @end

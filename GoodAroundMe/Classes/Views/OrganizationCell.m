@@ -14,7 +14,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *organizationImage;
 @property (weak, nonatomic) IBOutlet UILabel *organizationName;
 @property (weak, nonatomic) IBOutlet UILabel *subtitle;
-@property (weak, nonatomic) IBOutlet UIButton *followButton;
 
 @end
 
@@ -30,8 +29,9 @@
         self.organizationName.text = organization.name;
         self.subtitle.text = [NSString stringWithFormat:@"%@ followers  %@ posts", organization.followers_count, organization.posts_count];
         
-        NSString *title = ([organization.is_followed boolValue]) ? @"✓Follow" : @"Follow";
-        [self.followButton setTitle:title forState:UIControlStateNormal];
+        //NSString *title = ([organization.is_followed boolValue]) ? @"✓Follow" : @"Follow";
+        //[self.followButton setTitle:title forState:UIControlStateNormal];
+        self.followButton.highlighted = [organization.is_followed boolValue];
         self.followButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     }
 }

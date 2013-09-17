@@ -12,5 +12,6 @@
 @interface OrganizationCell : UITableViewCell
 
 @property (nonatomic, strong) Organization *organization;
+@property (weak, nonatomic) IBOutlet UIButton *followButton;
 
 @end

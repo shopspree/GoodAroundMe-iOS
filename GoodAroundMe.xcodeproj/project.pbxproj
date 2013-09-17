@@ -805,7 +805,6 @@
 		D8C5EE6917AEA184008CFF51 = {
 			isa = PBXGroup;
 			children = (
-				D807BFE817E8BD8800DE5F0C /* CoreTelephony.framework */,
 				D8C5EE7B17AEA184008CFF51 /* GoodAroundMe */,
 				D8C5EE7417AEA184008CFF51 /* Frameworks */,
 				D8C5EE7317AEA184008CFF51 /* Products */,
@@ -823,6 +822,7 @@
 		D8C5EE7417AEA184008CFF51 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D807BFE817E8BD8800DE5F0C /* CoreTelephony.framework */,
 				D807BFE617E8BD4E00DE5F0C /* NewRelicAgent.framework */,
 				D86BE04C17C399DD0045D2E1 /* AWSRuntime.framework */,
 				D86BE04A17C399A10045D2E1 /* AWSS3.framework */,

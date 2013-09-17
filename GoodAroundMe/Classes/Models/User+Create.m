@@ -251,25 +251,28 @@
 
 - (void)follow:(Organization *)organization success:(void (^)())success failure:(void (^)(NSString *message))failure
 {
+    organization.is_followed = [NSNumber numberWithBool:YES];
+    
     [OrganizationAPI follow:organization.uid success:^(NSDictionary *reponseDictionary) {
-        organization.is_followed = [NSNumber numberWithBool:YES];
         organization.followers_count = [NSNumber numberWithInteger:([organization.followers_count integerValue] + 1)];
         [self addFollowingObject:organization];
         success();
     } failure:^(NSString *message) {
+        organization.is_followed = [NSNumber numberWithBool:NO];
         failure(message);
     }];
 }
 
 - (void)unfollow:(Organization *)organization success:(void (^)())success failure:(void (^)(NSString *message))failure
 {
+    organization.is_followed = [NSNumber numberWithBool:NO];
+    
     [OrganizationAPI unfollow:organization.uid success:^(NSDictionary *reponseDictionary) {
-        organization.is_followed = [NSNumber numberWithBool:NO];
         organization.followers_count = [NSNumber numberWithInteger:([organization.followers_count integerValue] - 1)];
         [self removeFollowingObject:organization];
-        
         success();
     } failure:^(NSString *message) {
+        organization.is_followed = [NSNumber numberWithBool:YES];
         failure(message);
     }];
 }

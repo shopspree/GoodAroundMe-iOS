@@ -60,11 +60,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "GoodAroundMe/Classes/ViewControllers/OrganizationsTableViewController.m"
-         timestampString = "401050426.687031"
+         timestampString = "401136913.593115"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "92"
-         endingLineNumber = "92"
+         startingLineNumber = "113"
+         endingLineNumber = "113"
          landmarkName = "-tapOrganizationButtonAction:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -196,6 +196,32 @@
          startingLineNumber = "39"
          endingLineNumber = "39"
          landmarkName = "-viewDidAppear:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "GoodAroundMe/Classes/ViewControllers/OrganizationsTableViewController.m"
+         timestampString = "401136913.593115"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "126"
+         endingLineNumber = "126"
+         landmarkName = "-followButtonAction:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "GoodAroundMe/Classes/Models/User+Create.m"
+         timestampString = "401137365.866771"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "256"
+         endingLineNumber = "256"
+         landmarkName = "-follow:success:failure:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
