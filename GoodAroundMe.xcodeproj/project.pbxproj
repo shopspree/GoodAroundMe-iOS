@@ -18,6 +18,7 @@
 		D807BFE517E8475E00DE5F0C /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D807BFE417E8475D00DE5F0C /* libGoogleAnalyticsServices.a */; };
 		D807BFE717E8BD4E00DE5F0C /* NewRelicAgent.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D807BFE617E8BD4E00DE5F0C /* NewRelicAgent.framework */; };
 		D807BFE917E8BD8B00DE5F0C /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D807BFE817E8BD8800DE5F0C /* CoreTelephony.framework */; };
+		D807BFEF17E8FA8900DE5F0C /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D807BFEE17E8FA8900DE5F0C /* Crashlytics.framework */; };
 		D80F805C17B7DBAC00CC6303 /* UIViewController+Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = D80F805B17B7DBAA00CC6303 /* UIViewController+Utility.m */; };
 		D80F805F17B7DDEF00CC6303 /* AbstractTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D80F805E17B7DDEB00CC6303 /* AbstractTableViewController.m */; };
 		D85FA2F617DCF09600ED0406 /* FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D85FA2F517DCF09600ED0406 /* FeedbackViewController.m */; };
@@ -300,6 +301,7 @@
 		D807BFE417E8475D00DE5F0C /* libGoogleAnalyticsServices.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalyticsServices.a; sourceTree = "<group>"; };
 		D807BFE617E8BD4E00DE5F0C /* NewRelicAgent.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = NewRelicAgent.framework; sourceTree = "<group>"; };
 		D807BFE817E8BD8800DE5F0C /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		D807BFEE17E8FA8900DE5F0C /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		D80F805A17B7DBA800CC6303 /* UIViewController+Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Utility.h"; sourceTree = "<group>"; };
 		D80F805B17B7DBAA00CC6303 /* UIViewController+Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Utility.m"; sourceTree = "<group>"; };
 		D80F805D17B7DDE300CC6303 /* AbstractTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractTableViewController.h; sourceTree = "<group>"; };
@@ -571,6 +573,7 @@
 				D807BF6117E8454900DE5F0C /* libGoogleAnalytics_debug.a in Frameworks */,
 				D807BFE517E8475E00DE5F0C /* libGoogleAnalyticsServices.a in Frameworks */,
 				D807BFE717E8BD4E00DE5F0C /* NewRelicAgent.framework in Frameworks */,
+				D807BFEF17E8FA8900DE5F0C /* Crashlytics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -822,6 +825,7 @@
 		D8C5EE7417AEA184008CFF51 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D807BFEE17E8FA8900DE5F0C /* Crashlytics.framework */,
 				D807BFE817E8BD8800DE5F0C /* CoreTelephony.framework */,
 				D807BFE617E8BD4E00DE5F0C /* NewRelicAgent.framework */,
 				D86BE04C17C399DD0045D2E1 /* AWSRuntime.framework */,
@@ -1202,6 +1206,7 @@
 				D8C5EE6E17AEA184008CFF51 /* Sources */,
 				D8C5EE6F17AEA184008CFF51 /* Frameworks */,
 				D8C5EE7017AEA184008CFF51 /* Resources */,
+				D807BFED17E8FA3700DE5F0C /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1292,6 +1297,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		D807BFED17E8FA3700DE5F0C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Crashlytics.framework/run 4ebcf662fbf73c734bf37b5c0b1b1d3ed3a44ea1";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D8C5EE6E17AEA184008CFF51 /* Sources */ = {

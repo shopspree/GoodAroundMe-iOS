@@ -7,6 +7,7 @@
 //
 
 #import <NewRelicAgent/NewRelicAgent.h>
+#import <Crashlytics/Crashlytics.h>
 #import "AppDelegate.h"
 #import "GAI.h"
 
@@ -32,6 +33,9 @@
     
     // Initialize tracker.
     [[GAI sharedInstance] trackerWithTrackingId:@"UA-44088324-1"];
+    
+    // Crashlytics
+    [Crashlytics startWithAPIKey:@"4ebcf662fbf73c734bf37b5c0b1b1d3ed3a44ea1"];
 
     
     return YES;
