@@ -8,7 +8,7 @@
 
 #import <MobileCoreServices/MobileCoreServices.h>
 #import <QuartzCore/QuartzCore.h>
-#import <SDWebImage/UIButton+WebCache.h>
+#import <SDWebImage/UIImageView+WebCache.h>
 #import "UserSettingsViewController.h"
 #import "UIImage+Resize.h"
 #import "AmazonAPI.h"
@@ -20,7 +20,7 @@
 @interface UserSettingsViewController () <UIAlertViewDelegate, UITableViewDelegate>
 
 @property (nonatomic, strong) SettingsViewController *settingsController;
-@property (weak, nonatomic) IBOutlet UIButton *userImageButton;
+@property (weak, nonatomic) IBOutlet UIImageView *userImageView;
 @property (weak, nonatomic) IBOutlet UILabel *userFullNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *userEmailLabel;
 @property (weak, nonatomic) IBOutlet UIView *settingsTableView;
@@ -57,14 +57,10 @@
 
 - (void)refresh
 {
-    [self.userImageButton setBackgroundImageWithURL:[NSURL URLWithString:self.user.thumbnailURL] forState:UIControlStateNormal];
-    self.userImageButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
-    self.userImageButton.layer.cornerRadius = 10;
-    self.userImageButton.clipsToBounds = YES;
-    
-    //UIImage *image = self.userImageButton.imageView.image;
-    //image = [image scaleToSize:self.userImageButton.imageView.frame.size];
-    //[self.userImageButton setBackgroundImage:image forState:UIControlStateNormal];
+    [self.userImageView setImageWithURL:[NSURL URLWithString:self.user.thumbnailURL]];
+    self.userImageView.contentMode = UIViewContentModeScaleAspectFill;
+    self.userImageView.layer.cornerRadius = 10;
+    self.userImageView.clipsToBounds = YES;
     
     self.userFullNameLabel.text = [NSString stringWithFormat:@"%@ %@", self.user.firstname, self.user.lastname];
     
@@ -141,11 +137,6 @@
     [self.settingsController changeImage:self.view];
 }
 
-- (IBAction)imageButtonAction:(id)sender
-{
-    [self.settingsController changeImage:self.view];
-}
-
 - (IBAction)done:(id)sender
 {
     if (self.userImage) {
@@ -212,7 +203,7 @@
 - (void)changePicture:(UIImage *)image
 {
     self.userImage = image;
-    [self.userImageButton setBackgroundImage:image forState:UIControlStateNormal];
+    [self.userImageView setImage:image];
 }
 
 - (void)editName

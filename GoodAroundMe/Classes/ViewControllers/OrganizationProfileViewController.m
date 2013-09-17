@@ -140,7 +140,7 @@
     self.followButton.selected = YES;
     User *currentUser = [User currentUser:organization.managedObjectContext];
     [currentUser follow:organization success:^() {
-         return;
+         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
      } failure:^(NSString *message) {
          [self fail:@"Follow" withMessage:message];
      }];
@@ -151,7 +151,7 @@
     self.followButton.selected = NO;
     User *currentUser = [User currentUser:organization.managedObjectContext];
     [currentUser unfollow:organization success:^() {
-         return;
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
      } failure:^(NSString *message) {
          [self fail:@"Follow" withMessage:message];
      }];

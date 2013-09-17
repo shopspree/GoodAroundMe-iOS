@@ -12,6 +12,7 @@
 #import "OrganizationCell.h"
 #import "User+Create.h"
 #import "UserSettingsViewController.h"
+#import "OrganizationProfileViewController.h"
 #import "Organization+Create.h"
 
 #define USER_SECTION_INDEX 0
@@ -26,6 +27,7 @@
 @property (nonatomic, strong) NSArray *sections;
 @property (nonatomic, strong) NSArray *following;
 @property (weak, nonatomic) IBOutlet UIButton *settingsButton;
+@property (strong, nonatomic) User *currentUser;
 @property (nonatomic) BOOL isCurrentUser;
 
 @end
@@ -36,8 +38,8 @@
 {
     [super viewDidLoad];
     
-    User *currentUser = [User currentUser:self.user.managedObjectContext];
-    self.isCurrentUser = (self.user == currentUser);
+    self.currentUser = [User currentUser:self.user.managedObjectContext];
+    self.isCurrentUser = (self.user == self.currentUser);
     
     if (!self.isCurrentUser){
         self.navigationItem.rightBarButtonItem = nil;
@@ -126,9 +128,33 @@
             userSettingsVC.user = self.user;
             NSLog(@"[DEBUG] <UserProfileViewController> Segueing to %@ with User: \nname: %@ %@ \nemail: %@ \nurl: %@", segue.identifier, self.user.firstname, self.user.lastname, self.user.email, self.user.thumbnailURL);
         }
+    } else if ([segue.identifier isEqualToString:STORYBOARD_ORGANIZATION_PROFILE]) {
+        if ([segue.destinationViewController isKindOfClass:[OrganizationProfileViewController class]]) {
+            OrganizationProfileViewController *organizationProfileVC = segue.destinationViewController;
+            Organization *organization = (Organization *)sender;
+            organizationProfileVC.organization = organization;
+        }
     }
 }
 
+- (void)follow:(Organization *)organization
+{
+    [self.currentUser follow:organization success:^() {
+        [self refresh];
+    } failure:^(NSString *message) {
+        [self fail:@"Follow" withMessage:message];
+    }];
+}
+
+- (void)unfollow:(Organization *)organization
+{
+    [self.currentUser unfollow:organization success:^() {
+        [self refresh];
+    } failure:^(NSString *message) {
+        [self fail:@"Follow" withMessage:message];
+    }];
+    
+}
 
 #pragma mark - Storyboard
 
@@ -146,33 +172,20 @@
 {
     CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
-    if (indexPath != nil)
-    {
+    if (indexPath != nil) {
         Organization *organization = [self.following objectAtIndex:indexPath.row];
         ([organization.is_followed boolValue]) ? [self unfollow:organization] : [self follow:organization];
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
 
-- (void)follow:(Organization *)organization
-{
-    organization.is_followed = [NSNumber numberWithBool:true];
-    [self.user follow:organization success:^() {
-         [self refresh];
-    } failure:^(NSString *message) {
-        [self fail:@"Follow" withMessage:message];
-    }];
-}
-
-- (void)unfollow:(Organization *)organization
-{
-    organization.is_followed = [NSNumber numberWithBool:false];
-    [self.user unfollow:organization success:^() {
-        [self refresh];
-    } failure:^(NSString *message) {
-        [self fail:@"Follow" withMessage:message];
-    }];
-    
+- (IBAction)tapOrganizationButtonAction:(id)sender
+{CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
+    if (indexPath != nil) {
+        Organization *organization = [self.following objectAtIndex:indexPath.row];
+        [self performSegueWithIdentifier:STORYBOARD_ORGANIZATION_PROFILE sender:organization];
+    }
 }
 
 #pragma mark - Table view data source
@@ -250,7 +263,7 @@
         // do nothing
         return;
     } else if (indexPath.section == ORGANIZATION_SECTION_INDEX) {
-        NSInteger lastRow = [self.following count] - 1;
+        NSInteger lastRow = [self.following count];
         if (indexPath.row == lastRow) {
             [self performSegueWithIdentifier:STORYBOARD_EXPLORE sender:self];
         }
