@@ -17,6 +17,7 @@
 #import "Like.h"
 #import "CoreDataFactory.h"
 #import "UIResponder+Helper.h"
+#import "AppConstants.h"
 
 @interface NewsfeedPostView()
 
@@ -32,8 +33,14 @@
     if (newsfeed) {
         self.post = newsfeed.post;
     }
-    
-    self.delegate = [self traverseResponderChainForProtocol:@protocol(NewsfeedPostViewDelegate)];
+}
+
+- (id<NewsfeedPostViewDelegate>)delegate
+{
+    if (!_delegate) {
+        _delegate = [self traverseResponderChainForProtocol:@protocol(NewsfeedPostViewDelegate)];
+    }
+    return _delegate;
 }
 
 - (void)setPost:(Post *)post
@@ -59,6 +66,16 @@
 - (void)setup
 {
     self.commentButton.tag = NEWSFEED_POST_VIEW_COMMENT_BUTTON;
+    /*
+    [self addObserver:self.post
+           forKeyPath:@"comments_count"
+              options:NSKeyValueObservingOptionNew
+              context:nil];
+    
+    [self addObserver:self.post
+           forKeyPath:@"likes_count"
+              options:NSKeyValueObservingOptionNew
+              context:nil]; */
 }
 
 - (void)setThumbnailURL:(NSString *)thumbnailURL
@@ -101,7 +118,6 @@
 
 - (void)setPictureURL:(NSString *)pictureURL
 {
-    [super setPictureURL:pictureURL];
     if (pictureURL) {
         [self.pictureImage setImageWithURL:[NSURL URLWithString:pictureURL] placeholderImage:[UIImage imageNamed:@"Default.png"]];
         self.pictureImage.image = [self.pictureImage.image scaleToSize:self.pictureImage.frame.size];
@@ -113,6 +129,9 @@
         [self.pictureImage addGestureRecognizer:tapGesture];
         
     }
+    
+    [super setPictureURL:pictureURL];
+    
 }
 
 - (void)setLikesCountNumber:(NSNumber *)likesCountNumber
@@ -261,6 +280,11 @@
 - (IBAction)moreButtonClicked:(id)sender
 {
     [self.delegate goToPost:sender];
+}
+
+- (IBAction)giveButtonAction:(id)sender
+{
+    [self.delegate give:sender];
 }
 
 @end

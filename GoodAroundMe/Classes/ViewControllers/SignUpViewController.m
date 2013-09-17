@@ -98,7 +98,7 @@
             
             [User signUp:userDictionary success:^(User *user){
                 [self.activityIndicator stopAnimating];
-                [self navigateStoryboardWithIdentifier:EXPLORE];
+                [self navigateStoryboardWithIdentifier:STORYBOARD_EXPLORE];
             } failure:^(NSString *message) {
                 [self.activityIndicator stopAnimating];
                 [self fail:@"Sign up" withMessage:message];

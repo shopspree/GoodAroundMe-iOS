@@ -16,6 +16,7 @@
 #import "ApplicationHelper.h"
 #import "PostAPI.h"
 #import "FeedAPI.h"
+#import "AppConstants.h"
 
 @implementation Post (Create)
 
@@ -97,33 +98,32 @@
 
 - (void)setWithDictionary:(NSDictionary *)postDictionary
 {
+    [self setUid:[postDictionary[POST_ID] description]];
+    [self setTitle:[postDictionary[POST_TITLE] description]];
+    [self setCaption:[postDictionary[POST_CAPTION] description]];
+    [self setCreated_at:[ApplicationHelper dateFromString:[postDictionary[POST_CREATED_AT] description]]];
+    [self setUpdated_at:[ApplicationHelper dateFromString:[postDictionary[POST_UPDATED_AT] description]]];
+    [self setComments_count:[ApplicationHelper numberFromString:[postDictionary[POST_COMMENTS_COUNT] description]]];
+    [self setLikes_count:[ApplicationHelper numberFromString:[postDictionary[POST_LIKES_COUNT] description]]];
     
-    self.uid = [postDictionary[POST_ID] description];
-    self.title = [postDictionary[POST_TITLE] description];
-    self.caption = [postDictionary[POST_CAPTION] description];
-    self.created_at = [ApplicationHelper dateFromString:[postDictionary[POST_CREATED_AT] description]];
-    self.updated_at = [ApplicationHelper dateFromString:[postDictionary[POST_UPDATED_AT] description]];
-    self.comments_count = [ApplicationHelper numberFromString:[postDictionary[POST_COMMENTS_COUNT] description]];
-    self.likes_count = [ApplicationHelper numberFromString:[postDictionary[POST_LIKES_COUNT] description]];
-
     if (postDictionary[LIKE]) {
         NSDictionary *likeDictionary = postDictionary[LIKE];
         Like *like = [Like likeWithDictionary:likeDictionary inManagedObjectContext:self.managedObjectContext];
         [self addLikesObject:like];
-        self.liked_by_user = [NSNumber numberWithBool:YES];
+        [self setLiked_by_user:[NSNumber numberWithBool:YES]];
     } else {
-        self.liked_by_user = [NSNumber numberWithBool:NO];
+        [self setLiked_by_user:[NSNumber numberWithBool:NO]];
     }
     
     if (postDictionary[POST_CONTRIBUTOR]) {
         NSDictionary *userDictionary = postDictionary[POST_CONTRIBUTOR];
         User *contributor = [User userWithDictionary:userDictionary[USER] inManagedObjectContext:self.managedObjectContext];
-        self.contributor = contributor;
+        [self setContributor:contributor ];
     }
     
     if (postDictionary[POST_ORGANIZATION]) {
         Organization *organization = [Organization organizationWithDictionary:postDictionary[POST_ORGANIZATION] inManagedObjectContext:self.managedObjectContext];
-        self.organization = organization;
+        [self setOrganization:organization];
     }
 
     for (NSDictionary *mediaDictionary in postDictionary[POST_MEDIAS]) {

@@ -6,13 +6,34 @@
 //  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
+#import <NewRelicAgent/NewRelicAgent.h>
 #import "AppDelegate.h"
+#import "GAI.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    
+    // Start Newrelic agent
+    [NewRelicAgent startWithApplicationToken:@"AA0d8b9d2de9628d827e450480bea377a02422d11a"];
+    
+    
+    // Start Google Analytics for iOS
+    // Optional: automatically send uncaught exceptions to Google Analytics.
+    [GAI sharedInstance].trackUncaughtExceptions = YES;
+    
+    // Optional: set Google Analytics dispatch interval to e.g. 20 seconds.
+    [GAI sharedInstance].dispatchInterval = 20;
+    
+    // Optional: set Logger to VERBOSE for debug information.
+    [[[GAI sharedInstance] logger] setLogLevel:kGAILogLevelVerbose];
+    
+    // Initialize tracker.
+    [[GAI sharedInstance] trackerWithTrackingId:@"UA-44088324-1"];
+
+    
     return YES;
 }
 							

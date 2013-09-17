@@ -18,5 +18,6 @@
 - (void)goToOrganization:(id)sender;
 - (void)deletePost:(id)sender;
 - (void)more:(id)sender;
+- (void)give:(id)sender;
 
 @end

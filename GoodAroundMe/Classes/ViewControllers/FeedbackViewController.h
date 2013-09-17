@@ -10,4 +10,6 @@
 
 @interface FeedbackViewController : AbstractTableViewController
 
+- (IBAction)selectArea:(UIStoryboardSegue *)segue;
+
 @end

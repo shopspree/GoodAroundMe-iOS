@@ -6,9 +6,11 @@
 //  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
+#import <SDWebImage/UIImageView+WebCache.h>
 #import "LaunchingViewController.h"
 #import "OrganizationCategory+Create.h" 
 #import "User+Create.h"
+#import "OrganizationCategory.h"
 #import "StoryboardConstants.h"
 #import "CoreDataFactory.h"
 
@@ -55,6 +57,8 @@
 {  
     [OrganizationCategory categories:self.managedObjectContext success:^(NSArray *categories) {
         NSLog(@"[DEBUG] <LaunchingViewController> Everything is normal, performing Modal segue to Newsfeed");
+        [self loadCategoiesImages:categories];
+        
         [self performSegueWithIdentifier:NEWSFEED sender:self];
         
         [self.activityIndicator stopAnimating];
@@ -63,6 +67,14 @@
         [self fail:@"Good Around Me" withMessage:@"Error loading application"];
         [self.activityIndicator stopAnimating];
     }];
+}
+
+- (void)loadCategoiesImages:(NSArray *)categories
+{
+    for (OrganizationCategory *category in categories) {
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        [imageView setImageWithURL:[NSURL URLWithString:category.imageURL]];
+    }
 }
 
 - (void)loadUser

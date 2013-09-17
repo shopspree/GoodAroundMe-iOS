@@ -9,9 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "UIViewController+Utility.h"
 #import "StoryboardConstants.h"
+#import "GAITrackedViewController.h"
 
 @interface AbstractTableViewController : UITableViewController
 
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+
+- (void)startActivityIndicationInNavigationBar;
+- (void)stopActivityIndicationInNavigationBar;
 
 @end

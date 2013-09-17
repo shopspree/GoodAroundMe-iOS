@@ -30,6 +30,15 @@
                                                object:nil];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    // Google Analytics
+    UIViewController *currentVC = self.navigationController.visibleViewController;
+    NSString *className = [[currentVC class] description];
+    self.screenName = className;
+}
+
 - (void) willEnterForeground:(NSNotification *)notification {
     //[self performLoginIfRequired:self];
 }

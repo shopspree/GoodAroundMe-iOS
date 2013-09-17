@@ -27,7 +27,7 @@
         _menuItems = [NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"Feed", NAME,
                                                 NEWSFEED, SEGUE_IDENTIFIER, nil],
                       [NSDictionary dictionaryWithObjectsAndKeys:@"Explore", NAME,
-                       EXPLORE, SEGUE_IDENTIFIER, nil],
+                       STORYBOARD_EXPLORE, SEGUE_IDENTIFIER, nil],
                       [NSDictionary dictionaryWithObjectsAndKeys:@"Profile", NAME,
                        STORYBOARD_USER_PROFILE, SEGUE_IDENTIFIER, nil],
                       [NSDictionary dictionaryWithObjectsAndKeys:@"About us", NAME,

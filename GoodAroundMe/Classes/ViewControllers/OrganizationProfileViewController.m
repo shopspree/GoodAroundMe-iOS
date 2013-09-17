@@ -14,6 +14,7 @@
 #import "User+Create.h"
 #import "OrganizationSettingsViewController.h"
 #import "FollowersTableViewController.h"
+#import "GiveViewController.h"
 
 #define SECTION_ORGANIZATION_PROFILE 0
 #define SECTION_ORGANIZATION_POSTS 1
@@ -28,6 +29,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *followButton;
 @property (weak, nonatomic) IBOutlet UIButton *giveButton;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *editNavButton;
+@property (strong, nonatomic) Post *selectedPost;
 
 @end
 
@@ -125,6 +127,11 @@
             FollowersTableViewController *followersTableVC = (FollowersTableViewController *)segue.destinationViewController;
             followersTableVC.organization = self.organization;
         }
+    } else if ([segue.identifier isEqualToString:STORYBOARD_GIVE]) {
+        if ([segue.destinationViewController isKindOfClass:[GiveViewController class]]) {
+            GiveViewController *giveVC = (GiveViewController *)segue.destinationViewController;
+            giveVC.organization = self.organization;
+        }
     }
 }
 
@@ -172,6 +179,32 @@
     [self performSegueWithIdentifier:identifier sender:sender];
 }
 
+- (void)deletePostAfterConfirm
+{
+    Post *post = self.selectedPost;
+    if (post) {
+        NSLog(@"[DEBUG] <PostViewController> deleted post is %@", [post description]);
+        [post deletePost:^{
+            // TO DO add activity indicator
+            return;
+        } failure:^(NSString *message) {
+            [self fail:@"Delete post failed" withMessage:message];
+        }];
+    }
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)reportInappropriate
+{
+    Post *post = self.selectedPost;
+    [post inappropriate:^{
+        [self info:@"Resport Inappropriate" withMessage:@"Thank you. Our team will review your report and act accordnigly"];
+    } failure:^(NSString *message) {
+        [self fail:@"Resport Inappropriate" withMessage:message];
+    }];
+}
+
+
 #pragma mark - Storyboard
 
 - (IBAction)settingsButtonAction:(id)sender
@@ -191,6 +224,7 @@
 
 - (IBAction)giveButtonAction:(id)sender
 {
+    [self performSegueWithIdentifier:STORYBOARD_GIVE sender:self];
 }
 
 #pragma mark - Table view data source
@@ -321,8 +355,7 @@
 
 - (void)deletePost:(id)sender
 {
-    [self selectPost:sender];
-    
+    self.selectedPost = [self selectPost:sender];
     UIActionSheet *cellActionSheet = [[UIActionSheet alloc] initWithTitle:@""
                                                                  delegate:self
                                                         cancelButtonTitle:@"Cancel"
@@ -336,5 +369,31 @@
 {
     [self performSegueWithIdentifier:@"MoreOptions" sender:sender];
 }
+
+- (void)give:(id)sender
+{
+    [self performSegueWithIdentifier:STORYBOARD_GIVE sender:sender];
+}
+
+#pragma mark - UIActionSheetDelegate
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (actionSheet.tag == ACTION_SHEET_DELETE_POST_TAG) {
+        switch (buttonIndex) {
+            case 0:
+                [self deletePostAfterConfirm];
+                break;
+                
+            case 1:
+                [self reportInappropriate];
+                break;
+                
+            default:
+                break;
+        }
+    }
+}
+
 
 @end

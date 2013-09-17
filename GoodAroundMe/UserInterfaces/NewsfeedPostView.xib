@@ -659,6 +659,15 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">giveButtonAction:</string>
+						<reference key="source" ref="145562745"/>
+						<reference key="destination" ref="191373211"/>
+						<int key="IBEventType">7</int>
+					</object>
+					<int key="connectionID">1905</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
 						<string key="label">commentsCounButtonClicked:</string>
 						<reference key="source" ref="1051759891"/>
 						<reference key="destination" ref="191373211"/>
@@ -1489,11 +1498,11 @@
 							</object>
 							<reference ref="544311169"/>
 							<reference ref="140075907"/>
-							<reference ref="145562745"/>
 							<reference ref="270300260"/>
 							<reference ref="1051759891"/>
 							<reference ref="365871090"/>
 							<reference ref="133180068"/>
+							<reference ref="145562745"/>
 						</array>
 						<reference key="parent" ref="191373211"/>
 					</object>
@@ -2701,7 +2710,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">1904</int>
+			<int key="maxID">1905</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -2716,60 +2725,6 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">NewsfeedPostView</string>
 					<string key="superclassName">NewsfeedView</string>
-					<dictionary class="NSMutableDictionary" key="actions">
-						<string key="commentButtonClicked:">id</string>
-						<string key="commentsCounButtonClicked:">id</string>
-						<string key="deleteButtonClicked:">id</string>
-						<string key="imageButtonAction:">id</string>
-						<string key="likeButtonClicked:">id</string>
-						<string key="likesCountButtonClicked:">id</string>
-						<string key="logoAction:">id</string>
-						<string key="moreButtonClicked:">id</string>
-						<string key="nameAction:">id</string>
-						<string key="tap:">id</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="actionInfosByName">
-						<object class="IBActionInfo" key="commentButtonClicked:">
-							<string key="name">commentButtonClicked:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="commentsCounButtonClicked:">
-							<string key="name">commentsCounButtonClicked:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="deleteButtonClicked:">
-							<string key="name">deleteButtonClicked:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="imageButtonAction:">
-							<string key="name">imageButtonAction:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="likeButtonClicked:">
-							<string key="name">likeButtonClicked:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="likesCountButtonClicked:">
-							<string key="name">likesCountButtonClicked:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="logoAction:">
-							<string key="name">logoAction:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="moreButtonClicked:">
-							<string key="name">moreButtonClicked:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="nameAction:">
-							<string key="name">nameAction:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="tap:">
-							<string key="name">tap:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="captionLabel">UILabel</string>
 						<string key="commentButton">UIButton</string>

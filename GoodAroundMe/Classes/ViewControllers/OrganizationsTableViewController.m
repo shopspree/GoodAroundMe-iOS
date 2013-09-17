@@ -70,7 +70,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.destinationViewController isEqualToString:STORYBOARD_ORGANIZATION_PROFILE]) {
+    if ([segue.identifier isEqualToString:STORYBOARD_ORGANIZATION_PROFILE]) {
         if ([segue.destinationViewController isKindOfClass:[OrganizationProfileViewController class]]) {
             OrganizationProfileViewController *organizationProfileVC = (OrganizationProfileViewController *)segue.destinationViewController;
             NSIndexPath *indexPath = (NSIndexPath *)sender;
@@ -87,7 +87,7 @@
 
 #pragma mark - Storyboard
 
-- (IBAction)tapOrganizationAction:(id)sender
+- (IBAction)tapOrganizationButtonAction:(id)sender
 {
     CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
@@ -98,6 +98,18 @@
 - (IBAction)newOrganization:(id)sender
 {
     [self performSegueWithIdentifier:STORYBOARD_ORGANIZATION_SETTINGS sender:self];
+}
+
+- (IBAction)followButtonAction:(id)sender
+{
+    CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
+    if (indexPath != nil)
+    {
+        Organization *organization = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        ([organization.is_followed boolValue]) ? [self unfollow:organization] : [self follow:organization];
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -119,18 +131,6 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     //[self performSegueWithIdentifier:STORYBOARD_ORGANIZATION_PROFILE sender:indexPath];
-}
-
-- (IBAction)followButton:(id)sender
-{
-    CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
-    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
-    if (indexPath != nil)
-    {
-        Organization *organization = [self.fetchedResultsController objectAtIndexPath:indexPath];
-        ([organization.is_followed boolValue]) ? [self unfollow:organization] : [self follow:organization];
-        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }
 }
 
 - (void)follow:(Organization *)organization

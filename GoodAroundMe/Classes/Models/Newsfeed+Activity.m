@@ -56,17 +56,17 @@ failure:(void (^)(NSString *message))failure
         // handle error
     } else if (![matches count]) { // none found, so let's create a Photo for that Flickr photo
         newsfeed = [NSEntityDescription insertNewObjectForEntityForName:@"Newsfeed" inManagedObjectContext:context];
-        [newsfeed setWithDictionary:activityDictionary context:context];
+        [newsfeed setWithDictionary:activityDictionary];
                 
-    } else { // found the Photo, just return it from the list of matches (which there will only be one of)
+    } else {
         newsfeed = [matches lastObject];
-        [newsfeed setWithDictionary:activityDictionary context:context];
+        [newsfeed updateWithDictionary:activityDictionary];
     }
     
     return newsfeed;
 }
 
-- (void)setWithDictionary:(NSDictionary *)activityDictionary context:(NSManagedObjectContext *)context
+- (void)setWithDictionary:(NSDictionary *)activityDictionary
 {
     
     self.uid = [activityDictionary[ACTIVITY_ID] description];
@@ -74,20 +74,25 @@ failure:(void (^)(NSString *message))failure
     self.created_at = [ApplicationHelper dateFromString:[activityDictionary[ACTIVITY_CREATED_AT] description]];
     self.updated_at = [ApplicationHelper dateFromString:[activityDictionary[ACTIVITY_UPDATED_AT] description]];
     
-    Post *post = [Post postWithDictionary:activityDictionary[ACTIVITY_POST] inManagedObjectContext:context];
+    Post *post = [Post postWithDictionary:activityDictionary[ACTIVITY_POST] inManagedObjectContext:self.managedObjectContext];
     self.post = post;
     self.organization = post.organization;
     
     if (activityDictionary[ACTIVITY_COMMENT]) {
-        Comment *comment = [Comment commentWithDictionary:activityDictionary[ACTIVITY_COMMENT] inManagedObjectContext:context];
+        Comment *comment = [Comment commentWithDictionary:activityDictionary[ACTIVITY_COMMENT] inManagedObjectContext:self.managedObjectContext];
         self.comment = comment;
         self.comment.post = self.post;
     } else if (activityDictionary[ACTIVITY_LIKE]) {
-        Like *like = [Like likeWithDictionary:activityDictionary[ACTIVITY_LIKE] inManagedObjectContext:context];
+        Like *like = [Like likeWithDictionary:activityDictionary[ACTIVITY_LIKE] inManagedObjectContext:self.managedObjectContext];
         self.like = like;
         self.like.post = self.post;
     }
 
+}
+
+- (void)updateWithDictionary:(NSDictionary *)activityDictionary
+{
+    [self.post setWithDictionary:activityDictionary[ACTIVITY_POST]];
 }
 
 - (NSString *)description

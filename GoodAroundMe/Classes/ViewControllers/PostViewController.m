@@ -14,6 +14,7 @@
 #import "User.h"
 #import "OrganizationProfileViewController.h"
 #import "LikesTableViewController.h"
+#import "GiveViewController.h"
 
 
 #define ACTION_SHEET_DELETE_POST_TAG 2
@@ -100,6 +101,12 @@
                 [segue.destinationViewController performSelector:@selector(setEmail:) withObject:user.email];
             }
         }
+    } else if ([segue.identifier isEqualToString:STORYBOARD_GIVE]) {
+        if ([segue.destinationViewController isKindOfClass:[GiveViewController class]]) {
+            GiveViewController *giveVC = (GiveViewController *)segue.destinationViewController;
+            giveVC.organization = self.post.organization;
+        }
+        
     }
 }
 
@@ -226,6 +233,11 @@
 - (void)more:(id)sender
 {
     [self performSegueWithIdentifier:@"MoreOptions" sender:self];
+}
+
+- (void)give:(id)sender
+{
+    [self performSegueWithIdentifier:STORYBOARD_GIVE sender:self];
 }
 
 #pragma mark - Keyboard

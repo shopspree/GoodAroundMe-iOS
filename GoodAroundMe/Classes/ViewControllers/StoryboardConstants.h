@@ -12,7 +12,7 @@
 #define SIGN_IN @"Sign In"
 #define SING_UP @"Sign Up"
 #define NEWSFEED @"Newsfeed"
-#define EXPLORE @"Explore"
+#define STORYBOARD_EXPLORE @"Explore"
 #define POST_PAGE @"Post"
 #define STORYBOARD_USER_PROFILE @"UserProfile"
 #define STORYBOARD_USER_SETTINGS @"UserSettings"
@@ -24,6 +24,7 @@
 #define STORYBOARD_ORGANIZATION_FOLLOWERS @"Followers"
 #define STORYBOARD_LANDING_PAGE @"LandingPage"
 #define STORYBOARD_FEEDBACK @"Feedback"
+#define STORYBOARD_FEEDBACK_AREAS @"Feedback Areas"
 #define STORYBOARD_ABOUT_US @"AboutUs"
 #define STORYBOARD_MENU @"Menu"
 #define STORYBOARD_LIKES @"Likes"
@@ -31,6 +32,7 @@
 #define STORYBOARD_NEW_POST @"NewPost"
 #define STORYBOARD_NEW_POST_CAPTION @"NewPostCaption"
 #define STORYBOARD_LIKES_TABLE @"Likes"
+#define STORYBOARD_GIVE @"Give"
 
 @protocol StoryboardConstants <NSObject>
 

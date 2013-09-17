@@ -139,7 +139,7 @@
 
 - (IBAction)followMoreOrganizationButton:(id)sender
 {
-    [self performSegueWithIdentifier:EXPLORE sender:self];
+    [self performSegueWithIdentifier:STORYBOARD_EXPLORE sender:self];
 }
 
 - (IBAction)followButton:(id)sender
@@ -252,7 +252,7 @@
     } else if (indexPath.section == ORGANIZATION_SECTION_INDEX) {
         NSInteger lastRow = [self.following count] - 1;
         if (indexPath.row == lastRow) {
-            [self performSegueWithIdentifier:EXPLORE sender:self];
+            [self performSegueWithIdentifier:STORYBOARD_EXPLORE sender:self];
         }
     } 
 }

@@ -21,6 +21,7 @@
 #import "PostViewController.h"
 #import "NewPostCaptionViewController.h"
 #import "OrganizationProfileViewController.h"
+#import "GiveViewController.h"
 #import "UIImage+Resize.h"
 
 #define ACTION_SHEET_NEW_POST_TAG 1
@@ -73,6 +74,8 @@
 {
     [super viewWillAppear:animated];
     
+    [self validateUserIsFollowing];
+    
     self.selectedPost = nil;
     
     [self refresh];
@@ -96,6 +99,14 @@
         [self.refreshControl endRefreshing];
         [self fail:@"Newsfeed" withMessage:message];
     }];
+}
+
+- (void)validateUserIsFollowing
+{
+    User *user = [User currentUser:self.managedObjectContext];
+    if ([user.following count] == 0) {
+        [self performSegueWithIdentifier:STORYBOARD_EXPLORE sender:self];
+    }
 }
 
 - (Post *)selectPost:(id)sender
@@ -172,7 +183,13 @@
                 [segue.destinationViewController performSelector:@selector(setPost:) withObject:post];
             }
         }
-    } 
+    } else if ([segue.identifier isEqualToString:STORYBOARD_GIVE]) {
+        if ([segue.destinationViewController isKindOfClass:[GiveViewController class]]) {
+            GiveViewController *giveVC = (GiveViewController *)segue.destinationViewController;
+            Organization *organization = (Organization *)sender;
+            giveVC.organization = organization;
+        }
+    }
 }
 
 - (IBAction)unwindFromModal:(UIStoryboardSegue *)segue
@@ -431,6 +448,12 @@
 - (void)more:(id)sender
 {
     [self performSegueWithIdentifier:@"MoreOptions" sender:sender];
+}
+
+- (void)give:(id)sender
+{
+    Post *post = [self selectPost:sender];
+    [self performSegueWithIdentifier:STORYBOARD_GIVE sender:post.organization];
 }
 
 @end

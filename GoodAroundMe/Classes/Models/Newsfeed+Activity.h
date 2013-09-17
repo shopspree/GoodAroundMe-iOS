@@ -30,6 +30,7 @@
 
 + (Newsfeed *)newsfeedWithActivity:(NSDictionary *)activityDictionary inManagedObjectContext:(NSManagedObjectContext *)context;
 
-- (void)setWithDictionary:(NSDictionary *)activityDictionary context:(NSManagedObjectContext *)context;
+- (void)setWithDictionary:(NSDictionary *)activityDictionary;
+- (void)updateWithDictionary:(NSDictionary *)activityDictionary;
 
 @end

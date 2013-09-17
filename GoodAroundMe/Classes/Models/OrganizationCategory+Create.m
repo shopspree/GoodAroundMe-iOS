@@ -48,7 +48,8 @@
     
     if(categories) {
         // fetch categories from the server
-        [OrganizationCategory categoriesFromServer:managedObjectContext success:^(NSArray *categories) {
+        [OrganizationCategory categoriesFromServer:managedObjectContext success:^() {
+            NSArray *categories = [OrganizationCategory categories:managedObjectContext];
             success(categories);
         } failure:^(NSString *message) {
             failure(message);
@@ -74,7 +75,7 @@
     return categories;
 }
     
-+ (void)categoriesFromServer:(NSManagedObjectContext *)managedObjectContext success:(void (^)(NSArray *categories))success failure:(void (^)(NSString *message))failure
++ (void)categoriesFromServer:(NSManagedObjectContext *)managedObjectContext success:(void (^)())success failure:(void (^)(NSString *message))failure
 {
     [CategoryAPI categories:^(NSDictionary *responseDictionary) {
         NSMutableArray *categories = [NSMutableArray array];
@@ -82,7 +83,7 @@
             OrganizationCategory *category = [OrganizationCategory categoryWithDictionary:categoryDictionary[CATEGORY] inManagedObjectContext:managedObjectContext];
             [categories addObject:category];
         }
-        success(categories);
+        success();
     } failure:^(NSString *message) {
         failure(message);
     }];

@@ -7,6 +7,7 @@
 //
 
 #import "BaseAPI.h"
+#import "AppConstants.h"
 #import "APIConstants.h"
 #import "User+Create.h"
 
@@ -159,7 +160,7 @@
     if (statusCode == 401) {
         // check if the user is getting a 401 but is not changing password where in this process 
         if ([request.URL.absoluteString rangeOfString:@"update_password.json"].location == NSNotFound) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Unauthorized" object:self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_HTTP_401 object:self];
         }
     
         

@@ -9,8 +9,15 @@
 #import "AbstractTableViewController.h"
 #import "UIViewController+Utility.h"
 #import "StoryboardConstants.h"
+#import "GAI.h"
+#import "GAITracker.h"
+#import "GAIFields.h"
+#import "GAIDictionaryBuilder.h"
 
 @interface AbstractTableViewController ()
+
+@property (nonatomic, strong) UIBarButtonItem *rightBarButton;
+@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 @end
 
@@ -24,7 +31,28 @@
                                              selector:@selector(performLoginIfRequired:)
                                                  name:@"Unauthorized"
                                                object:nil];
+    
+    [self gaiManualScreenMeasurement];
 }
+
+
+- (void)gaiManualScreenMeasurement
+{
+    // Google Analytics
+    UIViewController *currentVC = self.navigationController.visibleViewController;
+    NSString *screenName = [[currentVC class] description];
+    
+    // May return nil if a tracker has not already been initialized with a
+    // property ID.
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    
+    // This screen name value will remain set on the tracker and sent with
+    // hits until it is set to a new value or to nil.
+    [tracker set:kGAIScreenName value:screenName];
+    
+    [tracker send:[[GAIDictionaryBuilder createAppView] build]];
+}
+
 
 - (void) performLoginIfRequired:(UIViewController *)source
 {
@@ -47,6 +75,22 @@
             NSLog(@"[ERROR] <AbstractTableViewController> Self managedObjectContext is empty on segue from %@", segue.identifier);
         }
     } 
+}
+
+- (void)startActivityIndicationInNavigationBar
+{
+    self.rightBarButton = self.navigationItem.rightBarButtonItem;
+    
+    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+    UIBarButtonItem * barButton = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
+    self.navigationItem.rightBarButtonItem = barButton;
+    [self.activityIndicator startAnimating];
+}
+
+- (void)stopActivityIndicationInNavigationBar
+{
+    [self.activityIndicator stopAnimating];
+    self.navigationItem.rightBarButtonItem = self.rightBarButton;
 }
 
 @end

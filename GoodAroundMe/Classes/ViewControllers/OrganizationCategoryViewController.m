@@ -80,7 +80,10 @@
     OrganizationCategory *category = [self.categories objectAtIndex:indexPath.item];
     
     cell.categoryLabel.text = category.name;
-    [cell.categoryImage setImageWithURL:[NSURL URLWithString:category.imageURL] placeholderImage:[UIImage imageNamed:@"Default.png"]];
+    if (category.imageURL && ![category.imageURL isEqualToString:@"(null)"]) {
+        [cell.categoryImage setImageWithURL:[NSURL URLWithString:category.imageURL] placeholderImage:[UIImage imageNamed:@"Default.png"]];
+    }
+    
     
     
     return cell;
