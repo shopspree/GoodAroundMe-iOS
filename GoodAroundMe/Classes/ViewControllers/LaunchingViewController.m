@@ -27,13 +27,36 @@
     [super viewDidLoad];
     
 	// Do any additional setup after loading the view.
-    self.navigationController.navigationBarHidden = YES;
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     
+    self.navigationController.navigationBarHidden = YES;
+    
+    if (self.managedObjectContext) {
+        [self launch];
+    } else {
+        [self initiliaze];
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+   self.navigationController.navigationBarHidden = NO;
+}
+
+- (void)initiliaze
+{
+    [[CoreDataFactory getInstance] context:^(NSManagedObjectContext *managedObjectContext) {
+        self.managedObjectContext = managedObjectContext;
+        [self launch];
+    }];
+}
+
+- (void)launch
+{
     [self.activityIndicator startAnimating];
     
     NSString *email = [[NSUserDefaults standardUserDefaults] stringForKey:USER_EMAIL];
@@ -42,24 +65,32 @@
     if (email && authToken) {
         [self loadUser];
     } else {
-        NSLog(@"[DEBUG] User has no stored mail, performing Modal segue to Sign In Sign Up");
-        [self performSegueWithIdentifier:SIGNUP_SIGNIN sender:self];
+        NSLog(@"[DEBUG] <LaunchingViewController> Authentication credentials missing: \n\temail: %@ \n\tauthentication token: %@", email, authToken);
+        [self performSegueWithIdentifier:STORYBOARD_SIGNUP_SIGNIN sender:self];
     }
-    
 }
 
-- (void)viewWillDisappear:(BOOL)animated
+- (void)loadUser
 {
-   self.navigationController.navigationBarHidden = NO;
+    NSString *email = [[NSUserDefaults standardUserDefaults] stringForKey:USER_EMAIL];
+    if (!email) {
+        [self performSegueWithIdentifier:STORYBOARD_SIGNUP_SIGNIN sender:self];
+    } else {
+        [User userByEmail:email inManagedObjectContext:self.managedObjectContext success:^(User *user) {
+            [self loadCategories];
+        } failure:^(NSString *message) {
+            [self fail:@"Good Around Me" withMessage:message];
+        }];
+    }
 }
 
 - (void)loadCategories
-{  
+{
     [OrganizationCategory categories:self.managedObjectContext success:^(NSArray *categories) {
         NSLog(@"[DEBUG] <LaunchingViewController> Everything is normal, performing Modal segue to Newsfeed");
         [self loadCategoiesImages:categories];
         
-        [self performSegueWithIdentifier:NEWSFEED sender:self];
+        [self performSegueWithIdentifier:STORYBOARD_NEWSFEED sender:self];
         
         [self.activityIndicator stopAnimating];
         
@@ -77,28 +108,15 @@
     }
 }
 
-- (void)loadUser
-{
-    NSString *email = [[NSUserDefaults standardUserDefaults] stringForKey:USER_EMAIL];
-    if (!email) {
-        [self performSegueWithIdentifier:SIGNUP_SIGNIN sender:self];
-    } else {
-        [[CoreDataFactory getInstance] context:^(NSManagedObjectContext *managedObjectContext) {
-            [User userByEmail:email inManagedObjectContext:managedObjectContext success:^(User *user) {
-                self.managedObjectContext = managedObjectContext;
-                [self loadCategories];
-                
-            } failure:^(NSString *message) {
-                [self fail:@"Good Around Me" withMessage:message];
-                
-            }];
-        }];
-    }
-}
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     [super prepareForSegue:segue sender:sender];
+    NSLog(@"[DEBUG] <LaunchingViewController> Perform segue to %@", segue.identifier);
+}
+
+- (IBAction)unwindFromUserAuthentication:(UIStoryboardSegue *)segue
+{
+    //[self launch];
 }
 
 @end

@@ -25,7 +25,7 @@
 {
     if (! _menuItems) {
         _menuItems = [NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"Feed", NAME,
-                                                NEWSFEED, SEGUE_IDENTIFIER, nil],
+                                                STORYBOARD_NEWSFEED, SEGUE_IDENTIFIER, nil],
                       [NSDictionary dictionaryWithObjectsAndKeys:@"Explore", NAME,
                        STORYBOARD_EXPLORE, SEGUE_IDENTIFIER, nil],
                       [NSDictionary dictionaryWithObjectsAndKeys:@"Profile", NAME,

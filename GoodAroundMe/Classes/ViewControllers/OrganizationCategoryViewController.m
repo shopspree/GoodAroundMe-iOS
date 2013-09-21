@@ -43,6 +43,8 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    [super prepareForSegue:segue sender:sender];
+    
     if ([segue.identifier isEqualToString:@"Organizations"]) {
         if ([segue.destinationViewController isKindOfClass:[OrganizationsTableViewController class]]) {
             OrganizationsTableViewController *organizationTableViewController = (OrganizationsTableViewController *)segue.destinationViewController;

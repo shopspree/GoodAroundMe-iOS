@@ -35,6 +35,7 @@
             [category setWithDictionary:categoryDictionary];
         } else { // found the Photo, just return it from the list of matches (which there will only be one of)
             category = [matches lastObject];
+            [category setWithDictionary:categoryDictionary];
         }
         
     }
@@ -46,15 +47,13 @@
 {
     NSArray *categories = [OrganizationCategory categories:managedObjectContext];
     
-    if(categories) {
-        // fetch categories from the server
-        [OrganizationCategory categoriesFromServer:managedObjectContext success:^() {
-            NSArray *categories = [OrganizationCategory categories:managedObjectContext];
-            success(categories);
-        } failure:^(NSString *message) {
-            failure(message);
-        }];
-    }
+    // fetch categories from the server
+    [OrganizationCategory categoriesFromServer:managedObjectContext success:^() {
+        NSArray *categories = [OrganizationCategory categories:managedObjectContext];
+        success(categories);
+    } failure:^(NSString *message) {
+        failure(message);
+    }];
     
     return categories;
 }

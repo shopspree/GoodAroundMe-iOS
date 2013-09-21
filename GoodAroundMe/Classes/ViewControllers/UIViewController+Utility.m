@@ -44,5 +44,12 @@
     [self.navigationController pushViewController:obj animated:YES];
 }
 
+- (NSString *)currentViewController
+{
+    UIViewController *currentViewController = self.navigationController.visibleViewController;
+    NSString *currentViewControllerName = [[currentViewController class] description];
+    
+    return currentViewControllerName ? currentViewControllerName : @"Unknown View Controller";
+}
 
 @end

@@ -11,8 +11,10 @@
 #import "UIViewController+Utility.h"
 #import "User+Create.h"
 #import "GAITrackedViewController.h"
+#import "AppConstants.h"
+#import "UIViewController+Utility.h"
 
-@interface AbstractViewController : GAITrackedViewController <UIAlertViewDelegate>
+@interface AbstractViewController : UIViewController <UIAlertViewDelegate>
 
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 

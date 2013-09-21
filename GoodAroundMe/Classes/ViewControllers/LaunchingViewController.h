@@ -11,4 +11,6 @@
 
 @interface LaunchingViewController : AbstractViewController
 
+- (IBAction)unwindFromUserAuthentication:(UIStoryboardSegue *)segue;
+
 @end

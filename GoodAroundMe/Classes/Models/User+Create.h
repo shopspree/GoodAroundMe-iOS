@@ -32,7 +32,7 @@
 + (User *)currentUser:(NSManagedObjectContext *)context;
 
 + (void)signUp:(NSDictionary *)userDictionary success:(void (^)(User *user))success failure:(void (^)(NSString *message))failure;
-+ (void)signIn:(NSDictionary *)userDictionary success:(void (^)(User *user))success failure:(void (^)(NSDictionary *errorData))failure;
++ (void)signIn:(NSDictionary *)userDictionary success:(void (^)(User *user))success failure:(void (^)(NSString *message))failure;
 + (void)signOut:(void (^)())success failure:(void (^)(NSString *message))failure;
 + (void)search:(NSString *)keyword page:(NSInteger)page success:(void (^)(NSArray *usersArray))success failure:(void (^)(NSDictionary *errorData))failure;
 
@@ -45,6 +45,8 @@
 - (void)updateUser:(void (^)(User *user))success failure:(void (^)(NSString *message))failure;
 - (void)follow:(Organization *)organization success:(void (^)())success failure:(void (^)(NSString *message))failure;
 - (void)unfollow:(Organization *)organization success:(void (^)())success failure:(void (^)(NSString *message))failure;
+- (BOOL) isFollowingOrganization:(Organization *)organization;
+
 - (NSData *)toJSON;
 - (NSString *)getFullName;
 - (NSString *)log;

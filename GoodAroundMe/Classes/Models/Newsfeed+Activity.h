@@ -24,13 +24,11 @@
 
 @interface Newsfeed (Activity)
 
-+ (void)synchronizeInContext:(NSManagedObjectContext *)context
-                     success:(void (^)())success
-                     failure:(void (^)(NSString *message))failure;
-
++ (void)newsfeedFromServer:(NSManagedObjectContext *)context success:(void (^)())success failure:(void (^)(NSString *message))failure;
 + (Newsfeed *)newsfeedWithActivity:(NSDictionary *)activityDictionary inManagedObjectContext:(NSManagedObjectContext *)context;
 
 - (void)setWithDictionary:(NSDictionary *)activityDictionary;
 - (void)updateWithDictionary:(NSDictionary *)activityDictionary;
+- (void)log;
 
 @end

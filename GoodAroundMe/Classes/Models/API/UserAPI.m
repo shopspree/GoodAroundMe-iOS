@@ -98,25 +98,16 @@
     }];
 }
 
-+ (void)signIn:(NSDictionary *)userDictionary success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSDictionary *errorData))failure
++ (void)signIn:(NSDictionary *)userDictionary success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure
 {
     NSData *json = [ApplicationHelper constructJSON:userDictionary];
     
-    NSURLRequest *request = [BaseAPI postRequestWithURL:API_SIGN_IN withJSON:json];
-    
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        if ([response statusCode] == 200) {
-            NSDictionary *responseDictionary = (NSDictionary *)JSON;
-            success(responseDictionary);
-        } 
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-        NSLog(@"[DEBUG] [%@] %d error!!!", [[self class] description], [response statusCode]);
-        
-        NSDictionary *errorData = (NSDictionary *)JSON;
-        failure(errorData);
+    [BaseAPI postRequestWithURL:API_SIGN_IN json:json success:^(NSDictionary *responseDictionary) {
+        success(responseDictionary);
+    } failure:^(NSString *message) {
+        NSLog(@"[DEBUG] <%@> Error sign in with message: %@", [[self class] description], message);
+        failure(message);
     }];
-    
-    [operation start];
 }
 
 + (void)signOut:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure

@@ -9,11 +9,13 @@
 #import <AWSS3/AWSS3.h>
 #import "AbstractViewController.h"
 #import "Organization+Create.h"
+#import "OrganizationCategory+Create.h"
 #import "SettingsViewController.h"
 
 @interface OrganizationSettingsViewController : AbstractViewController <UINavigationControllerDelegate,UIImagePickerControllerDelegate, AmazonServiceRequestDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 
 @property (nonatomic, strong) Organization *organization;
+@property (strong, nonatomic) OrganizationCategory *category;
 @property (nonatomic, strong) NSString *organizationName;
 @property (nonatomic, strong) NSString *organizationLocation;
 @property (nonatomic, strong) NSString *organizationAbout;
@@ -22,5 +24,6 @@
 - (void)saveOrganization;
 - (void)completion;
 - (void)uploadImageToAmazon;
+- (void)createOrganization;
 
 @end

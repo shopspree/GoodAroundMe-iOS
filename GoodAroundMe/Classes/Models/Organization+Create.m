@@ -30,7 +30,6 @@
         NSArray *matches = [context executeFetchRequest:request error:&error];
         
         // Check what happened in the fetch
-        
         if (!matches || ([matches count] > 1)) {  // nil means fetch failed; more than one impossible (unique!)
             // handle error
         } else if (![matches count]) { // none found, so let's create a Photo for that Flickr photo
@@ -40,7 +39,6 @@
             organization = [matches lastObject];
             [organization setWithDictionary:organizationDictionary];
         }
-        
     }
     
     return organization;
@@ -111,15 +109,15 @@
 {
     NSMutableArray *posts = [[self fetchOrganizationPosts] mutableCopy];
     
-    [OrganizationAPI postsForOrganization:self success:^(NSDictionary *reponseDictionary) {
-        NSMutableArray *posts = [reponseDictionary[@"posts"] mutableCopy];
+    [OrganizationAPI newsfeedForOrganization:self success:^(NSDictionary *reponseDictionary) {
+        NSMutableArray *activities = [reponseDictionary[@"activities"] mutableCopy];
         
-        for (NSDictionary *postDictionary in posts) {
-            Post *post = [Post postWithDictionary:postDictionary inManagedObjectContext:self.managedObjectContext];
-            post.organization = self;
+        for (NSDictionary *activityDictionary in activities) {
+            Newsfeed *newsfeed = [Newsfeed newsfeedWithActivity:activityDictionary[ACTIVITY] inManagedObjectContext:self.managedObjectContext];
+            newsfeed.post.organization = self;
         }
         
-        posts = [[self fetchOrganizationPosts] mutableCopy];
+        NSArray *posts = [[self fetchOrganizationPosts] mutableCopy];
         success(posts);
     } failure:^(NSString *message) {
         failure(message);
@@ -197,8 +195,9 @@
 
 - (void)setWithDictionary:(NSDictionary *)organizationDictionary
 {
-    if ([organizationDictionary[ORGANIZATION_NAME] description]) {
-        self.uid = [organizationDictionary[ORGANIZATION_ID] description];
+    self.uid = [organizationDictionary[ORGANIZATION_ID] description];
+    
+    if (organizationDictionary[ORGANIZATION_NAME]) {
         self.name = [organizationDictionary[ORGANIZATION_NAME] description];
         self.followers_count = [ApplicationHelper numberFromString:[organizationDictionary[ORGANIZATION_FOLLOWERS_COUNT] description]];
         self.posts_count = [ApplicationHelper numberFromString:[organizationDictionary[ORGANIZATION_POSTS_COUNT] description]];
@@ -206,10 +205,11 @@
         self.about = [organizationDictionary[ORGANIZATION_ABOUT] description];
         self.web_site_url = [organizationDictionary[ORGANIZATION_WEBSITE_URL] description];
         self.location = [organizationDictionary[ORGANIZATION_LOCATION] description];
-        self.is_followed = [NSNumber numberWithBool:[organizationDictionary[ORGANIZATION_IS_FOLLOWED] boolValue]];
-        
-    }    
+        User *currentUser = [User currentUser:self.managedObjectContext];
+        self.is_followed = [NSNumber numberWithBool:[currentUser isFollowingOrganization:self]];//[NSNumber numberWithBool:[organizationDictionary[ORGANIZATION_IS_FOLLOWED] boolValue]];
+    }
 }
+
 
 - (NSData *)toJSON
 {
@@ -230,6 +230,11 @@
                                     organizationDictioanry, ORGANIZATION, nil];
     
     return jsonDictionary;
+}
+
+- (NSString *)log
+{
+    return [NSString stringWithFormat:@"[DEBUG] <Organization+Create> %@:\n\tname: %@ \n\turl: %@ \n\tcategory: %@\n\tfollowers_count: %@\n\tposts_count: %@",  self.uid, self.name, self.image_thumbnail_url, self.category.name, self.followers_count, self.posts_count];
 }
 
 @end

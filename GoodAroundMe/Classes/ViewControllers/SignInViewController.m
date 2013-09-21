@@ -13,6 +13,7 @@
 @interface SignInViewController ()
 
 @property (strong, nonatomic) IBOutlet UIButton *logInButton;
+@property (strong, nonatomic) IBOutlet UIButton *backButton;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 @end
@@ -44,7 +45,9 @@
 
 - (IBAction)cancelButtonClicked:(id)sender
 {
+    self.backButton.userInteractionEnabled = NO;
     [self.navigationController popViewControllerAnimated:YES];
+    self.backButton.userInteractionEnabled = YES;
 }
 
 - (IBAction)tapBackground:(id)sender
@@ -86,10 +89,10 @@
             [self.activityIndicator startAnimating];
             
             [User signIn:userDictionary success:^(User *user) {
-                NSString *identifier =  STORYBOARD_LANDING_PAGE;
-                [self navigateStoryboardWithIdentifier:identifier];
-            } failure:^(NSDictionary *errorData) {
-                [self fail:@"Login" withMessage:errorData[@"errors"]];
+                NSLog(@"[DEBUG] <SignInViewController> Login success for user %@", user.email);
+                [self dismissViewControllerAnimated:YES completion:nil];
+            } failure:^(NSString *message) {
+                [self fail:@"Login" withMessage:message];
                 self.logInButton.hidden = NO;
                 
                 self.logInButton.hidden = YES;

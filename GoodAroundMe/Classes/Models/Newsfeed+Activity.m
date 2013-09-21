@@ -17,8 +17,7 @@
 
 @implementation Newsfeed (Activity)
 
-+ (void)synchronizeInContext:(NSManagedObjectContext *)context success:(void (^)())success
-failure:(void (^)(NSString *message))failure
++ (void)newsfeedFromServer:(NSManagedObjectContext *)context success:(void (^)())success failure:(void (^)(NSString *message))failure
 {
     [FeedAPI newsfeeds:^(NSDictionary *responseDictionary) {
         NSArray *newsfeedArray = responseDictionary[@"activities"];
@@ -60,7 +59,7 @@ failure:(void (^)(NSString *message))failure
                 
     } else {
         newsfeed = [matches lastObject];
-        [newsfeed updateWithDictionary:activityDictionary];
+        [newsfeed setWithDictionary:activityDictionary];
     }
     
     return newsfeed;
@@ -95,18 +94,16 @@ failure:(void (^)(NSString *message))failure
     [self.post setWithDictionary:activityDictionary[ACTIVITY_POST]];
 }
 
-- (NSString *)description
+- (void)log
 {
-    NSString *desc = [NSString stringWithFormat:@"\n[Newsfeed] uid=%@, type=%@, created_at=%@, updated_at=%@, post=%@, comment=%@, likes=%@",
+    NSLog(@"[DEBUG] <Newsfeed+Activity> Newsfeed \n\tuid=%@, \n\ttype=%@, \n\tcreated_at=%@, \n\tupdated_at=%@, \n\tpost=%@, \n\tcomment=%@, \n\tlikes=%@",
                       [self.uid description],
                       [self.type description],
                       [self.created_at description],
                       [self.updated_at description],
                       [self.post description],
                       [self.comment description],
-                      [self.like description]];
-    
-    return desc;
+                      [self.like description]);
 }
 
 @end

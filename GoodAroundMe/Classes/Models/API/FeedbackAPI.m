@@ -13,10 +13,10 @@
 
 + (void)reportProblem:(NSString *)area content:(NSString *)content screenshotURL:(NSString *)screenshotURL success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure
 {
-    NSDictionary *feedbackDictionary = [NSDictionary dictionaryWithObjectsAndKeys:[NSDictionary dictionaryWithObjectsAndKeys:area, @"area", content, @"report", nil],@"problem", nil];
-    NSData *json = [ApplicationHelper constructJSON:feedbackDictionary];
+    NSDictionary *problemDictionary = [NSDictionary dictionaryWithObjectsAndKeys:[NSDictionary dictionaryWithObjectsAndKeys:area, @"area", content, @"report", screenshotURL, @"screenshot_url", nil],@"problem", nil];
+    NSData *json = [ApplicationHelper constructJSON:problemDictionary];
     
-    [BaseAPI putRequestWithURL:API_USER json:json success:^(NSDictionary *responseDictionary) {
+    [BaseAPI postRequestWithURL:API_PROBLEMS_CREATE json:json success:^(NSDictionary *responseDictionary) {
         success(responseDictionary);
     } failure:^(NSString *message) {
         failure(message);

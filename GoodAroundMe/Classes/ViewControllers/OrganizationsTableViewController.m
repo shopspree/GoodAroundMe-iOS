@@ -12,6 +12,7 @@
 #import "OrganizationCell.h"
 #import "CoreDataFactory.h"
 #import "OrganizationProfileViewController.h"
+#import "NewOrganizationViewController.h"
 
 @interface OrganizationsTableViewController ()
 
@@ -62,7 +63,6 @@
                                                                             managedObjectContext:self.category.managedObjectContext
                                                                               sectionNameKeyPath:nil
                                                                                        cacheName:nil];
-        NSLog(@"self.category.organizations = %d || %d", [self.category.organizations count], [[[self.fetchedResultsController sections] objectAtIndex:0] numberOfObjects]);
     } else {
         self.fetchedResultsController = nil;
     }
@@ -70,12 +70,20 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    [super prepareForSegue:segue sender:sender];
+    
     if ([segue.identifier isEqualToString:STORYBOARD_ORGANIZATION_PROFILE]) {
         if ([segue.destinationViewController isKindOfClass:[OrganizationProfileViewController class]]) {
             OrganizationProfileViewController *organizationProfileVC = (OrganizationProfileViewController *)segue.destinationViewController;
             NSIndexPath *indexPath = (NSIndexPath *)sender;
             Organization *organization = [self.fetchedResultsController objectAtIndexPath:indexPath];
             organizationProfileVC.organization = organization;
+        }
+    } else if ([segue.identifier isEqualToString:STORYBOARD_ORGANIZATION_NEW]) {
+        if ([segue.destinationViewController isKindOfClass:[NewOrganizationViewController class]]) {
+            NewOrganizationViewController *newOrganizationVC = segue.destinationViewController;
+            newOrganizationVC.category = self.category;
+            NSLog(@"[DEBUG] <OrganizationsTableViewController> Segue to %@ with category of %@", segue.identifier, newOrganizationVC.category.name);
         }
     }
 }
@@ -118,7 +126,7 @@
 
 - (IBAction)newOrganization:(id)sender
 {
-    [self performSegueWithIdentifier:STORYBOARD_ORGANIZATION_SETTINGS sender:self];
+    [self performSegueWithIdentifier:STORYBOARD_ORGANIZATION_NEW sender:self];
 }
 
 - (IBAction)followButtonAction:(id)sender

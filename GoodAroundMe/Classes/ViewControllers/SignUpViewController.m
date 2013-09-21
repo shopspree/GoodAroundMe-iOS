@@ -73,7 +73,6 @@
         
     }
     
-    
     return YES;
 }
 
@@ -98,7 +97,8 @@
             
             [User signUp:userDictionary success:^(User *user){
                 [self.activityIndicator stopAnimating];
-                [self navigateStoryboardWithIdentifier:STORYBOARD_EXPLORE];
+                //[self navigateStoryboardWithIdentifier:STORYBOARD_EXPLORE];
+                [self dismissViewControllerAnimated:YES completion:nil];
             } failure:^(NSString *message) {
                 [self.activityIndicator stopAnimating];
                 [self fail:@"Sign up" withMessage:message];

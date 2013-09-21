@@ -31,5 +31,6 @@
 - (NSArray *)followersForOrganization:(void (^)(NSArray *followers))success failure:(void (^)(NSString *message))failure;
 - (NSData *)toJSON;
 - (NSDictionary *)toDictionary;
+- (NSString *)log;
 
 @end

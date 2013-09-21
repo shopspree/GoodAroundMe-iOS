@@ -25,19 +25,19 @@
     self.navigationController.navigationBarHidden = YES;
     
     if ([[NSUserDefaults standardUserDefaults] stringForKey:USER_EMAIL]) {
-        [self performSegueWithIdentifier:@"SignIn" sender:self];
+        [self performSegueWithIdentifier:STORYBOARD_SIGN_IN sender:self];
     }
     
 }
 
 - (IBAction)signUpButtonAction:(id)sender
 {
-    [self performSegueWithIdentifier:@"SignUp" sender:self];
+    [self performSegueWithIdentifier:STORYBOARD_SIGN_UP sender:self];
 }
 
 - (IBAction)signInButtonAction:(id)sender
 {
-    [self performSegueWithIdentifier:@"SignIn" sender:self];
+    [self performSegueWithIdentifier:STORYBOARD_SIGN_IN sender:self];
 }
 
 @end

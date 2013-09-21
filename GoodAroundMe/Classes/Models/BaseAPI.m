@@ -126,7 +126,7 @@
     [request setValue:[NSString stringWithFormat:@"%d", [jsonData length]] forHTTPHeaderField:@"Content-Length"];
     [request setHTTPBody: jsonData];
     
-    NSLog(@"[BaseAPI] <BaseAPI> Call for url:%@ %@", httpMethod, [url description]);
+    NSLog(@"[DEBUG] <BaseAPI> Call for url:%@ %@", httpMethod, [url description]);
     
     return request;
 }
@@ -159,18 +159,19 @@
     
     if (statusCode == 401) {
         // check if the user is getting a 401 but is not changing password where in this process 
-        if ([request.URL.absoluteString rangeOfString:@"update_password.json"].location == NSNotFound) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_HTTP_401 object:self];
+        if ([request.URL.absoluteString rangeOfString:@"update_password.json"].location == NSNotFound &&
+            [request.URL.absoluteString rangeOfString:@"/users/sign_in.json"].location == NSNotFound) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:NotificationUnauthorized object:self];
         }
     
         
     } else if (statusCode == 500) {
-        message = @"Oops, we have a problem and we are working to fix it";
+        message = [NSString stringWithFormat:@"Error %d: %@", ErrorCodeServerError500, ErrorMessageWorkingToFix];
         
     } else {
         NSString *messageTopic = @"Error with details: ";//[[errorData[@"errors"] allKeys] lastObject];
         NSString *messageContent = errorData[@"errors"];//[[errorData[@"errors"] allValues] lastObject][0];
-        message = (messageTopic && messageContent) ? [NSString stringWithFormat:@"%@ %@", messageTopic, messageContent] : @"Oops, an error occured. Please try later";
+        message = (messageTopic && messageContent) ? [NSString stringWithFormat:@"%@ %@", messageTopic, messageContent] : ErrorMessageLetUsKnow;
     }
     
     return message;

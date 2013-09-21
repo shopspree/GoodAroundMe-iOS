@@ -160,7 +160,7 @@
     NSLog(@"[DEBUG] <UserSettingsViewController> AlertView %d clickedButtonAtIndex %d", alertView.tag, buttonIndex);
     if (alertView.tag == ALERT_VIEW_TAG && buttonIndex == 1) {
         [User signOut:^{
-            [self navigateStoryboardWithIdentifier:SIGNUP_SIGNIN];
+            [self navigateStoryboardWithIdentifier:STORYBOARD_LANDING_PAGE];
         } failure:^(NSString *message) {
             [self fail:@"Sign out failed" withMessage:message];
         }];

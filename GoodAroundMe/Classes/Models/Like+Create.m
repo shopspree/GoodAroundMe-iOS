@@ -75,6 +75,7 @@
         
         if (!matches || ([matches count] > 1)) {  // nil means fetch failed; more than one impossible (unique!)
             // handle error
+            NSLog(@"[ERROR] <Like+Create> likeOnPost for user %@ and post %@ Failed", user.email, post.uid);
         } else if (![matches count]) { // none found, so let's create a Photo for that Flickr photo
             // do nothing
         } else { // found the Photo, just return it from the list of matches (which there will only be one of)

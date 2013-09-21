@@ -13,11 +13,18 @@
 #define SERVER_HOST @"goodaroundme.herokuapp.com"
 #define SERVER_PORT @"80"
 
-#define NOTIFICATION_HTTP_401 @"Unauthorized" 
-
+// Notifications
 extern NSString *const NotificationUnauthorized;
 extern NSString *const NotificationCommentsCountChanged;
 extern NSString *const NotificationLikesCountChanged;
+
+// Error messages
+extern NSString *const ErrorMessageLetUsKnow;
+extern NSString *const ErrorMessageWorkingToFix;
+
+// Error codes
+extern NSInteger const ErrorCodeManagedObjectContextNil;
+extern NSInteger const ErrorCodeServerError500;
 
 @interface AppConstants : NSObject
 

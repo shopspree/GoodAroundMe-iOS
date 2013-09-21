@@ -12,6 +12,12 @@ NSString *const NotificationUnauthorized = @"Unauthorized";
 NSString *const NotificationCommentsCountChanged = @"CommentsCountChanged";
 NSString *const NotificationLikesCountChanged = @"LikesCountChanged";
 
+NSString *const ErrorMessageLetUsKnow =  @"Oops, an error occured. Let us know";
+NSString *const ErrorMessageWorkingToFix = @"Oops, we have a problem and we are working to fix it";
+
+NSInteger const ErrorCodeManagedObjectContextNil = 1;
+NSInteger const ErrorCodeServerError500 = 2;
+
 @implementation AppConstants
 
 @end

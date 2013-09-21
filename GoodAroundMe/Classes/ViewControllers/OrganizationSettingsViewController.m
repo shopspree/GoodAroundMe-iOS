@@ -10,8 +10,8 @@
 #import <QuartzCore/QuartzCore.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "OrganizationSettingsViewController.h"
-#import "OrganizationCategory+Create.h"
 #import "UIImage+Resize.h"
+#import "PlaceholderTextArea.h"
 
 @interface OrganizationSettingsViewController () <UITextViewDelegate>
 
@@ -24,10 +24,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *organizationNameTextField;
 @property (weak, nonatomic) IBOutlet UITextField *locationTextField;
 @property (weak, nonatomic) IBOutlet UILabel *categoryLabel;
-@property (weak, nonatomic) IBOutlet UITextView *aboutTextView;
-@property (weak, nonatomic) IBOutlet UILabel *FollowersLabel;
-@property (weak, nonatomic) IBOutlet UILabel *updatesLabel;
-@property (weak, nonatomic) IBOutlet UILabel *fundsRaisedLabel;
+@property (weak, nonatomic) IBOutlet PlaceholderTextView *aboutTextView;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *saveNavButton;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *tap;
@@ -48,7 +45,7 @@ static NSInteger pickerSize = 216;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    /* */
     // register for keyboard notifications
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShow:)
@@ -68,12 +65,14 @@ static NSInteger pickerSize = 216;
     self.categoriesPicker.showsSelectionIndicator = YES;
     [self.view addSubview:self.categoriesPicker];
     
-    self.aboutTextView.delegate = self;
-    self.aboutTextView.text = AboutPlaceHolder;
+    self.aboutTextView.placeholderText = AboutPlaceHolder;
     
     self.logoImageView.tag = LogoImageTag;
+    self.logoImageView.layer.borderWidth = 1.0f;
+    self.logoImageView.layer.borderColor = [[UIColor grayColor] CGColor];
+    //self.logoImageView.contentMode = UIViewContentModeScaleAspectFill;
     
-    UITapGestureRecognizer *tapOnCategory = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showCategories:)];
+    UITapGestureRecognizer *tapOnCategory = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapOnCategory:)];
     tapOnCategory.numberOfTouchesRequired = 1;
     [self.categoryLabel addGestureRecognizer:tapOnCategory];
     self.categoryLabel.tag = CategoryLabelTag;
@@ -81,37 +80,47 @@ static NSInteger pickerSize = 216;
     
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
     
-    NSLog(@"[DEBUG] <OrganizationSettingsViewController> Settings for organziation uid %@ \nname %@ location %@ category %@ about %@ \nupdates count %@ \nfollowers count %@", self.organization.uid, self.organization.name, self.organization.location, self.organization.category.name, self.organization.about, self.organization.posts_count, self.organization.followers_count);
+    NSLog(@"[DEBUG] <%@> Settings for organziation uid %@ \nname %@ location %@ category %@ about %@ \nupdates count %@ \nfollowers count %@", [self currentViewController], self.organization.uid, self.organization.name, self.organization.location, self.organization.category.name, self.organization.about, self.organization.posts_count, self.organization.followers_count);
+    
+    
+    [self refresh];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    [self refresh];
 }
 
 - (void)refresh
 {
-    [self.logoImageView setImageWithURL:[NSURL URLWithString:self.organization.image_thumbnail_url] placeholderImage:[UIImage imageNamed:@"Default.png"]completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
+    [self.logoImageView setImageWithURL:[NSURL URLWithString:self.organization.image_thumbnail_url] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
         image = [image scaleToSize:CGSizeMake(self.logoImageView.frame.size.width, self.logoImageView.frame.size.height)];
     }];
-    //self.logoImageView.contentMode = UIViewContentModeScaleAspectFill;
-    self.logoImageView.layer.borderWidth = 1.0f;
-    self.logoImageView.layer.borderColor = [[UIColor grayColor] CGColor];
     
     self.organizationNameTextField.text = self.organization.name;
     
     self.locationTextField.text = self.organization.location;
     
-    self.categoryLabel.text = self.organization.category ? self.organization.category.name : @"Set category";
+    if (self.category) {
+        self.categoryLabel.text = self.category.name;
+    }
     
     self.aboutTextView.text = self.organization.about;
-    
-    self.updatesLabel.text = [NSString stringWithFormat:@"%@ Updates", self.organization ? self.organization.posts_count : [NSNumber numberWithInteger:0]];
-    self.FollowersLabel.text = [NSString stringWithFormat:@"%@ Followers", self.organization ? self.organization.followers_count : [NSNumber numberWithInteger:0]];
-    
-    NSLog(@"[DEBUG] <OrganizationSettingsViewController> Picker Y position is %f", self.categoriesPicker.frame.origin.y);
+}
+
+- (void)setOrganization:(Organization *)organization
+{
+    _organization = organization;
+    if (organization.category) {
+        self.category = organization.category;
+    }
+}
+
+- (void)setCategory:(OrganizationCategory *)category
+{
+    _category = category;
+    self.categoryLabel.text = category.name;
+    NSLog(@"[DEBUG] <OrganizationSettingsViewController> Set category with name %@", category.name);
 }
 
 - (SettingsViewController *)settingsController
@@ -190,8 +199,8 @@ static NSInteger pickerSize = 216;
     if (self.organization) {
         self.organization.name = self.organizationNameTextField.text;
         self.organization.location = self.locationTextField.text;
-        self.organization.about = [self.aboutTextView.text isEqualToString:AboutPlaceHolder]? nil : self.aboutTextView.text;
-        self.organization.category = [self.categories objectAtIndex:[self.categoriesPicker selectedRowInComponent:0]];
+        self.organization.about = self.aboutTextView.actualText;
+        self.organization.category = self.category;
     }
 }
 
@@ -259,32 +268,11 @@ static NSInteger pickerSize = 216;
     [self hidePicker];
 }
 
-- (IBAction)showCategories:(id)sender
+- (IBAction)tapOnCategory:(id)sender
 {
     [self showPicker];
 }
 
-#pragma mark - UITextViewDelegate
-
-- (BOOL) textViewShouldBeginEditing:(UITextView *)textView
-{
-    if ([self.aboutTextView.text isEqualToString:AboutPlaceHolder]) {
-        self.aboutTextView.text = @"";
-    }
-    self.aboutTextView.textColor = [UIColor blackColor];
-    
-    return YES;
-}
-
--(void) textViewDidChange:(UITextView *)textView
-{
-    
-    if (self.aboutTextView.text.length == 0){
-        self.aboutTextView.textColor = [UIColor lightGrayColor];
-        self.aboutTextView.text = AboutPlaceHolder;
-        [self.aboutTextView resignFirstResponder];
-    }
-}
 #pragma mark - UIImagePickerControllerDelegate
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
@@ -361,8 +349,7 @@ static NSInteger pickerSize = 216;
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
-    OrganizationCategory *category = [self.categories objectAtIndex:row];
-    self.categoryLabel.text = category.name;
+    self.category = [self.categories objectAtIndex:row];
 }
 
 - (void)showPicker
@@ -370,7 +357,7 @@ static NSInteger pickerSize = 216;
     CGFloat pickerPoition = self.categoriesPicker.frame.origin.y;
     
     if (pickerPoition >= self.view.frame.size.height) {
-        [self.view addGestureRecognizer:self.tap]; // add tap gesture to tap away from the keyboard
+        //[self.view addGestureRecognizer:self.tap]; // add tap gesture to tap away from the keyboard
         [self movePickerUp:YES];
     }
 }
@@ -380,7 +367,7 @@ static NSInteger pickerSize = 216;
     CGFloat pickerPoition = self.categoriesPicker.frame.origin.y;
     
     if (pickerPoition < self.view.frame.size.height) {
-        [self.view removeGestureRecognizer:self.tap]; // remove tap gesture
+        //[self.view removeGestureRecognizer:self.tap]; // remove tap gesture
         [self movePickerUp:NO];
     }
 }
@@ -405,7 +392,7 @@ static NSInteger pickerSize = 216;
 - (void)keyboardWillShow:(UITextView *)textView
 {
     self.isKeyboardShown = YES;
-    [self.view addGestureRecognizer:self.tap]; // add tap gesture to tap away from the keyboard
+    //[self.view addGestureRecognizer:self.tap]; // add tap gesture to tap away from the keyboard
     
     [self animateTextField:textView up:YES];
     
@@ -415,7 +402,7 @@ static NSInteger pickerSize = 216;
 - (void)keyboardWillHide:(UITextView *)textView
 {
     self.isKeyboardShown = NO;
-    [self.view removeGestureRecognizer:self.tap]; // remove tap gesture
+    //[self.view removeGestureRecognizer:self.tap]; // remove tap gesture
     
     [self animateTextField:textView up:NO];
 }

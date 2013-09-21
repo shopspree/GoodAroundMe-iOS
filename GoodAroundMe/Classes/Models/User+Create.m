@@ -95,7 +95,7 @@
     }];
 }
 
-+ (void)signIn:(NSDictionary *)userDictionary success:(void (^)(User *user))success failure:(void (^)(NSDictionary *errorData))failure
++ (void)signIn:(NSDictionary *)userDictionary success:(void (^)(User *user))success failure:(void (^)(NSString *message))failure
 {
     [UserAPI signIn:userDictionary success:^(NSDictionary *responseDictionary) {
         [User storeUser:responseDictionary];
@@ -106,8 +106,8 @@
             success(authenticatedUser);
         }];
         
-    } failure:^(NSDictionary *errorData) {
-        failure(errorData);
+    } failure:^(NSString *message) {
+        failure(message);
     }];
 }
 
@@ -275,6 +275,22 @@
         organization.is_followed = [NSNumber numberWithBool:YES];
         failure(message);
     }];
+}
+
+
+
+- (BOOL) isFollowingOrganization:(Organization *)organization
+{
+    BOOL isFollowing = NO;
+    
+    NSArray *following = [self.following allObjects];
+    for (Organization *followed in following) {
+        if ([followed.uid isEqualToString:organization.uid]) {
+            return YES;
+        }
+    }
+    
+    return isFollowing;
 }
 
 - (NSData *)toJSON

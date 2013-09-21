@@ -32,7 +32,7 @@
                                                  name:@"Unauthorized"
                                                object:nil];
     
-    [self gaiManualScreenMeasurement];
+    //[self gaiManualScreenMeasurement];
 }
 
 
@@ -56,12 +56,12 @@
 
 - (void) performLoginIfRequired:(UIViewController *)source
 {
-    [self navigateStoryboardWithIdentifier:SIGNUP_SIGNIN];
+    [self navigateStoryboardWithIdentifier:STORYBOARD_LANDING_PAGE];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    NSLog(@"[DEBUG] <AbstractTableViewController> Segue to %@", [segue.destinationViewController class]);
+    NSLog(@"[DEBUG] <%@> Segue to %@", [self currentViewController], [segue.destinationViewController class]);
     
     UIViewController *destinationViewController = segue.destinationViewController;
     if ([destinationViewController isKindOfClass:[UINavigationController class]]) {
@@ -72,7 +72,7 @@
     if ([destinationViewController respondsToSelector:@selector(setManagedObjectContext:)]) {
         [destinationViewController performSelector:@selector(setManagedObjectContext:) withObject:self.managedObjectContext];
         if (!self.managedObjectContext) {
-            NSLog(@"[ERROR] <AbstractTableViewController> Self managedObjectContext is empty on segue from %@", segue.identifier);
+            NSLog(@"[ERROR] <%@> Self managedObjectContext is empty on segue from %@", [self currentViewController], segue.identifier);
         }
     } 
 }

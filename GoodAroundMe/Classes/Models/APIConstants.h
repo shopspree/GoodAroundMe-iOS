@@ -50,6 +50,7 @@
 #define API_ORGANIZATION_CREATE         @"/api/v1/organization_categories/%@/organizations.json"
 #define API_ORGANIZATION_UPDATE         @"/api/v1/organizations/%@.json"
 #define API_ORGANIZATION_FOLLOWERS      @"/api/v1/organizations/%@/followers.json"
+#define API_PROBLEMS_CREATE             @"/api/v1/problems.json"
 
 
 

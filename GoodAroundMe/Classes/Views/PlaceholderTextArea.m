@@ -8,6 +8,12 @@
 
 #import "PlaceholderTextArea.h"
 
+@interface PlaceholderTextView ()
+
+@property (nonatomic) BOOL inEditMode;
+
+@end
+
 @implementation PlaceholderTextView
 
 - (id) initWithFrame:(CGRect)frame
@@ -33,6 +39,7 @@
         self.delegate = self;
         self.realTextColor = [UIColor blackColor];
         self.placeholderColor = [UIColor lightGrayColor];
+        self.inEditMode = NO;
     }
 }
 
@@ -42,15 +49,27 @@
     
     if (placeholderText) {
         self.text = placeholderText;
-        self.textColor = self.placeholderColor;
     }
+}
+
+- (void)setText:(NSString *)text
+{
+    if (!self.inEditMode && (!text || text.length == 0)) {
+        text = self.placeholderText;
+    }
+    
+    self.textColor = [text isEqualToString:self.placeholderText] ? self.placeholderColor : self.realTextColor;
+    
+    [super setText:text];
 }
 
 #pragma mark - UITextViewDelegate
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
-    NSLog(@"[DEBUG] <PlaceholderTextView> Placeholder text is: \n%@ \n\nText is: \n%@", self.placeholderText, self.text);
+    NSLog(@"[DEBUG] <PlaceholderTextView> textViewShouldBeginEditing \nPlaceholder: \t%@ \n\tText is: \t%@", self.placeholderText, self.text);
+    self.inEditMode = YES;
+    
     if ([self.text isEqualToString:self.placeholderText]) {
         self.text = @"";
         self.textColor = self.realTextColor;
@@ -61,12 +80,24 @@
 
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
+    self.inEditMode = NO;
+    NSLog(@"[DEBUG] <PlaceholderTextView> textViewDidEndEditing");
     if (self.text.length == 0){
         self.textColor = self.placeholderColor;
         self.text = self.placeholderText;
         [self resignFirstResponder];
     }
 }
+/*
+- (void)textViewDidChange:(UITextView *)textView
+{
+    NSLog(@"[DEBUG] <PlaceholderTextView> textViewDidChange");
+    if (!textView.text || textView.text.length == 0){
+        textView.text = self.placeholderText;
+    }
+    
+    self.textColor = [textView.text isEqualToString:self.placeholderText] ? self.placeholderColor : self.realTextColor;
+}*/
 
 - (NSString *)actualText
 {

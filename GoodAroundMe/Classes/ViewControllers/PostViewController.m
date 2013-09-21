@@ -155,6 +155,8 @@
     self.commentInputTextField.text = nil;
     
     [self.post comment:commentText success:^{
+        [self.postTableViewController.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
+                                                      withRowAnimation:UITableViewRowAnimationAutomatic];
         [self.postTableViewController setupFetchedResultsController];
     } failure:^(NSString *message) {
         [self fail:@"Comment" withMessage:message];
@@ -276,6 +278,7 @@
                                               postFrame.origin.y,
                                               postFrame.size.width,
                                               postFrame.size.height + movement);
+            postFrame = self.postView.frame;
         }];
     } else {
         [UIView animateWithDuration:movementDuration animations:^{

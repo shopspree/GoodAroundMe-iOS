@@ -16,9 +16,6 @@
 #import "FollowersTableViewController.h"
 #import "GiveViewController.h"
 
-#define SECTION_ORGANIZATION_PROFILE 0
-#define SECTION_ORGANIZATION_POSTS 1
-
 #define ACTION_SHEET_DELETE_POST_TAG 2
 
 @interface OrganizationProfileViewController () 
@@ -35,10 +32,12 @@
 
 @implementation OrganizationProfileViewController
 
+static NSInteger SectionOrganizationProfile = 0;
+static NSInteger SectionOrganizationNewsfeed = 1;
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.followButton.selected = [self.organization.is_followed boolValue];
     
     self.title = self.organization.name;
     
@@ -54,23 +53,15 @@
 {
     [super viewWillAppear:animated];
     
-    [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:[NSIndexPath indexPathForRow:0 inSection:0], nil] withRowAnimation:UITableViewRowAnimationFade];
-}
-
-- (void)setOrganization:(Organization *)organization
-{
-    _organization = organization;
+    self.followButton.selected = [self.organization.is_followed boolValue];
     
-    if (organization) {
-        NSString *title = ([organization.is_followed boolValue]) ? @"✓Follow" : @"Follow";
-        [self.followButton setTitle:title forState:UIControlStateNormal];
-    }
+    [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:[NSIndexPath indexPathForRow:0 inSection:0], nil] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (NSArray *)sections
 {
     if (!_sections) {
-        _sections = [NSArray arrayWithObjects:[NSNumber numberWithInt:SECTION_ORGANIZATION_PROFILE], [NSNumber numberWithInt:SECTION_ORGANIZATION_POSTS], nil];
+        _sections = [NSArray arrayWithObjects:[NSNumber numberWithInt:SectionOrganizationProfile], [NSNumber numberWithInt:SectionOrganizationNewsfeed], nil];
     }
     return _sections;
 }
@@ -164,8 +155,7 @@
     CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
     
-    if (indexPath != nil && indexPath.section == SECTION_ORGANIZATION_POSTS)
-    {
+    if (indexPath != nil && indexPath.section == SectionOrganizationNewsfeed) {
         post = self.posts[indexPath.row];
     }
     
@@ -237,13 +227,14 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == SECTION_ORGANIZATION_PROFILE) {
-        return 1;
-    } else if (section == SECTION_ORGANIZATION_POSTS){
-        return [self.posts count];
+    NSInteger numberOfRowsInSection = 0;
+    if (section == SectionOrganizationProfile) {
+        numberOfRowsInSection = 1;
+    } else if (section == SectionOrganizationNewsfeed){
+        numberOfRowsInSection = [self.posts count];
     }
     
-    return 0;
+    return numberOfRowsInSection;
     
 }
 
@@ -254,16 +245,17 @@
     
     UITableViewCell *cell;
     
-    if (indexPath.section == SECTION_ORGANIZATION_PROFILE) {
+    if (indexPath.section == SectionOrganizationProfile) {
         cell = [tableView dequeueReusableCellWithIdentifier:OrganizationProfileCellIdentifier forIndexPath:indexPath];
         OrganizationProfileCell *organizationProfileCell = (OrganizationProfileCell *)cell;
         organizationProfileCell.organization = self.organization;
         
-    } else if (indexPath.section == SECTION_ORGANIZATION_POSTS) {
+    } else if (indexPath.section == SectionOrganizationNewsfeed) {
         cell = [tableView dequeueReusableCellWithIdentifier:PostCellIdentifier forIndexPath:indexPath];
         NewsfeedCell *newsfeedCell = (NewsfeedCell *)cell;
         Post *post = [self.posts objectAtIndex:indexPath.row];
         newsfeedCell.newsfeed = post.newsfeed;
+        NSLog(@"[DEBUG] <PostViewController> in section %d row %d for post %@ and newsfeed uid %@", indexPath.section, indexPath.row, post.title, post.newsfeed.uid);
     }
     
     return cell;
@@ -271,11 +263,11 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CGFloat height = 700.0;
+    CGFloat height = 300.0f;
     
-    if (indexPath.section == SECTION_ORGANIZATION_PROFILE) {
-        height = MAX(self.tableView.frame.size.height, 400);
-    } else if (indexPath.section == SECTION_ORGANIZATION_POSTS) {
+    if (indexPath.section == SectionOrganizationProfile) {
+        height = MAX(self.tableView.frame.size.height, 400.0f);
+    } else if (indexPath.section == SectionOrganizationNewsfeed) {
         UIView *view = [[[NSBundle mainBundle] loadNibNamed:@"NewsfeedPostView" owner:self options:nil] lastObject];
         height = view.frame.size.height;
     }
@@ -303,7 +295,7 @@
     Post *post = nil;
     CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
-    if (indexPath != nil && indexPath.section == SECTION_ORGANIZATION_POSTS)
+    if (indexPath != nil && indexPath.section == SectionOrganizationNewsfeed)
     {
         post = self.posts[indexPath.row];
         

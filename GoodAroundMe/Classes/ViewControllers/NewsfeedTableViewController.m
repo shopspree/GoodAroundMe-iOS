@@ -10,6 +10,7 @@
 #import "NewsfeedTableViewController.h"
 #import "NewsfeedCell.h"
 #import "UploadPostCell.h"
+#import "LoadingCell.h"
 #import "Newsfeed+Activity.h"
 #import "NewsfeedPostView.h"
 #import "CoreDataFactory.h"
@@ -54,30 +55,13 @@
     }
 }
 
-- (void)fetchCoreData:(NSManagedObjectContext *)managedObjectContext
-{
-    if (managedObjectContext) {
-        User *currentUser = [User currentUser:self.managedObjectContext];
-        NSArray *following = [currentUser.following allObjects];
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Newsfeed"];
-        request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"updated_at" ascending:NO]];
-        request.predicate = [NSPredicate predicateWithFormat:@"organization IN %@", following]; // all Organizations the user follows
-        
-        self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:managedObjectContext sectionNameKeyPath:nil cacheName:nil];
-        
-    } else {
-        self.fetchedResultsController = nil;
-    }
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
-    [self validateUserIsFollowing];
-    
     self.selectedPost = nil;
     
+    [self segueToExploreIfUserIsNotFollowing];
     [self refresh];
 }
 
@@ -90,18 +74,37 @@
 - (IBAction)refresh
 {
     [self.refreshControl beginRefreshing];
-    [self fetchCoreData:self.managedObjectContext];
+    [self fetchCoreData];
     
-    [Newsfeed synchronizeInContext:self.managedObjectContext success:^{
+    [Newsfeed newsfeedFromServer:self.managedObjectContext success:^{
         [self.refreshControl endRefreshing];
-        [self fetchCoreData:self.managedObjectContext];
+        [self fetchCoreData];
     } failure:^(NSString *message) {
         [self.refreshControl endRefreshing];
         [self fail:@"Newsfeed" withMessage:message];
     }];
 }
 
-- (void)validateUserIsFollowing
+- (void)fetchCoreData
+{
+    if (self.managedObjectContext) {
+        User *currentUser = [User currentUser:self.managedObjectContext];
+        NSArray *following = [currentUser.following allObjects];
+        
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Newsfeed"];
+        request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"updated_at" ascending:NO]];
+        request.predicate = [NSPredicate predicateWithFormat:@"organization IN %@", following]; // all Organizations the user follows
+        
+        self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:self.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
+        
+    } else {
+        NSLog(@"[ERROR] <NewsfeedTableViewController> self.managedObjectContext is nil");
+        [self fail:@"Newsfeed" withMessage:[NSString stringWithFormat:@"Error %d: loading newsfeed", ErrorCodeManagedObjectContextNil]];
+        self.fetchedResultsController = nil;
+    }
+}
+
+- (void)segueToExploreIfUserIsNotFollowing
 {
     User *user = [User currentUser:self.managedObjectContext];
     if ([user.following count] == 0) {

@@ -20,7 +20,10 @@
     // Start Newrelic agent
     [NewRelicAgent startWithApplicationToken:@"AA0d8b9d2de9628d827e450480bea377a02422d11a"];
     
+    // Crashlytics
+    [Crashlytics startWithAPIKey:@"4ebcf662fbf73c734bf37b5c0b1b1d3ed3a44ea1"];
     
+    /*
     // Start Google Analytics for iOS
     // Optional: automatically send uncaught exceptions to Google Analytics.
     [GAI sharedInstance].trackUncaughtExceptions = YES;
@@ -33,9 +36,8 @@
     
     // Initialize tracker.
     [[GAI sharedInstance] trackerWithTrackingId:@"UA-44088324-1"];
+    */
     
-    // Crashlytics
-    [Crashlytics startWithAPIKey:@"4ebcf662fbf73c734bf37b5c0b1b1d3ed3a44ea1"];
 
     
     return YES;

@@ -16,9 +16,11 @@
 
 @interface OrganizationProfileCell ()
 
-@property (weak, nonatomic) IBOutlet UIImageView *image1;
-@property (weak, nonatomic) IBOutlet UIImageView *image2;
-@property (weak, nonatomic) IBOutlet UIImageView *image3;
+//@property (weak, nonatomic) IBOutlet UIImageView *image1;
+//@property (weak, nonatomic) IBOutlet UIImageView *image2;
+//@property (weak, nonatomic) IBOutlet UIImageView *image3;
+@property (strong, nonatomic) IBOutletCollection(UIImageView) NSArray *imageMosaic;
+
 @property (weak, nonatomic) IBOutlet UIImageView *logoImage;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *locationLabel;
@@ -38,9 +40,12 @@
 {
     _organization = organization;
     if (organization) {
-        [self.image1 setImageWithURL:[NSURL URLWithString:self.imagePicks[0]] placeholderImage:[UIImage imageNamed:@"Default.png"]];
-        [self.image2 setImageWithURL:[NSURL URLWithString:self.imagePicks[1]] placeholderImage:[UIImage imageNamed:@"Default.png"]];
-        [self.image3 setImageWithURL:[NSURL URLWithString:self.imagePicks[2]] placeholderImage:[UIImage imageNamed:@"Default.png"]];
+        NSLog(@"[DEBUG] <OrganizationProfileCell> imageMosaic.count =  %d, imagePicks.count = %d", [self.imageMosaic count], [self.imagePicks count]);
+        for (int i=0; i<[self.imageMosaic count]; i++) {
+            UIImageView *imageView = self.imageMosaic[i];
+            NSString *imageURL = (i < [self.imagePicks count]) ? self.imagePicks[i] : nil;
+            [imageView setImageWithURL:[NSURL URLWithString:imageURL]];
+        }
 
         [self.logoImage setImageWithURL:[NSURL URLWithString:organization.image_thumbnail_url] placeholderImage:[UIImage imageNamed:@"Default.png"]];
         self.logoImage.image = [self.logoImage.image scaleToSize:CGSizeMake(self.logoImage.frame.size.width, self.logoImage.frame.size.height)];
@@ -48,6 +53,7 @@
         self.logoImage.layer.borderColor = [[UIColor grayColor] CGColor];
         
         self.nameLabel.text = organization.name;
+        self.locationLabel.text = organization.location;
         self.categoryLabel.text = organization.category.name;
         self.updatesLabel.text = [NSString stringWithFormat:@"%@ Updates", organization.posts_count];
         self.followersLabel.text = [NSString stringWithFormat:@"%@ Followers", organization.followers_count];
@@ -60,16 +66,17 @@
     if (! _imagePicks) {
         NSMutableSet *picks = [NSMutableSet set];
         NSArray *posts = [self.organization.posts allObjects];
-        if ([posts count] < 3) {
-            NSMutableArray *imagePicksCopy = [NSMutableArray arrayWithCapacity:3];
+        if ([posts count] < [self.imageMosaic count]) {
+            NSMutableArray *imagePicksCopy = [NSMutableArray arrayWithCapacity:[self.imageMosaic count]];
             for (int i=0; i<[posts count]; i++) {
                 Post *post = [posts objectAtIndex:i];
                 Picture *picture = [[post.pictures allObjects] lastObject];
                 
                 if (picture) {
-                    [imagePicksCopy addObject:post];
+                    [imagePicksCopy addObject:picture.url];
                 }
             }
+            
             _imagePicks = imagePicksCopy;
         } else {
             do {
@@ -81,7 +88,7 @@
                     [picks addObject:picture.url];
                 }
                 
-            } while ([picks count] < 3);
+            } while ([picks count] < [self.imageMosaic count]);
             _imagePicks = [picks allObjects];
         }
         

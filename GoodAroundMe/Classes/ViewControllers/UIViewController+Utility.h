@@ -13,5 +13,6 @@
 - (void)fail:(NSString *)title withMessage:(NSString *)message;
 - (void)info:(NSString *)title withMessage:(NSString *)message;
 - (void)navigateStoryboardWithIdentifier:(NSString *)identifier;
+- (NSString *)currentViewController;
 
 @end
