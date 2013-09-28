@@ -33,6 +33,7 @@
 @property (nonatomic, strong) Post *selectedPost;
 @property (nonatomic, strong) NSArray *uploads;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *cameraBarButton;
+@property (strong, nonatomic) UIView *loadingView;
 
 @end
 
@@ -48,6 +49,8 @@
                   forControlEvents:UIControlEventValueChanged];
     
     self.navigationController.navigationBarHidden = NO;
+    [self.view addSubview:self.loadingView];
+    [self startLoading:YES];
     
     User *currentUser = [User currentUser:self.managedObjectContext];
     if (!currentUser.organization) {
@@ -71,15 +74,19 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - private methods
+
 - (IBAction)refresh
 {
     [self.refreshControl beginRefreshing];
     [self fetchCoreData];
     
     [Newsfeed newsfeedFromServer:self.managedObjectContext success:^{
+        [self startLoading:NO];
         [self.refreshControl endRefreshing];
         [self fetchCoreData];
     } failure:^(NSString *message) {
+        [self startLoading:NO];
         [self.refreshControl endRefreshing];
         [self fail:@"Newsfeed" withMessage:message];
     }];
@@ -131,6 +138,42 @@
 {
     [self selectPost:sender];
     [self performSegueWithIdentifier:identifier sender:sender];
+}
+
+- (UIView *)loadingView
+{
+    if (!_loadingView) {
+        static NSInteger loadingViewHeight = 40;
+        static NSInteger activityIntegerRadius = 20;
+        
+        _loadingView = [[UIView alloc] initWithFrame:CGRectMake(0, -1*loadingViewHeight, self.view.frame.size.width, loadingViewHeight)];
+        _loadingView.alpha = 0.3f;
+        _loadingView.backgroundColor = [UIColor blackColor];
+        
+        CGRect activityIndicatorRect = CGRectMake(roundf((_loadingView.frame.size.width - activityIntegerRadius) / 2),
+                                                  roundf((_loadingView.frame.size.height - activityIntegerRadius) / 2),
+                                                  activityIntegerRadius,
+                                                  activityIntegerRadius);
+        UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:activityIndicatorRect];
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhite;
+        [activityIndicator startAnimating];
+        
+        [_loadingView addSubview:activityIndicator];
+    }
+    return _loadingView;
+}
+
+- (void)startLoading:(BOOL)start
+{
+    const float movementDuration = 0.27f; // tweak as needed
+    CGFloat y = start ? 0 : -1*self.loadingView.frame.size.height;
+    
+    [UIView animateWithDuration:movementDuration animations:^{
+        self.loadingView.frame = CGRectMake(0,
+                                            y,
+                                            self.loadingView.frame.size.width,
+                                            self.loadingView.frame.size.height);
+    }];
 }
 
 #pragma mark - Storyboard
@@ -221,7 +264,17 @@
     
     Newsfeed *newsfeed = [self.fetchedResultsController objectAtIndexPath:indexPath];
     UIView *view = [[[NSBundle mainBundle] loadNibNamed:[NSString stringWithFormat:@"Newsfeed%@View", newsfeed.type] owner:self options:nil] lastObject];
+    
     height = view.frame.size.height;
+    
+    if ([view isKindOfClass:[NewsfeedPostView class]]) {
+        NewsfeedPostView *newsfeedPostView = (NewsfeedPostView *)view;
+        
+        CGFloat originalHeight = newsfeedPostView.frame.size.height;
+        CGFloat calculatedHeight = [newsfeedPostView sizeToFitText:newsfeed.post.caption];
+        
+        height = MIN(originalHeight, calculatedHeight);
+    }
     
     return height;
 }
@@ -237,44 +290,29 @@
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (actionSheet.tag == ACTION_SHEET_DELETE_POST_TAG) {
-        switch (buttonIndex) {
-            case 0:
-                if (self.selectedPost) {
-                    NSLog(@"[DEBUG] <NewsfeedTableViewController> deleted post is %@", [self.selectedPost description]);
-                    [self.selectedPost deletePost:^{
-                        return;
-                    } failure:^(NSString *message) {
-                        [self fail:@"Delete post failed" withMessage:message];
-                    }];
-                }
-                break;
-                
-            case 1:
-                if (self.selectedPost) {
-                    NSLog(@"[DEBUG] <NewsfeedTableViewController> Reported as inappropriate post is %@", [self.selectedPost description]);
-                    [self.selectedPost inappropriate:^{
-                        [self info:@"Resport Inappropriate" withMessage:@"Thank you. Our team will review your report and act accordnigly"];
-                    } failure:^(NSString *message) {
-                        [self fail:@"Resport Inappropriate" withMessage:message];
-                    }];
-                }
-                
-            default:
-                break;
-        }
-    } else if (actionSheet.tag == ACTION_SHEET_NEW_POST_TAG) {
-        switch (buttonIndex) {
-            case 0:
-                [self takePhoto];
-                break;
+    if (actionSheet.tag == ACTION_SHEET_DELETE_POST_TAG && self.selectedPost) {
+        if (buttonIndex == actionSheet.destructiveButtonIndex) {
+            NSLog(@"[DEBUG] <NewsfeedTableViewController> deleted post is %@", [self.selectedPost description]);
+            [self.selectedPost deletePost:^{
+                return;
+            } failure:^(NSString *message) {
+                [self fail:@"Delete post failed" withMessage:message];
+            }];
             
-            case 1:
-                [self choosePhotoFromLibrary];
-                break;
-                
-            default:
-                break;
+        } else if (buttonIndex == actionSheet.firstOtherButtonIndex) {
+            NSLog(@"[DEBUG] <NewsfeedTableViewController> Reported as inappropriate post is %@", [self.selectedPost description]);
+            [self.selectedPost inappropriate:^{
+                [self info:@"Resport Inappropriate" withMessage:@"Thank you. Our team will review your report and act accordnigly"];
+            } failure:^(NSString *message) {
+                [self fail:@"Resport Inappropriate" withMessage:message];
+            }];
+        }
+        
+    } else if (actionSheet.tag == ACTION_SHEET_NEW_POST_TAG) {
+        if (buttonIndex == actionSheet.firstOtherButtonIndex) {
+            [self takePhoto];
+        } else if (buttonIndex == (actionSheet.firstOtherButtonIndex + 1)) {
+            [self choosePhotoFromLibrary];
         }
     }
 }
@@ -336,7 +374,7 @@
         
         //image = [self imageWithImage:image scaledToSize:CGSizeMake(320, 269)];
         NewsfeedPostView *view = [[[NSBundle mainBundle] loadNibNamed:@"NewsfeedPostView" owner:self options:nil] lastObject];
-        image = [image scaleToSize:CGSizeMake(view.pictureImage.frame.size.width, view.pictureImage.frame.size.height)];
+        image = [image scaleToSize:CGSizeMake(view.pictureImage.frame.size.width/2, view.pictureImage.frame.size.height/2)];
         
         // Save the new image (original or edited) to the Camera Roll
         UIImageWriteToSavedPhotosAlbum (image, nil, nil , nil);
@@ -390,27 +428,25 @@
         
         if (post) {
             if ([post.liked_by_user boolValue]) {
-                NSLog(@"[DEBUG] <NewsfeedTableViewController> Unlike post id = %@ likes_count = %@", post.uid, post.likes_count);
+                NSLog(@"[DEBUG] <NewsfeedTableViewController> Unlike post title = %@ likes_count = %@", post.title, post.likes_count);
                 [post unlike:^{
                     return;
                 } failure:^(NSString *message) {
                     [self fail:@"Failed to unlike" withMessage:message];
                 }];
-                NSLog(@"[DEBUG] <NewsfeedTableViewController> Ater Unlike post id = %@ likes_count = %@", post.uid, post.likes_count);
+                NSLog(@"[DEBUG] <NewsfeedTableViewController> Ater Unlike post title = %@ likes_count = %@", post.title, post.likes_count);
             } else {
-                NSLog(@"[DEBUG] <NewsfeedTableViewController> Like post id = %@ likes_count = %@", post.uid, post.likes_count);
+                NSLog(@"[DEBUG] <NewsfeedTableViewController> Like post title = %@ likes_count = %@", post.title, post.likes_count);
                 [post like:^(Like *like) {
                     return;
                 } failure:^(NSString *message) {
                     [self fail:@"Failed to like" withMessage:message];
                 }];
-                NSLog(@"[DEBUG] <NewsfeedTableViewController> After Like post id = %@ likes_count = %@", post.uid, post.likes_count);
+                NSLog(@"[DEBUG] <NewsfeedTableViewController> After Like post title = %@ likes_count = %@", post.title, post.likes_count);
             }
             
-            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
         }
-        
-        
     }
 }
 
@@ -439,10 +475,13 @@
 {
     [self selectPost:sender];
     
+    User *currentUser = [User currentUser:self.managedObjectContext];
+    NSString *deleteButtonTitle = self.selectedPost.organization == currentUser.organization ? @"Delete" : nil;
+    
     UIActionSheet *cellActionSheet = [[UIActionSheet alloc] initWithTitle:@""
                                                                  delegate:self
                                                         cancelButtonTitle:@"Cancel"
-                                                   destructiveButtonTitle:@"Delete"
+                                                   destructiveButtonTitle:deleteButtonTitle
                                                         otherButtonTitles:@"Report Inappropriate", nil];
     cellActionSheet.tag = ACTION_SHEET_DELETE_POST_TAG;
     [cellActionSheet showInView:self.tableView];

@@ -186,6 +186,9 @@
         if (editedImage != originalImage) {
             UIImageWriteToSavedPhotosAlbum(image, nil, nil , nil);
         }
+        
+        // scale image to screen size to improve performance
+        image = [image scaleToSize:CGSizeMake(self.userImageView.frame.size.width, self.userImageView.frame.size.height)];
     }
     
     [picker dismissViewControllerAnimated:YES completion:^{

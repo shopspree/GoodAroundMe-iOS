@@ -26,11 +26,11 @@
     _user = user;
     if (_user) {
         NSLog(@"[DEBUG] <UserCell> Started for user: \nname:%@ %@ \nemail:%@ \nurl:%@", user.firstname, user.lastname, user.email, user.thumbnailURL);
-        [self.userImageView setImageWithURL:[NSURL URLWithString:user.thumbnailURL]
-                           placeholderImage:[UIImage imageNamed:@"Default.png"]];
+        [self.userImageView setImageWithURL:[NSURL URLWithString:user.thumbnailURL]];
         self.userImageView.contentMode = UIViewContentModeScaleAspectFill;
         self.userImageView.layer.cornerRadius = 10; 
         self.userImageView.clipsToBounds = YES;
+        self.userImageView.backgroundColor = [UIColor lightGrayColor];
         
         self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", user.firstname, user.lastname];
         

@@ -12,7 +12,7 @@
 
 @interface PostTableViewController : CoreDataTableViewController <UIActionSheetDelegate>
 
-//@property (nonatomic, strong) UIViewController *masterController;
+@property (nonatomic, strong) UIViewController *masterController;
 @property (nonatomic, strong) Post *post;
 
 - (void)setupFetchedResultsController;

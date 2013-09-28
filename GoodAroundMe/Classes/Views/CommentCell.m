@@ -1,24 +1,15 @@
 //
 //  CommentCell.m
-//  TempName
+//  GoodAroundMe
 //
-//  Created by asaf ahi-mordehai on 7/9/13.
-//  Copyright (c) 2013 asaf ahi-mordehai. All rights reserved.
+//  Created by asaf ahi-mordehai on 9/23/13.
+//  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "CommentCell.h"
-#import "User.h"
+#import "User+Create.h"
 #import "ApplicationHelper.h"
-
-@interface CommentCell()
-
-@property (nonatomic, strong) NSString *imageURL;
-@property (nonatomic, strong) NSString *username;
-@property (nonatomic, strong) NSString *content;
-@property (nonatomic, strong) NSString *timestamp;
-
-@end
 
 @implementation CommentCell
 
@@ -26,46 +17,25 @@
 {
     _comment = comment;
     if (comment) {
-        NSLog(@"[DEBUG] <CommentCell> Comment user is %@ %@ %@", comment.user.firstname, comment.user.lastname, comment.user.thumbnailURL);
-        self.imageURL = comment.user.thumbnailURL;
-        self.username = [NSString stringWithFormat:@"%@ %@", comment.user.firstname, comment.user.lastname];
-        self.content = comment.content;
-        self.timestamp = [ApplicationHelper timeSinceNow:comment.created_at];
         
+        self.commentView = [[[NSBundle mainBundle] loadNibNamed:[[CommentView class] description] owner:nil options:nil] lastObject];
+        
+        self.commentView.frame = self.contentView.frame;
+        self.commentView.tag = 500;
+        [[self.contentView viewWithTag:500] removeFromSuperview];
+        [self.contentView addSubview:self.commentView];
+        self.commentView.comment = comment;
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentTappedAction:)];
+        tap.numberOfTapsRequired = 1;
+        self.commentView.tap = tap;
     }
 }
 
-- (void)setImageURL:(NSString *)imageURL
+- (IBAction)commentTappedAction:(id)sender
 {
-    _imageURL = imageURL;
-    //self.thumbnailImage.frame = CGRectMake(10, 5, 50, 50);
-    [self.thumbnailImage setImageWithURL:[NSURL URLWithString:imageURL] placeholderImage:[UIImage imageNamed:@"Default.png"]];
+    [self.delegate commentTappedAction:sender];
 }
 
-- (void)setUsername:(NSString *)username
-{
-    _username = username;
-    self.usernameLabel.text = username;
-}
-
-- (void)setContent:(NSString *)content
-{
-    _content = content;
-    self.contentLabel.text = content;
-}
-
-- (void)setTimestamp:(NSString *)timestamp
-{
-    _timestamp = timestamp;
-    self.timestampLabel.text = timestamp;
-}
-
-- (void)layoutSubviews
-{
-    self.contentLabel.frame = CGRectMake(self.contentLabel.frame.origin.x, self.contentLabel.frame.origin.y, 237, 21); // TO DO: how to avoid hard coding ?!
-    self.contentLabel.numberOfLines = 0;
-    [self.contentLabel setLineBreakMode:NSLineBreakByWordWrapping]; //will wrap text in new line
-    [self.contentLabel sizeToFit];
-}
 
 @end

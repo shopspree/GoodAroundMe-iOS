@@ -25,6 +25,10 @@ extern NSString *const ErrorMessageWorkingToFix;
 // Error codes
 extern NSInteger const ErrorCodeManagedObjectContextNil;
 extern NSInteger const ErrorCodeServerError500;
+extern NSInteger const ErrorCodeServerError404;
+
+// Application 
+extern NSString *const GoodAroundMeCache;
 
 @interface AppConstants : NSObject
 

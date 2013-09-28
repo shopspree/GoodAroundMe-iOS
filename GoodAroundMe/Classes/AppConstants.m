@@ -17,6 +17,9 @@ NSString *const ErrorMessageWorkingToFix = @"Oops, we have a problem and we are 
 
 NSInteger const ErrorCodeManagedObjectContextNil = 1;
 NSInteger const ErrorCodeServerError500 = 2;
+NSInteger const ErrorCodeServerError404 = 3;
+
+NSString *const GoodAroundMeCache = @"GAMCache";
 
 @implementation AppConstants
 

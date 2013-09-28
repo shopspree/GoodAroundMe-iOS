@@ -79,6 +79,7 @@
         SignInTableController *signInTableController= [self.childViewControllers lastObject];
         
         NSString *email = signInTableController.emailTextField.text;
+        email = [email stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         NSString *password = signInTableController.passwordTextField.text;
 
         if (([self validateEmail:email]) && ([self validatePassword:password])) {
@@ -86,16 +87,16 @@
                                             password, USER_PASSWORD, nil], USER_LOGIN, nil];
             
             self.logInButton.hidden = YES;
+            self.activityIndicator.hidden = NO;
             [self.activityIndicator startAnimating];
             
             [User signIn:userDictionary success:^(User *user) {
+                self.logInButton.hidden = NO;
                 NSLog(@"[DEBUG] <SignInViewController> Login success for user %@", user.email);
                 [self dismissViewControllerAnimated:YES completion:nil];
             } failure:^(NSString *message) {
                 [self fail:@"Login" withMessage:message];
                 self.logInButton.hidden = NO;
-                
-                self.logInButton.hidden = YES;
                 [self.activityIndicator stopAnimating];
                 self.activityIndicator.hidden = YES;
             }];

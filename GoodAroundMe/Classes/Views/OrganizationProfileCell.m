@@ -13,22 +13,11 @@
 #import "UIImage+Resize.h"
 #import "Post+Create.h"
 #import "Picture+Create.h"
+#import "UITextView+Truncate.h"
 
 @interface OrganizationProfileCell ()
 
-//@property (weak, nonatomic) IBOutlet UIImageView *image1;
-//@property (weak, nonatomic) IBOutlet UIImageView *image2;
-//@property (weak, nonatomic) IBOutlet UIImageView *image3;
 @property (strong, nonatomic) IBOutletCollection(UIImageView) NSArray *imageMosaic;
-
-@property (weak, nonatomic) IBOutlet UIImageView *logoImage;
-@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *locationLabel;
-@property (weak, nonatomic) IBOutlet UILabel *categoryLabel;
-@property (weak, nonatomic) IBOutlet UILabel *followersLabel;
-@property (weak, nonatomic) IBOutlet UILabel *updatesLabel;
-@property (weak, nonatomic) IBOutlet UILabel *fundsLabel;
-@property (weak, nonatomic) IBOutlet UITextView *descriptionTextArea;
 
 @property (nonatomic, strong) NSArray *imagePicks;
 
@@ -45,9 +34,10 @@
             UIImageView *imageView = self.imageMosaic[i];
             NSString *imageURL = (i < [self.imagePicks count]) ? self.imagePicks[i] : nil;
             [imageView setImageWithURL:[NSURL URLWithString:imageURL]];
+            self.imageView.backgroundColor = [UIColor lightGrayColor];
         }
 
-        [self.logoImage setImageWithURL:[NSURL URLWithString:organization.image_thumbnail_url] placeholderImage:[UIImage imageNamed:@"Default.png"]];
+        [self.logoImage setImageWithURL:[NSURL URLWithString:organization.image_thumbnail_url]];
         self.logoImage.image = [self.logoImage.image scaleToSize:CGSizeMake(self.logoImage.frame.size.width, self.logoImage.frame.size.height)];
         self.logoImage.layer.borderWidth = 1.0f;
         self.logoImage.layer.borderColor = [[UIColor grayColor] CGColor];
@@ -57,7 +47,14 @@
         self.categoryLabel.text = organization.category.name;
         self.updatesLabel.text = [NSString stringWithFormat:@"%@ Updates", organization.posts_count];
         self.followersLabel.text = [NSString stringWithFormat:@"%@ Followers", organization.followers_count];
-        self.descriptionTextArea.text = organization.about;
+        
+        NSDictionary *attributedStringDict = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"GillSans-Light" size:14.0f], NSFontAttributeName, nil];
+        self.aboutTextView.attributedText = [[NSAttributedString alloc] initWithString:organization.about attributes:attributedStringDict];
+        [self.aboutTextView truncateToHeight];
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(goToOrganizationInformation:)];
+        tap.numberOfTapsRequired = 1;
+        [self.aboutTextView addGestureRecognizer:tap];
     }
 }
 
@@ -95,6 +92,11 @@
     }
     
     return _imagePicks;
+}
+
+- (IBAction)goToOrganizationInformation:(id)sender
+{
+    [self.delegate goToOrganizationInformation:sender];
 }
 
 @end

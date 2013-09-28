@@ -9,16 +9,36 @@
 #import "PostTableViewController.h"
 #import "CommentCell.h"
 #import "NewsfeedCell.h"
+#import "NewsfeedPostView.h"
 #import "Newsfeed.h"
 #import "Comment.h"
 #import "User.h"
 #import "UserProfileViewController.h"
 
-@interface PostTableViewController ()
+@interface PostTableViewController () <CommentCellDelegate>
+
 @property (nonatomic, strong) NSIndexPath *selectedIndexPath;
+
 @end
 
 @implementation PostTableViewController
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+	// Do any additional setup after loading the view
+    
+    // register for keyboard notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:self.view.window];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:self.view.window];
+}
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -30,6 +50,7 @@
 - (void)setPost:(Post *)post
 {
     _post = post;
+    self.managedObjectContext = self.post.managedObjectContext;
     
     if (!post.newsfeed) {
         [post newsfeedForPost:^(Newsfeed *newsfeed) {
@@ -48,7 +69,7 @@
     [self.post comments:^(NSArray *comments) {
         [self setupFetchedResultsController];
     } failure:^(NSString *message) {
-        [self fail:@"Good Around Me" withMessage:message];
+        [self fail:[NSString stringWithFormat:@"Loading comments for post %@", self.post.title] withMessage:message];
     }];
 }
 
@@ -68,26 +89,17 @@
     }
 }
 
-- (IBAction)usernameTapped:(id)sender
+#pragma mark - CommentCellDelegate
+
+- (IBAction)commentTappedAction:(id)sender
 {
     UITapGestureRecognizer *gesture = (UITapGestureRecognizer *)sender;
     CGPoint tapLocation = [gesture locationInView:self.tableView];
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:tapLocation];
     if (indexPath) {
         Comment *comment = [self commentForIndexPath:indexPath];
-        NSLog(@"User tapped is %@", comment.user.email);
-        [self performSegueWithIdentifier:@"UserProfile" sender:comment];
-    }
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([segue.identifier isEqualToString:STORYBOARD_USER_PROFILE]) {
-        if ([segue.destinationViewController isKindOfClass:[UserProfileViewController class]] && [sender isKindOfClass:[Comment class]]) {
-            UserProfileViewController *userProfileVC = (UserProfileViewController *)segue.destinationViewController;
-            Comment *comment = (Comment *)sender;
-            
-            userProfileVC.user = comment.user;
+        if ([self.masterController respondsToSelector:@selector(goToUser:)]) {
+            [self.masterController performSelector:@selector(goToUser:) withObject:comment.user];
         }
     }
 }
@@ -105,23 +117,19 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0) {
-        static NSString *CellIdentifier = @"NewsfeedPostCell";
+        NSString *CellIdentifier = @"NewsfeedPostCell";
         NewsfeedCell *newsfeedCell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
         newsfeedCell.newsfeed = self.post.newsfeed;
         
         return newsfeedCell;
     } else {
-        static NSString *CellIdentifier = @"CommentCell";
+        NSString *CellIdentifier = @"CommentCell";
         CommentCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
         
         // Configure the cell...
         Comment *comment = [self commentForIndexPath:indexPath];
         cell.comment = comment;
-        cell.userInteractionEnabled = YES;
-        
-        UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(usernameTapped:)];
-        [cell.usernameLabel setUserInteractionEnabled:YES];
-        [cell.usernameLabel addGestureRecognizer:tap];
+        cell.delegate = self;
         
         return cell;
     }
@@ -133,44 +141,27 @@
     return comment;
 }
 
-#define GUTTER_VERTICAL 10.0f
-#define TIMESTAMP_HEIGHT 21.0f
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CGFloat height = 700.0;
     if (indexPath.row == 0) {
         UIView *view = [[[NSBundle mainBundle] loadNibNamed:@"NewsfeedPostView" owner:self options:nil] lastObject];
         height = view.frame.size.height;
-    } else {
-        // Get the comment
-        NSIndexPath *commentIndexPath = [NSIndexPath indexPathForRow:(indexPath.row - 1) inSection:indexPath.section];
-        Comment *comment = [self.fetchedResultsController objectAtIndexPath:commentIndexPath];
         
-        // size the cell according to the comment content
-        if (comment) {
-            
-            CGSize constraint = CGSizeMake(232.0f, 1000.0f);
-            // size of name label
-            NSString *username = [NSString stringWithFormat:@"%@ %@", comment.user.firstname, comment.user.lastname];
-            CGSize usernameSize = [username sizeWithFont:[UIFont fontWithName:@"Gill Sans Light" size:14.0f]
-                                       constrainedToSize:constraint lineBreakMode:NSLineBreakByWordWrapping];
-            // size of content label
-            NSString *content = comment.content;
-            CGSize contentSize = [content sizeWithFont:[UIFont fontWithName:@"Gill Sans Light" size:14.0f]
-                                     constrainedToSize:constraint lineBreakMode:NSLineBreakByWordWrapping];
-            
-            // ---
-            // |
-            //  username
-            // |
-            //  content
-            // |
-            //  timestamp
-            // ---
-            height = GUTTER_VERTICAL + usernameSize.height + GUTTER_VERTICAL + contentSize.height + GUTTER_VERTICAL + TIMESTAMP_HEIGHT;
-            
-            height = MAX(height, 90.f);
+        if ([view isKindOfClass:[NewsfeedPostView class]]) {
+            NewsfeedPostView *newsfeedPostView = (NewsfeedPostView *)view;
+            height = [newsfeedPostView sizeToFitText:self.post.caption];
+        }
+        
+    } else {
+        UIView *view = [[[NSBundle mainBundle] loadNibNamed:@"CommentView" owner:self options:nil] lastObject];
+        height = view.frame.size.height;
+        
+        if ([view isKindOfClass:[CommentView class]]) {
+            CommentView *commentView = (CommentView *)view;
+            Comment *comment = [self commentForIndexPath:indexPath];
+    
+            height = [commentView sizeToFitText:[comment getContentText]];
         }
     }
     
@@ -183,12 +174,19 @@
 {
     if (indexPath.row != 0) {
         self.selectedIndexPath = indexPath;
+        
+        User *currentUser = [User currentUser:self.managedObjectContext];
+        Comment *selectedComment = [self commentForIndexPath:self.selectedIndexPath];
+        
+        NSString *destructiveButtonTitle = (self.post.organization == currentUser.organization || [selectedComment.user.email isEqualToString:currentUser.email]) ? @"Delete" : nil;
         UIActionSheet *cellActionSheet = [[UIActionSheet alloc] initWithTitle:@"Delete comment"
                                                                      delegate:self
                                                             cancelButtonTitle:@"Cancel"
-                                                       destructiveButtonTitle:@"Delete"
+                                                       destructiveButtonTitle:destructiveButtonTitle
                                                             otherButtonTitles:nil, nil];
-        [cellActionSheet showInView:self.tableView];
+        if (destructiveButtonTitle) {
+            [cellActionSheet showInView:self.tableView];
+        }
     }
     
 }
@@ -197,21 +195,53 @@
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    switch (buttonIndex) {
-        case 0:
-            if (self.selectedIndexPath) {
-                Comment *selectedComment = [self commentForIndexPath:self.selectedIndexPath];
-                NSLog(@"[DEBUG] deleted comment is %@", [selectedComment description]);
-                [self.post deleteComment:selectedComment success:^{
-                    [self.tableView reloadData];
-                } failure:^(NSString *message) {
-                    [self fail:@"Deletec comment failed" withMessage:message];
-                }];
-            }
-            break;
-            
-        default:
-            break;
+    if (buttonIndex == actionSheet.destructiveButtonIndex && self.selectedIndexPath) {
+        Comment *selectedComment = [self commentForIndexPath:self.selectedIndexPath];
+        NSLog(@"[DEBUG] <PostTableiewController> Deleted comment is %@", [selectedComment description]);
+        [self.post deleteComment:selectedComment success:^{
+            [self.tableView reloadData];
+        } failure:^(NSString *message) {
+            [self fail:@"Delete comment failed" withMessage:message];
+        }];
+    }
+}
+
+#pragma mark - Keyboard
+
+- (void)keyboardWillShow:(UITextView *)textView
+{
+    [self animateTextField:textView up:YES];   
+}
+
+
+- (void)keyboardWillHide:(UITextView *)textView
+{
+    [self animateTextField:textView up:NO];
+}
+
+- (void) animateTextField:(UITextView *)textView up:(BOOL)up
+{
+    const int keyboardHeight = 216.0f; // tweak as needed
+    const float movementDuration = 0.27f; // tweak as needed
+    
+    int movement = up ? -1 * keyboardHeight : keyboardHeight;
+    
+    if (up) {
+        [UIView animateWithDuration:movementDuration animations:^{
+            CGRect frame = self.tableView.frame;
+            self.view.frame = CGRectMake(frame.origin.x,
+                                         frame.origin.y,
+                                         frame.size.width,
+                                         frame.size.height + movement);
+        }];
+    } else {
+        [UIView animateWithDuration:movementDuration animations:^{
+            CGRect frame = self.tableView.frame;
+            self.view.frame = CGRectMake(frame.origin.x,
+                                         frame.origin.y,
+                                         frame.size.width,
+                                         frame.size.height + movement);
+        }];
     }
 }
 

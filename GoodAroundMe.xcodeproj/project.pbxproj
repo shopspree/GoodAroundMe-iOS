@@ -20,6 +20,7 @@
 		D807BFE917E8BD8B00DE5F0C /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D807BFE817E8BD8800DE5F0C /* CoreTelephony.framework */; };
 		D807BFEF17E8FA8900DE5F0C /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D807BFEE17E8FA8900DE5F0C /* Crashlytics.framework */; };
 		D807BFF217EB782A00DE5F0C /* LoadingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D807BFF117EB782900DE5F0C /* LoadingCell.m */; };
+		D807BFF817F066B100DE5F0C /* CommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D807BFF717F066AE00DE5F0C /* CommentCell.m */; };
 		D80F805C17B7DBAC00CC6303 /* UIViewController+Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = D80F805B17B7DBAA00CC6303 /* UIViewController+Utility.m */; };
 		D80F805F17B7DDEF00CC6303 /* AbstractTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D80F805E17B7DDEB00CC6303 /* AbstractTableViewController.m */; };
 		D85FA2F617DCF09600ED0406 /* FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D85FA2F517DCF09600ED0406 /* FeedbackViewController.m */; };
@@ -36,6 +37,14 @@
 		D86BE04D17C399DD0045D2E1 /* AWSRuntime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D86BE04C17C399DD0045D2E1 /* AWSRuntime.framework */; };
 		D86BE05917C65E860045D2E1 /* UploadPostCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D86BE05817C65E830045D2E1 /* UploadPostCell.m */; };
 		D86BE05F17C7399F0045D2E1 /* AmazonAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = D86BE05E17C7399D0045D2E1 /* AmazonAPI.m */; };
+		D8A2E1D717F1C33000CB78D3 /* CommentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D8A2E1D617F1C33000CB78D3 /* CommentView.xib */; };
+		D8A2E1DC17F1C36F00CB78D3 /* CommentView.m in Sources */ = {isa = PBXBuildFile; fileRef = D8A2E1DB17F1C36F00CB78D3 /* CommentView.m */; };
+		D8A2E1DF17F2D91B00CB78D3 /* OrganizationInformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D8A2E1DE17F2D91A00CB78D3 /* OrganizationInformationViewController.m */; };
+		D8A2E1E117F2E17800CB78D3 /* OrganizationSectionHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D8A2E1E017F2E17800CB78D3 /* OrganizationSectionHeaderView.xib */; };
+		D8A2E1E417F2E22700CB78D3 /* OrganizationSectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = D8A2E1E317F2E22600CB78D3 /* OrganizationSectionHeaderView.m */; };
+		D8A2E1E717F2E2AD00CB78D3 /* OrganizationAboutCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D8A2E1E617F2E2AD00CB78D3 /* OrganizationAboutCell.m */; };
+		D8A2E1EA17F2F8F600CB78D3 /* UITextView+Truncate.m in Sources */ = {isa = PBXBuildFile; fileRef = D8A2E1E917F2F8F500CB78D3 /* UITextView+Truncate.m */; };
+		D8A2E1ED17F6D14C00CB78D3 /* GAMCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D8A2E1EC17F6D14B00CB78D3 /* GAMCache.m */; };
 		D8B1212717B2B21E00F68F59 /* OrganizationCategoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D8B1212617B2B21D00F68F59 /* OrganizationCategoryViewController.m */; };
 		D8B1212917B3D08500F68F59 /* Untitled-2.png in Resources */ = {isa = PBXBuildFile; fileRef = D8B1212817B3D08500F68F59 /* Untitled-2.png */; };
 		D8B1212C17B3ED0B00F68F59 /* facebookLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = D8B1212A17B3ED0B00F68F59 /* facebookLogo.png */; };
@@ -106,7 +115,6 @@
 		D8C5EFBA17AEA788008CFF51 /* UserChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C5EF8D17AEA788008CFF51 /* UserChangePasswordViewController.m */; };
 		D8C5EFC817AEA7E0008CFF51 /* MoreOptionsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D8C5EFC317AEA7E0008CFF51 /* MoreOptionsView.xib */; };
 		D8C5EFE517AEA9A9008CFF51 /* CategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C5EFCA17AEA9A9008CFF51 /* CategoryCell.m */; };
-		D8C5EFE617AEA9A9008CFF51 /* CommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C5EFCC17AEA9A9008CFF51 /* CommentCell.m */; };
 		D8C5EFEA17AEA9A9008CFF51 /* MenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C5EFD417AEA9A9008CFF51 /* MenuCell.m */; };
 		D8C5EFEB17AEA9A9008CFF51 /* NewsfeedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C5EFD617AEA9A9008CFF51 /* NewsfeedCell.m */; };
 		D8C5EFEE17AEA9A9008CFF51 /* NewsfeedPostView.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C5EFDC17AEA9A9008CFF51 /* NewsfeedPostView.m */; };
@@ -305,6 +313,8 @@
 		D807BFEE17E8FA8900DE5F0C /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		D807BFF017EB782700DE5F0C /* LoadingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingCell.h; sourceTree = "<group>"; };
 		D807BFF117EB782900DE5F0C /* LoadingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingCell.m; sourceTree = "<group>"; };
+		D807BFF617F066AB00DE5F0C /* CommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentCell.h; sourceTree = "<group>"; };
+		D807BFF717F066AE00DE5F0C /* CommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentCell.m; sourceTree = "<group>"; };
 		D80F805A17B7DBA800CC6303 /* UIViewController+Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Utility.h"; sourceTree = "<group>"; };
 		D80F805B17B7DBAA00CC6303 /* UIViewController+Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Utility.m"; sourceTree = "<group>"; };
 		D80F805D17B7DDE300CC6303 /* AbstractTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractTableViewController.h; sourceTree = "<group>"; };
@@ -335,6 +345,20 @@
 		D86BE05817C65E830045D2E1 /* UploadPostCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UploadPostCell.m; sourceTree = "<group>"; };
 		D86BE05D17C7399B0045D2E1 /* AmazonAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmazonAPI.h; sourceTree = "<group>"; };
 		D86BE05E17C7399D0045D2E1 /* AmazonAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AmazonAPI.m; sourceTree = "<group>"; };
+		D8A2E1D617F1C33000CB78D3 /* CommentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommentView.xib; sourceTree = "<group>"; };
+		D8A2E1DA17F1C36F00CB78D3 /* CommentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentView.h; sourceTree = "<group>"; };
+		D8A2E1DB17F1C36F00CB78D3 /* CommentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentView.m; sourceTree = "<group>"; };
+		D8A2E1DD17F2D91A00CB78D3 /* OrganizationInformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrganizationInformationViewController.h; sourceTree = "<group>"; };
+		D8A2E1DE17F2D91A00CB78D3 /* OrganizationInformationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrganizationInformationViewController.m; sourceTree = "<group>"; };
+		D8A2E1E017F2E17800CB78D3 /* OrganizationSectionHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OrganizationSectionHeaderView.xib; sourceTree = "<group>"; };
+		D8A2E1E217F2E22600CB78D3 /* OrganizationSectionHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrganizationSectionHeaderView.h; sourceTree = "<group>"; };
+		D8A2E1E317F2E22600CB78D3 /* OrganizationSectionHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrganizationSectionHeaderView.m; sourceTree = "<group>"; };
+		D8A2E1E517F2E2AD00CB78D3 /* OrganizationAboutCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrganizationAboutCell.h; sourceTree = "<group>"; };
+		D8A2E1E617F2E2AD00CB78D3 /* OrganizationAboutCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrganizationAboutCell.m; sourceTree = "<group>"; };
+		D8A2E1E817F2F8F500CB78D3 /* UITextView+Truncate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+Truncate.h"; sourceTree = "<group>"; };
+		D8A2E1E917F2F8F500CB78D3 /* UITextView+Truncate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+Truncate.m"; sourceTree = "<group>"; };
+		D8A2E1EB17F6D14A00CB78D3 /* GAMCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAMCache.h; sourceTree = "<group>"; };
+		D8A2E1EC17F6D14B00CB78D3 /* GAMCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GAMCache.m; sourceTree = "<group>"; };
 		D8B1212517B2B21D00F68F59 /* OrganizationCategoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrganizationCategoryViewController.h; sourceTree = "<group>"; };
 		D8B1212617B2B21D00F68F59 /* OrganizationCategoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrganizationCategoryViewController.m; sourceTree = "<group>"; };
 		D8B1212817B3D08500F68F59 /* Untitled-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Untitled-2.png"; sourceTree = "<group>"; };
@@ -457,8 +481,6 @@
 		D8C5EFC317AEA7E0008CFF51 /* MoreOptionsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MoreOptionsView.xib; sourceTree = "<group>"; };
 		D8C5EFC917AEA9A9008CFF51 /* CategoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CategoryCell.h; sourceTree = "<group>"; };
 		D8C5EFCA17AEA9A9008CFF51 /* CategoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CategoryCell.m; sourceTree = "<group>"; };
-		D8C5EFCB17AEA9A9008CFF51 /* CommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentCell.h; sourceTree = "<group>"; };
-		D8C5EFCC17AEA9A9008CFF51 /* CommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentCell.m; sourceTree = "<group>"; };
 		D8C5EFD317AEA9A9008CFF51 /* MenuCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuCell.h; sourceTree = "<group>"; };
 		D8C5EFD417AEA9A9008CFF51 /* MenuCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuCell.m; sourceTree = "<group>"; };
 		D8C5EFD517AEA9A9008CFF51 /* NewsfeedCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsfeedCell.h; sourceTree = "<group>"; };
@@ -997,6 +1019,8 @@
 				D86BE03E17C115F80045D2E1 /* OrganizationProfileViewController.h */,
 				D86BE03F17C115FB0045D2E1 /* OrganizationProfileViewController.m */,
 				D8DD2E3217DA083F006B1D07 /* OrganizationSettingsViewController.h */,
+				D8DD2E2917D4C6C7006B1D07 /* SettingsViewController.h */,
+				D8DD2E2A17D4C6C8006B1D07 /* SettingsViewController.m */,
 				D8DD2E3317DA0844006B1D07 /* OrganizationSettingsViewController.m */,
 				D8B1215317B5B33D00F68F59 /* OrganizationsTableViewController.h */,
 				D8B1215417B5B33F00F68F59 /* OrganizationsTableViewController.m */,
@@ -1004,8 +1028,6 @@
 				D8C5EF7917AEA788008CFF51 /* PostTableViewController.m */,
 				D8C5EF7A17AEA788008CFF51 /* PostViewController.h */,
 				D8C5EF7B17AEA788008CFF51 /* PostViewController.m */,
-				D8DD2E2917D4C6C7006B1D07 /* SettingsViewController.h */,
-				D8DD2E2A17D4C6C8006B1D07 /* SettingsViewController.m */,
 				D8C5F08017B04C49008CFF51 /* SignInTableController.h */,
 				D8C5F08117B04C4A008CFF51 /* SignInTableController.m */,
 				D8C5EF7C17AEA788008CFF51 /* SignInViewController.h */,
@@ -1039,6 +1061,10 @@
 				D807BF4217E06EC200DE5F0C /* GiveViewController.m */,
 				D807BF4917E1D0CF00DE5F0C /* FeedbackAreaViewController.h */,
 				D807BF4A17E1D0CF00DE5F0C /* FeedbackAreaViewController.m */,
+				D8A2E1DD17F2D91A00CB78D3 /* OrganizationInformationViewController.h */,
+				D8A2E1DE17F2D91A00CB78D3 /* OrganizationInformationViewController.m */,
+				D8A2E1EB17F6D14A00CB78D3 /* GAMCache.h */,
+				D8A2E1EC17F6D14B00CB78D3 /* GAMCache.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -1048,8 +1074,6 @@
 			children = (
 				D8C5EFC917AEA9A9008CFF51 /* CategoryCell.h */,
 				D8C5EFCA17AEA9A9008CFF51 /* CategoryCell.m */,
-				D8C5EFCB17AEA9A9008CFF51 /* CommentCell.h */,
-				D8C5EFCC17AEA9A9008CFF51 /* CommentCell.m */,
 				D8C5EFD317AEA9A9008CFF51 /* MenuCell.h */,
 				D8C5EFD417AEA9A9008CFF51 /* MenuCell.m */,
 				D8C5EFD517AEA9A9008CFF51 /* NewsfeedCell.h */,
@@ -1078,6 +1102,16 @@
 				D807BF4D17E1D96B00DE5F0C /* PlaceholderTextArea.m */,
 				D807BFF017EB782700DE5F0C /* LoadingCell.h */,
 				D807BFF117EB782900DE5F0C /* LoadingCell.m */,
+				D807BFF617F066AB00DE5F0C /* CommentCell.h */,
+				D807BFF717F066AE00DE5F0C /* CommentCell.m */,
+				D8A2E1DA17F1C36F00CB78D3 /* CommentView.h */,
+				D8A2E1DB17F1C36F00CB78D3 /* CommentView.m */,
+				D8A2E1E217F2E22600CB78D3 /* OrganizationSectionHeaderView.h */,
+				D8A2E1E317F2E22600CB78D3 /* OrganizationSectionHeaderView.m */,
+				D8A2E1E517F2E2AD00CB78D3 /* OrganizationAboutCell.h */,
+				D8A2E1E617F2E2AD00CB78D3 /* OrganizationAboutCell.m */,
+				D8A2E1E817F2F8F500CB78D3 /* UITextView+Truncate.h */,
+				D8A2E1E917F2F8F500CB78D3 /* UITextView+Truncate.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1109,6 +1143,8 @@
 				D8C5F07217AED584008CFF51 /* iPhone.storyboard */,
 				D8B1217117B7AFA000F68F59 /* NewsfeedPostView.xib */,
 				D8C5EFC317AEA7E0008CFF51 /* MoreOptionsView.xib */,
+				D8A2E1D617F1C33000CB78D3 /* CommentView.xib */,
+				D8A2E1E017F2E17800CB78D3 /* OrganizationSectionHeaderView.xib */,
 			);
 			path = UserInterfaces;
 			sourceTree = "<group>";
@@ -1298,6 +1334,8 @@
 				D8B1217217B7AFA100F68F59 /* NewsfeedPostView.xib in Resources */,
 				D8EB950F17B827AC00D47D54 /* tumblr_mlxvr2nHZc1rpcrx8o1_1280.jpg in Resources */,
 				D807BF4817E0885600DE5F0C /* background.png in Resources */,
+				D8A2E1D717F1C33000CB78D3 /* CommentView.xib in Resources */,
+				D8A2E1E117F2E17800CB78D3 /* OrganizationSectionHeaderView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1364,7 +1402,6 @@
 				D8C5EFB917AEA788008CFF51 /* UserSettingsViewController.m in Sources */,
 				D8C5EFBA17AEA788008CFF51 /* UserChangePasswordViewController.m in Sources */,
 				D8C5EFE517AEA9A9008CFF51 /* CategoryCell.m in Sources */,
-				D8C5EFE617AEA9A9008CFF51 /* CommentCell.m in Sources */,
 				D8C5EFEA17AEA9A9008CFF51 /* MenuCell.m in Sources */,
 				D8C5EFEB17AEA9A9008CFF51 /* NewsfeedCell.m in Sources */,
 				D8C5EFEE17AEA9A9008CFF51 /* NewsfeedPostView.m in Sources */,
@@ -1436,6 +1473,13 @@
 				D807BF5117E1E1FB00DE5F0C /* FeedbackAPI.m in Sources */,
 				D807BF5317E6543500DE5F0C /* AppConstants.m in Sources */,
 				D807BFF217EB782A00DE5F0C /* LoadingCell.m in Sources */,
+				D807BFF817F066B100DE5F0C /* CommentCell.m in Sources */,
+				D8A2E1DC17F1C36F00CB78D3 /* CommentView.m in Sources */,
+				D8A2E1DF17F2D91B00CB78D3 /* OrganizationInformationViewController.m in Sources */,
+				D8A2E1E417F2E22700CB78D3 /* OrganizationSectionHeaderView.m in Sources */,
+				D8A2E1E717F2E2AD00CB78D3 /* OrganizationAboutCell.m in Sources */,
+				D8A2E1EA17F2F8F600CB78D3 /* UITextView+Truncate.m in Sources */,
+				D8A2E1ED17F6D14C00CB78D3 /* GAMCache.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

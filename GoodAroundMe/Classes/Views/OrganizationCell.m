@@ -24,7 +24,7 @@
     _organization = organization;
     if (organization) {
         NSLog(@"[DEBUG] Set cell with %@ organization", organization.name);
-        [self.organizationImage setImageWithURL:[NSURL URLWithString:organization.image_thumbnail_url] placeholderImage:[UIImage imageNamed:@"Default.png"]];
+        [self.organizationImage setImageWithURL:[NSURL URLWithString:organization.image_thumbnail_url]];
         
         self.organizationName.text = organization.name;
         self.subtitle.text = [NSString stringWithFormat:@"%@ followers  %@ posts", organization.followers_count, organization.posts_count];

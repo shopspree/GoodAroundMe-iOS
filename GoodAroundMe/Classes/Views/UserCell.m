@@ -24,9 +24,9 @@
     [super layoutSubviews];
     
     if (self.user) {
-        UIImage *placeholderImage = [UIImage imageNamed:@"Default.png"];
-        [self.imageView setImageWithURL:[NSURL URLWithString:self.user.thumbnailURL] placeholderImage:placeholderImage];
+        [self.imageView setImageWithURL:[NSURL URLWithString:self.user.thumbnailURL]];
         self.imageView.image = [self.imageView.image scaleToSize:self.imageView.frame.size];
+        self.imageView.backgroundColor = [UIColor lightGrayColor];
         self.usernameLabel.text = [NSString stringWithFormat:@"%@ %@", self.user.firstname, self.user.lastname];
     }
     

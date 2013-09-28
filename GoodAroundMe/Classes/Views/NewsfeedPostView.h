@@ -31,6 +31,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *nameButton;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *pictureImage;
+@property (weak, nonatomic) IBOutlet UIView *captionView;
 @property (weak, nonatomic) IBOutlet UILabel *captionLabel;
 @property (weak, nonatomic) IBOutlet UIButton *likeButton;
 @property (weak, nonatomic) IBOutlet UIButton *commentButton;
@@ -41,5 +42,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *contributorLabel;
 @property (weak, nonatomic) IBOutlet UIButton *deleteButton;
 @property (weak, nonatomic) IBOutlet UIButton *moreButton;
+
+- (CGFloat)sizeToFitText:(NSString *)text;
 
 @end

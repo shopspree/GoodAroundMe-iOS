@@ -66,6 +66,13 @@
     return jsonDict;
 }
 
+- (NSString *)getContentText
+{
+    NSString *username = [self.user getFullName];
+    NSString *text = [NSString stringWithFormat:@"%@ %@", username, self.content];
+    return text;
+}
+
 - (NSString *)description2
 {
     NSString *desc = [NSString stringWithFormat:@"\n[DEBUG] Comment: uid=%@, content=%@, created_at=%@, updated_at=%@",

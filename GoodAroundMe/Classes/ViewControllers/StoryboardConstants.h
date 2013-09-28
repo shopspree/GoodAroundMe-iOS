@@ -22,6 +22,7 @@
 #define STORYBOARD_ORGANIZATION_SETTINGS @"Organization Settings"
 #define STORYBOARD_ORGANIZATION_NEW @"New Organization"
 #define STORYBOARD_ORGANIZATION_FOLLOWERS @"Followers"
+#define STORYBOARD_ORGANIZATION_INFORMATION @"OrganizationInformation"
 #define STORYBOARD_LANDING_PAGE @"LandingPage"
 #define STORYBOARD_FEEDBACK @"Feedback"
 #define STORYBOARD_FEEDBACK_AREAS @"Feedback Areas"

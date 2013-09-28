@@ -85,8 +85,11 @@
         SignUpTableController *signUpTableController = [self.childViewControllers lastObject];
         
         NSString *firstName = signUpTableController.firstNameTextField.text;
+        firstName = [firstName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         NSString *lastName = signUpTableController.lastNameTextField.text;
+        lastName = [lastName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         NSString *email = signUpTableController.emailTextField.text;
+        email = [email stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         NSString *password = signUpTableController.passwordTextField.text;
         
         if (([self validateName:firstName]) &&

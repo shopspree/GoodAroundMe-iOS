@@ -25,5 +25,6 @@
 + (NSData *)constructJSONForContent:(NSString *)content;
 
 - (void)setWithDictionary:(NSDictionary *)commentDictionary;
+- (NSString *)getContentText;
 
 @end

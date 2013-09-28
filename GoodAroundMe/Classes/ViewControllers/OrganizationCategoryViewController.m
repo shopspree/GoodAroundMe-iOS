@@ -83,7 +83,15 @@
     
     cell.categoryLabel.text = category.name;
     if (category.imageURL && ![category.imageURL isEqualToString:@"(null)"]) {
-        [cell.categoryImage setImageWithURL:[NSURL URLWithString:category.imageURL] placeholderImage:[UIImage imageNamed:@"Default.png"]];
+        [[SDImageCache sharedImageCache] queryDiskCacheForKey:category.imageURL done:^(UIImage *image, SDImageCacheType cacheType) {
+            if (image) {
+                [cell.categoryImage setImage:image];
+            } else {
+                [cell.categoryImage setImageWithURL:[NSURL URLWithString:category.imageURL]];
+            }
+         
+        }];
+    
     }
     
     

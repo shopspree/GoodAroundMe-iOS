@@ -157,7 +157,7 @@ static NSInteger pickerSize = 216;
 - (void)stopActivityIndicationInNavigationBar
 {
     [self.activityIndicator stopAnimating];
-    self.navigationItem.rightBarButtonItem = self.saveNavButton;
+    self.customNavigationItem.rightBarButtonItem = self.saveNavButton;
 }
 
 - (void)changePicture:(UIImage *)image
@@ -291,6 +291,9 @@ static NSInteger pickerSize = 216;
         if (editedImage != originalImage) {
             UIImageWriteToSavedPhotosAlbum(image, nil, nil , nil);
         }
+        
+        // scale image to screen size to improve performance
+        image = [image scaleToSize:CGSizeMake(self.logoImageView.frame.size.width/2, self.logoImageView.frame.size.height/2)];
     }
     
     [picker dismissViewControllerAnimated:YES completion:^{

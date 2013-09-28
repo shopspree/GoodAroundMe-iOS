@@ -15,10 +15,11 @@
 #import "OrganizationSettingsViewController.h"
 #import "FollowersTableViewController.h"
 #import "GiveViewController.h"
+#import "OrganizationInformationViewController.h"
 
 #define ACTION_SHEET_DELETE_POST_TAG 2
 
-@interface OrganizationProfileViewController () 
+@interface OrganizationProfileViewController () <OrganizationProfileCellDelegate>
 
 @property (nonatomic, strong) NSArray *sections;
 @property (nonatomic, strong) NSArray *posts;
@@ -34,6 +35,9 @@
 
 static NSInteger SectionOrganizationProfile = 0;
 static NSInteger SectionOrganizationNewsfeed = 1;
+
+static NSString *OrganizationProfileCellIdentifier = @"OrganizationProfileCell";
+static NSString *PostCellIdentifier = @"PostCell";
 
 - (void)viewDidLoad
 {
@@ -122,6 +126,11 @@ static NSInteger SectionOrganizationNewsfeed = 1;
         if ([segue.destinationViewController isKindOfClass:[GiveViewController class]]) {
             GiveViewController *giveVC = (GiveViewController *)segue.destinationViewController;
             giveVC.organization = self.organization;
+        }
+    } else if ([segue.identifier isEqualToString:STORYBOARD_ORGANIZATION_INFORMATION]) {
+        if ([segue.destinationViewController isKindOfClass:[OrganizationInformationViewController class]]) {
+            OrganizationInformationViewController *organizationInfromationVC = (OrganizationInformationViewController *)segue.destinationViewController;
+            organizationInfromationVC.organization = self.organization;
         }
     }
 }
@@ -240,8 +249,6 @@ static NSInteger SectionOrganizationNewsfeed = 1;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *OrganizationProfileCellIdentifier = @"OrganizationProfileCell";
-    static NSString *PostCellIdentifier = @"PostCell";
     
     UITableViewCell *cell;
     
@@ -249,6 +256,7 @@ static NSInteger SectionOrganizationNewsfeed = 1;
         cell = [tableView dequeueReusableCellWithIdentifier:OrganizationProfileCellIdentifier forIndexPath:indexPath];
         OrganizationProfileCell *organizationProfileCell = (OrganizationProfileCell *)cell;
         organizationProfileCell.organization = self.organization;
+        organizationProfileCell.delegate = self;
         
     } else if (indexPath.section == SectionOrganizationNewsfeed) {
         cell = [tableView dequeueReusableCellWithIdentifier:PostCellIdentifier forIndexPath:indexPath];
@@ -266,15 +274,21 @@ static NSInteger SectionOrganizationNewsfeed = 1;
     CGFloat height = 300.0f;
     
     if (indexPath.section == SectionOrganizationProfile) {
-        height = MAX(self.tableView.frame.size.height, 400.0f);
+        height = MAX(self.tableView.frame.size.height, 400);
+        /*NSString *about = self.organization.about;
+        
+        OrganizationProfileCell *cell = [tableView dequeueReusableCellWithIdentifier:OrganizationProfileCellIdentifier forIndexPath:indexPath];
+        CGSize textAreaSize = [about sizeWithFont:cell.descriptionTextArea.font
+                               constrainedToSize:CGSizeMake(cell.superview.frame.size.width, 1000)
+                                   lineBreakMode:NSLineBreakByWordWrapping];
+        CGFloat originalLabelHeight = cell.descriptionTextArea.frame.size.height;
+        CGFloat labelHeight = labelSize.height;
+        height += (labelHeight - originalLabelHeight);
+         */
     } else if (indexPath.section == SectionOrganizationNewsfeed) {
         UIView *view = [[[NSBundle mainBundle] loadNibNamed:@"NewsfeedPostView" owner:self options:nil] lastObject];
         height = view.frame.size.height;
     }
-    
-    //Newsfeed *newsfeed = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    //UIView *view = [[[NSBundle mainBundle] loadNibNamed:[NSString stringWithFormat:@"Newsfeed%@View", newsfeed.type] owner:self options:nil] lastObject];
-    //height = view.frame.size.height;
     
     return height;
 }
@@ -348,10 +362,13 @@ static NSInteger SectionOrganizationNewsfeed = 1;
 - (void)deletePost:(id)sender
 {
     self.selectedPost = [self selectPost:sender];
+    
+    User *currentUser = [User currentUser:self.managedObjectContext];
+    NSString *destructiveButtonTitle = self.organization == currentUser.organization ? @"Delete" : nil;
     UIActionSheet *cellActionSheet = [[UIActionSheet alloc] initWithTitle:@""
                                                                  delegate:self
                                                         cancelButtonTitle:@"Cancel"
-                                                   destructiveButtonTitle:@"Delete"
+                                                   destructiveButtonTitle:destructiveButtonTitle
                                                         otherButtonTitles:@"Report Inappropriate", nil];
     cellActionSheet.tag = ACTION_SHEET_DELETE_POST_TAG;
     [cellActionSheet showInView:self.tableView];
@@ -372,19 +389,19 @@ static NSInteger SectionOrganizationNewsfeed = 1;
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (actionSheet.tag == ACTION_SHEET_DELETE_POST_TAG) {
-        switch (buttonIndex) {
-            case 0:
-                [self deletePostAfterConfirm];
-                break;
-                
-            case 1:
-                [self reportInappropriate];
-                break;
-                
-            default:
-                break;
+        if (buttonIndex == actionSheet.destructiveButtonIndex) {
+            [self deletePostAfterConfirm];
+        } else if (buttonIndex == actionSheet.firstOtherButtonIndex) {
+            [self reportInappropriate];
         }
     }
+}
+
+#pragma mark - OrganizationProfileCellDelegate
+
+- (IBAction)goToOrganizationInformation:(id)sender
+{
+    [self performSegueWithIdentifier:STORYBOARD_ORGANIZATION_INFORMATION sender:sender];
 }
 
 

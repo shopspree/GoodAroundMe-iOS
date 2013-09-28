@@ -41,6 +41,7 @@
         self.backgroundImageView.image = self.image;
     }
     self.activityIndicator.hidden = YES;
+    self.activityIndicator.hidesWhenStopped = YES;
     
     self.titleTextField.delegate = self;
     self.captionTextField.delegate = self;
@@ -73,6 +74,7 @@
     } failure:^(NSString *message) {
         [self fail:@"Failed to create new post" withMessage:message];
         self.shareButton.userInteractionEnabled = YES;
+        [self.activityIndicator stopAnimating];
     }];
 }
 
@@ -80,7 +82,7 @@
 
 - (IBAction)cancelButtonAction:(id)sender
 {
-    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (IBAction)tapAction:(id)sender
@@ -118,7 +120,7 @@
         // Found next responder, so set it.
         [nextResponder becomeFirstResponder];
     } else {
-        [self shareButtonAction:textField];
+        [self.view endEditing:YES];
     }
     
     return NO; // We do not want UITextField to insert line-breaks.
@@ -127,7 +129,7 @@
         
 #pragma mark - AmazonServiceRequestDelegate
         
-    -(void)request:(AmazonServiceRequest *)request didCompleteWithResponse:(AmazonServiceResponse *)response
+-(void)request:(AmazonServiceRequest *)request didCompleteWithResponse:(AmazonServiceResponse *)response
 {
     NSLog(@"[DEBUG] Request tag:%@ url:%@", request.requestTag, request.url);
     [self newPost:request.url.absoluteString];
@@ -144,7 +146,7 @@
  * @param totalBytesWritten         The total number of bytes written for this connection.
  * @param totalBytesExpectedToWrite The number of bytes the connection expects to write.
  */
-    -(void)request:(AmazonServiceRequest *)request didSendData:(long long)bytesWritten totalBytesWritten:(long long)totalBytesWritten totalBytesExpectedToWrite:(long long)totalBytesExpectedToWrite
+-(void)request:(AmazonServiceRequest *)request didSendData:(long long)bytesWritten totalBytesWritten:(long long)totalBytesWritten totalBytesExpectedToWrite:(long long)totalBytesExpectedToWrite
 {
     float progress = (float)totalBytesWritten / (float)totalBytesExpectedToWrite;
     NSLog(@"[DEBUG] Request tag:%@ url:%@ %f%%!", request.requestTag, request.url, progress);

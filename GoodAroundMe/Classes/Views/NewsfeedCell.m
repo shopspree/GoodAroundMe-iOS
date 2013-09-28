@@ -17,10 +17,10 @@
         
         self.newsfeedView = [[[NSBundle mainBundle] loadNibNamed:[NSString stringWithFormat:@"Newsfeed%@View", newsfeed.type] owner:nil options:nil] lastObject];
         
+        self.newsfeedView.frame = self.contentView.frame;
         self.newsfeedView.tag = 500;
         [[self.contentView viewWithTag:500] removeFromSuperview];
         [self.contentView addSubview:self.newsfeedView];
-        self.contentView.frame = self.newsfeedView.frame;
         [self.newsfeedView initWithNewsfeed:newsfeed];
     }
 }

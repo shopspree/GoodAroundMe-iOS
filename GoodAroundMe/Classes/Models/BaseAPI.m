@@ -162,8 +162,14 @@
         if ([request.URL.absoluteString rangeOfString:@"update_password.json"].location == NSNotFound &&
             [request.URL.absoluteString rangeOfString:@"/users/sign_in.json"].location == NSNotFound) {
             [[NSNotificationCenter defaultCenter] postNotificationName:NotificationUnauthorized object:self];
+        } else {
+            if ([errorData objectForKey:@"errors"]) {
+                message = [errorData objectForKey:@"errors"];
+            }
         }
-    
+        
+    } else if (statusCode == 404) {
+        message = [NSString stringWithFormat:@"Error %d: %@", ErrorCodeServerError404, ErrorMessageWorkingToFix];
         
     } else if (statusCode == 500) {
         message = [NSString stringWithFormat:@"Error %d: %@", ErrorCodeServerError500, ErrorMessageWorkingToFix];

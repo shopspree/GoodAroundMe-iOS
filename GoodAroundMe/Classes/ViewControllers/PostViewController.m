@@ -15,13 +15,14 @@
 #import "OrganizationProfileViewController.h"
 #import "LikesTableViewController.h"
 #import "GiveViewController.h"
+#import "UserProfileViewController.h"
 
 
 #define ACTION_SHEET_DELETE_POST_TAG 2
 
 @interface PostViewController ()
 
-@property (weak, nonatomic) IBOutlet UIView *postView;
+@property (weak, nonatomic) IBOutlet UITableView *postTableView;
 @property (weak, nonatomic) IBOutlet UIView *commentInputView;
 @property (weak, nonatomic) IBOutlet UITextField *commentInputTextField;
 @property (weak, nonatomic) IBOutlet UIButton *sendCommentButton;
@@ -50,27 +51,37 @@
                                                  name:UIKeyboardWillHideNotification
                                                object:self.view.window];
     
-    [self.postTableViewController.tableView reloadData];
+    self.postTableView.delegate = self.postTableViewController;
+    self.postTableView.dataSource = self.postTableViewController;
+    
+    [self.postTableViewController viewDidLoad];
+    //[self.postTableViewController.tableView reloadData];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.postTableViewController viewWillAppear:animated];
+    
+    if (self.keyboardIsShown) {
+        [self.commentInputTextField becomeFirstResponder];
+        self.keyboardIsShown = NO;
+    }
 }
 
 - (PostTableViewController *)postTableViewController
 {
     if (! _postTableViewController) {
         if (self.post) {
-            _postTableViewController = [self.childViewControllers lastObject];
+            _postTableViewController = [[PostTableViewController alloc] init];
             _postTableViewController.post = self.post;
+            _postTableViewController.masterController = self;
+            _postTableViewController.tableView = self.postTableView;
         }
     }
     
     return _postTableViewController;
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    if (self.keyboardIsShown) {
-        [self.commentInputTextField becomeFirstResponder];
-    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -90,16 +101,10 @@
         }
         
     } else if ([segue.identifier isEqualToString:STORYBOARD_USER_PROFILE]) {
-        User *user;
-        if ([sender isKindOfClass:[CommentCell class]]) {
-            user = nil;
-            // TO DO
-        }
-        
-        if (user) {
-            if ([segue.destinationViewController respondsToSelector:@selector(setEmail:)]) {
-                [segue.destinationViewController performSelector:@selector(setEmail:) withObject:user.email];
-            }
+        if ([segue.destinationViewController isKindOfClass:[UserProfileViewController class]] && [sender isKindOfClass:[User class]]) {
+            UserProfileViewController *userProfileVC = segue.destinationViewController;
+            User *user = (User *)sender;
+            userProfileVC.user = user;
         }
     } else if ([segue.identifier isEqualToString:STORYBOARD_GIVE]) {
         if ([segue.destinationViewController isKindOfClass:[GiveViewController class]]) {
@@ -130,6 +135,15 @@
     } failure:^(NSString *message) {
         [self fail:@"Resport Inappropriate" withMessage:message];
     }];
+}
+
+- (void)goToUser:(id)sender
+{
+    if (self.isKeyboardShown) {
+        [self tap:sender];
+    } else {
+        [self performSegueWithIdentifier:STORYBOARD_USER_PROFILE sender:sender];
+    }
 }
 
 - (IBAction)unwindFromModal:(UIStoryboardSegue *)segue
@@ -187,7 +201,7 @@
             
         }
         
-        [self.postTableViewController.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+        [self.postTableViewController.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 
@@ -205,10 +219,7 @@
 {
     if (self.isKeyboardShown) {
         [self tap:sender];
-    } else {
-        return; // do nothing already in comments view
     }
-
 }
 
 - (void)goToOrganization:(id)sender
@@ -218,7 +229,6 @@
     } else {
         [self performSegueWithIdentifier:STORYBOARD_ORGANIZATION_PROFILE sender:self];
     }
-
 }
 
 - (void)deletePost:(id)sender
@@ -264,30 +274,34 @@
 
 - (void) animateTextField:(UITextView *)textView up:(BOOL)up
 {
-    const int movementDistance = 216.0; // tweak as needed
-    const float movementDuration = 0.3f; // tweak as needed
+    const int keyboardHeight = 216.0f; // tweak as needed
+    const float movementDuration = 0.27f; // tweak as needed
     
-    int movement = (up ? -movementDistance : movementDistance);
+    int movement = up ? -1 * keyboardHeight : keyboardHeight;
     
     if (up) {
         [UIView animateWithDuration:movementDuration animations:^{
-            self.commentInputView.frame = CGRectOffset(self.commentInputView.frame, 0, movement);
+            CGRect frame = self.commentInputView.frame;
+            self.commentInputView.frame = CGRectOffset(frame, 0, movement);
         } completion:^(BOOL finished) {
-            CGRect postFrame = self.postView.frame;
-            self.postView.frame = CGRectMake(postFrame.origin.x,
-                                              postFrame.origin.y,
-                                              postFrame.size.width,
-                                              postFrame.size.height + movement);
-            postFrame = self.postView.frame;
+            CGRect frame = self.view.frame;
+            self.view.frame = CGRectMake(frame.origin.x,
+                                         frame.origin.y,
+                                         frame.size.width,
+                                         frame.size.height + movement);
+            NSLog(@"[DEBUG] <PostViewController> Table view height is %f", self.postTableView.frame.size.height);
         }];
     } else {
         [UIView animateWithDuration:movementDuration animations:^{
-            self.commentInputView.frame = CGRectOffset(self.commentInputView.frame, 0, movement);
-            CGRect postFrame = self.postView.frame;
-            self.postView.frame = CGRectMake(postFrame.origin.x,
-                                              postFrame.origin.y,
-                                              postFrame.size.width,
-                                              postFrame.size.height + movement);
+            CGRect frame = self.commentInputView.frame;
+            self.commentInputView.frame = CGRectOffset(frame, 0, movement);
+            
+            frame = self.view.frame;
+            self.view.frame = CGRectMake(frame.origin.x,
+                                         frame.origin.y,
+                                         frame.size.width,
+                                         frame.size.height + movement);
+            NSLog(@"[DEBUG] <PostViewController> Table view height is %f", self.postTableView.frame.size.height);
         }];
     }
 }

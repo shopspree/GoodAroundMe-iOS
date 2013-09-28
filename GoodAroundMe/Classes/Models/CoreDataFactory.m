@@ -9,7 +9,9 @@
 #import "CoreDataFactory.h"
 
 @interface CoreDataFactory()
+
 @property (nonatomic, strong) NSString *filename;
+
 @end
 
 @implementation CoreDataFactory
@@ -27,13 +29,13 @@ static CoreDataFactory *instance;
     return instance;
 }
 
-- (id)init
+- (NSString *)filename
 {
-    self = [super init];
-    if (self) {
-        _filename = [NSString stringWithFormat:@"%@-%@.data", CORE_DATA_FILE, [[NSDate date] description]];
+    if (!_filename) {
+        _filename = [NSString stringWithFormat:@"%@-%@.data", CORE_DATA_FILE, @"1"];//[[NSDate date] description]];
     }
-    return self;
+    
+    return _filename;
 }
 
 - (void)context:(void (^)(NSManagedObjectContext *managedObjectContext))create get:(void (^)(NSManagedObjectContext *managedObjectContext))get

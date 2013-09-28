@@ -287,4 +287,21 @@
     [self.delegate give:sender];
 }
 
+- (CGFloat)sizeToFitText:(NSString *)text
+{
+    CGFloat height = self.frame.size.height;
+
+    CGFloat originalLabelHeight = self.captionLabel.frame.size.height;
+    CGSize labelSize = [text sizeWithFont:self.captionLabel.font
+                                          constrainedToSize:CGSizeMake(self.captionLabel.frame.size.width, 1000)
+                                              lineBreakMode:NSLineBreakByWordWrapping];
+    
+    CGFloat labelHeight = labelSize.height;
+    CGFloat delta = (labelHeight - originalLabelHeight);
+    
+    height += delta;
+    
+    return height;
+}
+
 @end
