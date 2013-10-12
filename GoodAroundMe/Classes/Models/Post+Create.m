@@ -105,6 +105,7 @@
     [self setUpdated_at:[ApplicationHelper dateFromString:[postDictionary[POST_UPDATED_AT] description]]];
     [self setComments_count:[ApplicationHelper numberFromString:[postDictionary[POST_COMMENTS_COUNT] description]]];
     [self setLikes_count:[ApplicationHelper numberFromString:[postDictionary[POST_LIKES_COUNT] description]]];
+    [self setContributor:[postDictionary[POST_CONTRIBUTOR] description]];
     
     if (postDictionary[LIKE]) {
         NSDictionary *likeDictionary = postDictionary[LIKE];
@@ -115,10 +116,10 @@
         [self setLiked_by_user:[NSNumber numberWithBool:NO]];
     }
     
-    if (postDictionary[POST_CONTRIBUTOR]) {
-        NSDictionary *userDictionary = postDictionary[POST_CONTRIBUTOR];
-        User *contributor = [User userWithDictionary:userDictionary[USER] inManagedObjectContext:self.managedObjectContext];
-        [self setContributor:contributor ];
+    if (postDictionary[POST_USER]) {
+        NSDictionary *userDictionary = postDictionary[POST_USER];
+        User *user = [User userWithDictionary:userDictionary inManagedObjectContext:self.managedObjectContext];
+        [self setUser:user];
     }
     
     if (postDictionary[POST_ORGANIZATION]) {

@@ -68,7 +68,7 @@
 
 - (NSString *)getContentText
 {
-    NSString *username = [self.user getFullName];
+    NSString *username = self.user.displayName;
     NSString *text = [NSString stringWithFormat:@"%@ %@", username, self.content];
     return text;
 }

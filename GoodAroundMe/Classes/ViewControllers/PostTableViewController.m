@@ -23,23 +23,6 @@
 
 @implementation PostTableViewController
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	// Do any additional setup after loading the view
-    
-    // register for keyboard notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillShow:)
-                                                 name:UIKeyboardWillShowNotification
-                                               object:self.view.window];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillHide:)
-                                                 name:UIKeyboardWillHideNotification
-                                               object:self.view.window];
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -202,45 +185,6 @@
             [self.tableView reloadData];
         } failure:^(NSString *message) {
             [self fail:@"Delete comment failed" withMessage:message];
-        }];
-    }
-}
-
-#pragma mark - Keyboard
-
-- (void)keyboardWillShow:(UITextView *)textView
-{
-    [self animateTextField:textView up:YES];   
-}
-
-
-- (void)keyboardWillHide:(UITextView *)textView
-{
-    [self animateTextField:textView up:NO];
-}
-
-- (void) animateTextField:(UITextView *)textView up:(BOOL)up
-{
-    const int keyboardHeight = 216.0f; // tweak as needed
-    const float movementDuration = 0.27f; // tweak as needed
-    
-    int movement = up ? -1 * keyboardHeight : keyboardHeight;
-    
-    if (up) {
-        [UIView animateWithDuration:movementDuration animations:^{
-            CGRect frame = self.tableView.frame;
-            self.view.frame = CGRectMake(frame.origin.x,
-                                         frame.origin.y,
-                                         frame.size.width,
-                                         frame.size.height + movement);
-        }];
-    } else {
-        [UIView animateWithDuration:movementDuration animations:^{
-            CGRect frame = self.tableView.frame;
-            self.view.frame = CGRectMake(frame.origin.x,
-                                         frame.origin.y,
-                                         frame.size.width,
-                                         frame.size.height + movement);
         }];
     }
 }

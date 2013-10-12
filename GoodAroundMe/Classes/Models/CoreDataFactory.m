@@ -8,6 +8,8 @@
 
 #import "CoreDataFactory.h"
 
+#define CORE_DATA_EXT @".data"
+
 @interface CoreDataFactory()
 
 @property (nonatomic, strong) NSString *filename;
@@ -32,7 +34,12 @@ static CoreDataFactory *instance;
 - (NSString *)filename
 {
     if (!_filename) {
-        _filename = [NSString stringWithFormat:@"%@-%@.data", CORE_DATA_FILE, @"1"];//[[NSDate date] description]];
+        NSDictionary *infoDictionary = [[NSBundle mainBundle]infoDictionary];
+        
+        NSString *build = infoDictionary[(NSString *)kCFBundleVersionKey];
+        NSString *bundleName = infoDictionary[(NSString *)kCFBundleNameKey];
+        
+        _filename = [NSString stringWithFormat:@"%@-%@%@", bundleName, build, CORE_DATA_EXT];//, [[NSDate date] description]];
     }
     
     return _filename;
@@ -45,14 +52,16 @@ static CoreDataFactory *instance;
     url = [url URLByAppendingPathComponent:self.filename];
     UIManagedDocument *document = [[UIManagedDocument alloc] initWithFileURL:url];
     
+    // delete all preceding CoreData files
+    [self deleteAllCoreDataFiles:CORE_DATA_EXT];
+    
     if (self.managedObjectContext) {
         create(self.managedObjectContext);
         get(self.managedObjectContext);
     } else if (![[NSFileManager defaultManager] fileExistsAtPath:[url path]]) {
-        [document saveToURL:url
-           forSaveOperation:UIDocumentSaveForCreating
-          completionHandler:^(BOOL success) {
+        [document saveToURL:url forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
               if (success) {
+                  NSLog(@"[INFO] <CoreDataFactory> Using core data file %@", [url path]);
                   self.managedObjectContext = document.managedObjectContext;
                   create(self.managedObjectContext);
               }
@@ -76,6 +85,32 @@ static CoreDataFactory *instance;
     } get:^(NSManagedObjectContext *managedObjectContext) {
         get(managedObjectContext);
     }];
+}
+
+- (void)deleteAllCoreDataFiles:(NSString *)prefix
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *directory = [paths lastObject];
+    
+    BOOL isDir = NO;
+    if ([fileManager fileExistsAtPath:directory isDirectory:&isDir] && isDir) {
+        NSError *error = nil;
+        NSArray *files = [fileManager contentsOfDirectoryAtPath:directory error:&error];
+        
+        NSLog(@"[DEBUG] <CoreDataFactory> Found %d files at directory %@ ", [files count], directory);
+        for (NSString *file in files) {
+            if ([file rangeOfString:prefix].location != NSNotFound) {
+                NSDictionary *attrs = [fileManager attributesOfItemAtPath:directory error:&error];
+                unsigned long long result = [attrs fileSize];
+                //NSLog(@"[DEBUG] Found file at directory %@ of name %@ of size %llu", directory, file, result);
+                if([fileManager removeItemAtPath:[directory stringByAppendingPathComponent:file] error:&error]) {
+                    NSLog(@"[DEBUG] <CoreDataFactory> Delete file %@ of size %llu", file, result);
+                }
+            }
+        }
+        
+    }
 }
 
 @end

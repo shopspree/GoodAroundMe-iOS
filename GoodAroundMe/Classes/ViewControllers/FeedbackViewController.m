@@ -66,7 +66,7 @@ static NSString *SelectArea = @"Select problem area";
                  screenshotURL:self.problemScreenshotURL
                        success:^(NSDictionary *responseDictionary) {
         [self stopActivityIndicationInNavigationBar];
-        [self navigateStoryboardWithIdentifier:STORYBOARD_FEEDBACK];
+        [self.navigationController popToRootViewControllerAnimated:YES];
     } failure:^(NSString *message) {
         [self stopActivityIndicationInNavigationBar];
         [self fail:@"Report problem failed" withMessage:message];

@@ -109,7 +109,7 @@ static NSString *PostCellIdentifier = @"PostCell";
             
             if ([sender isKindOfClass:[UIButton class]]) {
                 UIButton *button = (UIButton *)sender;
-                postVC.keyboardIsShown = (button.tag == NEWSFEED_POST_VIEW_COMMENT_BUTTON);
+                postVC.isCommentMode = (button.tag == NEWSFEED_POST_VIEW_COMMENT_BUTTON);
             }
         }
     } else if ([segue.identifier isEqualToString:STORYBOARD_ORGANIZATION_SETTINGS]) {

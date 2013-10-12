@@ -15,7 +15,7 @@
 #define USER_AUTHENTICATION @"authentication_token"
 #define USER_PASSWORD @"password"
 #define USER_BOOTSTRAP @"boostrap"
-#define USER_FULL_NAME @"full_name"
+#define USER_DISPLAY_NAME @"display_name"
 #define USER_FIRST_NAME @"first_name"
 #define USER_LAST_NAME @"last_name"
 #define USER_THUMBNAIL_URL @"thumbnail_url"
@@ -48,7 +48,6 @@
 - (BOOL) isFollowingOrganization:(Organization *)organization;
 
 - (NSData *)toJSON;
-- (NSString *)getFullName;
 - (NSString *)log;
 
 @end

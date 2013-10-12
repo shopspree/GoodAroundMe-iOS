@@ -43,7 +43,7 @@ NSInteger const FontSizeForComment = 15.0f;
     // Create the attributes
     NSDictionary *nameAttrs = [NSDictionary dictionaryWithObjectsAndKeys: nameFont, NSFontAttributeName, nil];
     NSDictionary *contentAttrs = [NSDictionary dictionaryWithObjectsAndKeys: contentFont, NSFontAttributeName, nil];
-    const NSRange range = NSMakeRange(0,[self.comment.user getFullName].length);
+    const NSRange range = NSMakeRange(0,self.comment.user.displayName.length);
     
     // Create the attributed string (text + attributes)
     NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:text attributes:contentAttrs];

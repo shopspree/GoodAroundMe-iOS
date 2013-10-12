@@ -2,7 +2,7 @@
 //  Post.m
 //  GoodAroundMe
 //
-//  Created by asaf ahi-mordehai on 8/31/13.
+//  Created by asaf ahi-mordehai on 10/7/13.
 //  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
@@ -25,11 +25,12 @@
 @dynamic title;
 @dynamic uid;
 @dynamic updated_at;
-@dynamic comments;
 @dynamic contributor;
+@dynamic comments;
 @dynamic likes;
 @dynamic newsfeed;
 @dynamic organization;
 @dynamic pictures;
+@dynamic user;
 
 @end

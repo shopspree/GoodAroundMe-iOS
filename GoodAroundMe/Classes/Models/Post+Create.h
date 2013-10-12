@@ -20,6 +20,7 @@
 #define POST_LIKED_BY_USER @"liked_by_user"
 #define POST_LIKES_COUNT @"likes_count"
 #define POST_CONTRIBUTOR @"contributor"
+#define POST_USER @"user"
 
 #define POST_ORGANIZATION @"organization"
 #define POST_MEDIAS @"medias"

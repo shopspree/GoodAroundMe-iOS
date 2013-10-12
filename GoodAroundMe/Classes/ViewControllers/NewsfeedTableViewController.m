@@ -24,6 +24,7 @@
 #import "OrganizationProfileViewController.h"
 #import "GiveViewController.h"
 #import "UIImage+Resize.h"
+#import "TempViewController.h"
 
 #define ACTION_SHEET_NEW_POST_TAG 1
 #define ACTION_SHEET_DELETE_POST_TAG 2
@@ -33,7 +34,7 @@
 @property (nonatomic, strong) Post *selectedPost;
 @property (nonatomic, strong) NSArray *uploads;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *cameraBarButton;
-@property (strong, nonatomic) UIView *loadingView;
+//@property (strong, nonatomic) UIView *loadingView;
 
 @end
 
@@ -49,8 +50,6 @@
                   forControlEvents:UIControlEventValueChanged];
     
     self.navigationController.navigationBarHidden = NO;
-    [self.view addSubview:self.loadingView];
-    [self startLoading:YES];
     
     User *currentUser = [User currentUser:self.managedObjectContext];
     if (!currentUser.organization) {
@@ -81,13 +80,25 @@
     [self.refreshControl beginRefreshing];
     [self fetchCoreData];
     
+    static CGFloat duration = 0.27f; 
+    [UIView animateWithDuration:duration animations:^{
+        CGPoint newOffset = CGPointMake(0, -1 * self.tableView.rowHeight);//[self.tableView contentInset].top);
+        [self.tableView setContentOffset:newOffset animated:YES];
+     }];
+    
     [Newsfeed newsfeedFromServer:self.managedObjectContext success:^{
-        [self startLoading:NO];
-        [self.refreshControl endRefreshing];
+        [UIView animateWithDuration:duration animations:^{
+            [self.tableView setContentOffset:CGPointZero animated:YES];
+        } completion:^(BOOL finished) {
+            [self.refreshControl endRefreshing];
+        }];
         [self fetchCoreData];
     } failure:^(NSString *message) {
-        [self startLoading:NO];
-        [self.refreshControl endRefreshing];
+        [UIView animateWithDuration:duration animations:^{
+            [self.tableView setContentOffset:CGPointZero animated:YES];
+        } completion:^(BOOL finished) {
+            [self.refreshControl endRefreshing];
+        }];
         [self fail:@"Newsfeed" withMessage:message];
     }];
 }
@@ -140,42 +151,6 @@
     [self performSegueWithIdentifier:identifier sender:sender];
 }
 
-- (UIView *)loadingView
-{
-    if (!_loadingView) {
-        static NSInteger loadingViewHeight = 40;
-        static NSInteger activityIntegerRadius = 20;
-        
-        _loadingView = [[UIView alloc] initWithFrame:CGRectMake(0, -1*loadingViewHeight, self.view.frame.size.width, loadingViewHeight)];
-        _loadingView.alpha = 0.3f;
-        _loadingView.backgroundColor = [UIColor blackColor];
-        
-        CGRect activityIndicatorRect = CGRectMake(roundf((_loadingView.frame.size.width - activityIntegerRadius) / 2),
-                                                  roundf((_loadingView.frame.size.height - activityIntegerRadius) / 2),
-                                                  activityIntegerRadius,
-                                                  activityIntegerRadius);
-        UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:activityIndicatorRect];
-        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhite;
-        [activityIndicator startAnimating];
-        
-        [_loadingView addSubview:activityIndicator];
-    }
-    return _loadingView;
-}
-
-- (void)startLoading:(BOOL)start
-{
-    const float movementDuration = 0.27f; // tweak as needed
-    CGFloat y = start ? 0 : -1*self.loadingView.frame.size.height;
-    
-    [UIView animateWithDuration:movementDuration animations:^{
-        self.loadingView.frame = CGRectMake(0,
-                                            y,
-                                            self.loadingView.frame.size.width,
-                                            self.loadingView.frame.size.height);
-    }];
-}
-
 #pragma mark - Storyboard
 
 - (IBAction)cameraButtonPressed:(id)sender
@@ -212,7 +187,7 @@
     
             if ([sender isKindOfClass:[UIButton class]]) {
                 UIButton *button = (UIButton *)sender;
-                postViewController.keyboardIsShown = (button.tag == NEWSFEED_POST_VIEW_COMMENT_BUTTON);
+                postViewController.isCommentMode = (button.tag == NEWSFEED_POST_VIEW_COMMENT_BUTTON);
             }       
         }
     } else if ([segue.identifier isEqualToString:STORYBOARD_ORGANIZATION_PROFILE]) {

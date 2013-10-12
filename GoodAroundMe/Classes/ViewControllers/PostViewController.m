@@ -22,6 +22,7 @@
 
 @interface PostViewController ()
 
+@property (weak, nonatomic) IBOutlet UIView *mainView;
 @property (weak, nonatomic) IBOutlet UITableView *postTableView;
 @property (weak, nonatomic) IBOutlet UIView *commentInputView;
 @property (weak, nonatomic) IBOutlet UITextField *commentInputTextField;
@@ -30,6 +31,7 @@
 @property (nonatomic, strong) PostTableViewController *postTableViewController;
 
 @property (nonatomic) BOOL isKeyboardShown;
+@property (nonatomic) CGRect viewFrame;
 
 @end
 
@@ -63,25 +65,26 @@
     [super viewWillAppear:animated];
     
     [self.postTableViewController viewWillAppear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
     
-    if (self.keyboardIsShown) {
+    [self.postTableViewController viewDidAppear:animated];
+    
+    if (self.isCommentMode && !self.isKeyboardShown) {
         [self.commentInputTextField becomeFirstResponder];
-        self.keyboardIsShown = NO;
     }
 }
 
-- (PostTableViewController *)postTableViewController
+- (void)viewWillLayoutSubviews
 {
-    if (! _postTableViewController) {
-        if (self.post) {
-            _postTableViewController = [[PostTableViewController alloc] init];
-            _postTableViewController.post = self.post;
-            _postTableViewController.masterController = self;
-            _postTableViewController.tableView = self.postTableView;
-        }
+    if (self.isKeyboardShown) {
+        self.view.frame = self.viewFrame;
     }
     
-    return _postTableViewController;
+    [super viewWillLayoutSubviews];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -93,7 +96,7 @@
             LikesTableViewController *likesTVC = (LikesTableViewController *)segue.destinationViewController;
             likesTVC.post = self.post;
         }
-
+        
     } else if ([segue.identifier isEqualToString:STORYBOARD_ORGANIZATION_PROFILE]) {
         if ([segue.destinationViewController isKindOfClass:[OrganizationProfileViewController class]]) {
             OrganizationProfileViewController *organizationProfileViewController = (OrganizationProfileViewController *)segue.destinationViewController;
@@ -111,8 +114,23 @@
             GiveViewController *giveVC = (GiveViewController *)segue.destinationViewController;
             giveVC.organization = self.post.organization;
         }
-        
     }
+}
+
+#pragma mark - private 
+
+- (PostTableViewController *)postTableViewController
+{
+    if (! _postTableViewController) {
+        if (self.post) {
+            _postTableViewController = [[PostTableViewController alloc] init];
+            _postTableViewController.post = self.post;
+            _postTableViewController.masterController = self;
+            _postTableViewController.tableView = self.postTableView;
+        }
+    }
+    
+    return _postTableViewController;
 }
 
 - (void)deletePost{
@@ -207,6 +225,7 @@
 
 - (void)commentOnPost:(id)sender
 {
+    self.isCommentMode = YES;
     [self.commentInputTextField becomeFirstResponder];
 }
 
@@ -233,10 +252,13 @@
 
 - (void)deletePost:(id)sender
 {
+    User *currentUser = [User currentUser:self.managedObjectContext];
+    NSString *deleteButtonTitle = self.post.organization == currentUser.organization ? @"Delete" : nil;
+    
     UIActionSheet *cellActionSheet = [[UIActionSheet alloc] initWithTitle:@""
                                                                  delegate:self
                                                         cancelButtonTitle:@"Cancel"
-                                                   destructiveButtonTitle:@"Delete"
+                                                   destructiveButtonTitle:deleteButtonTitle
                                                         otherButtonTitles:@"Report Inappropriate", nil];
     cellActionSheet.tag = ACTION_SHEET_DELETE_POST_TAG;
     [cellActionSheet showInView:self.view];
@@ -254,77 +276,78 @@
 
 #pragma mark - Keyboard
 
-- (void)keyboardWillShow:(UITextView *)textView
+- (void)keyboardWillShow:(NSNotification *)notification
 {
-    self.isKeyboardShown = YES;
     [self.postTableViewController.tableView addGestureRecognizer:self.tap]; // add tap gesture to tap away from the keyboard
     
-    [self animateTextField:textView up:YES];
+    [self animateTextField:notification up:YES];
 
 }
 
 
-- (void)keyboardWillHide:(UITextView *)textView
+- (void)keyboardWillHide:(NSNotification *)notification
 {
-    self.isKeyboardShown = NO;
     [self.postTableViewController.tableView removeGestureRecognizer:self.tap]; // remove tap gesture
     
-    [self animateTextField:textView up:NO];
+    [self animateTextField:notification up:NO];
 }
 
-- (void) animateTextField:(UITextView *)textView up:(BOOL)up
+- (void)animateTextField:(NSNotification *)notification up:(BOOL)up
 {
+    self.isCommentMode = up;
+    
     const int keyboardHeight = 216.0f; // tweak as needed
-    const float movementDuration = 0.27f; // tweak as needed
+    const float movementDuration = [self keyboardAnimationDurationForNotification:notification]; // tweak as needed
     
     int movement = up ? -1 * keyboardHeight : keyboardHeight;
     
+    CGRect frame = self.view.frame;
+    self.viewFrame = CGRectMake(frame.origin.x,
+                                frame.origin.y,
+                                frame.size.width,
+                                frame.size.height + movement);
+    
     if (up) {
         [UIView animateWithDuration:movementDuration animations:^{
-            CGRect frame = self.commentInputView.frame;
-            self.commentInputView.frame = CGRectOffset(frame, 0, movement);
+            self.postTableView.frame = self.viewFrame;
+            self.commentInputView.frame = CGRectOffset(self.commentInputView.frame, 0, movement);
+            
+            //[self.view layoutIfNeeded];
         } completion:^(BOOL finished) {
-            CGRect frame = self.view.frame;
-            self.view.frame = CGRectMake(frame.origin.x,
-                                         frame.origin.y,
-                                         frame.size.width,
-                                         frame.size.height + movement);
-            NSLog(@"[DEBUG] <PostViewController> Table view height is %f", self.postTableView.frame.size.height);
+            
+            self.view.frame = self.viewFrame;
+            self.isKeyboardShown = up;
         }];
     } else {
         [UIView animateWithDuration:movementDuration animations:^{
-            CGRect frame = self.commentInputView.frame;
-            self.commentInputView.frame = CGRectOffset(frame, 0, movement);
-            
-            frame = self.view.frame;
-            self.view.frame = CGRectMake(frame.origin.x,
-                                         frame.origin.y,
-                                         frame.size.width,
-                                         frame.size.height + movement);
-            NSLog(@"[DEBUG] <PostViewController> Table view height is %f", self.postTableView.frame.size.height);
+            self.commentInputView.frame = CGRectOffset(self.commentInputView.frame, 0, movement);
+            self.view.frame = self.viewFrame;
+            self.postTableView.frame = self.viewFrame;
+            self.isKeyboardShown = up;
         }];
     }
+    
 }
 
+- (NSTimeInterval)keyboardAnimationDurationForNotification:(NSNotification*)notification
+{
+    NSDictionary* info = [notification userInfo];
+    NSValue* value = [info objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+    NSTimeInterval duration = 0;
+    [value getValue:&duration];
+    return duration;
+}
 
 #pragma mark - UIActionSheetDelegate
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (actionSheet.tag == ACTION_SHEET_DELETE_POST_TAG) {
-        switch (buttonIndex) {
-            case 0:
-                NSLog(@"[DEBUG] <PostViewController> deleted post is %@", [self.post description]);
-                [self deletePost];
-                break;
-                
-            case 1:
-                NSLog(@"[DEBUG] <PostViewController> Reported as inappropriate post is %@", [self.post description]);
-                
-                break;
-                
-            default:
-                break;
+        if (buttonIndex == actionSheet.destructiveButtonIndex) {
+            NSLog(@"[DEBUG] <PostViewController> deleted post is %@", [self.post description]);
+            [self deletePost];
+        } else if (buttonIndex == actionSheet.firstOtherButtonIndex) {
+            NSLog(@"[DEBUG] <PostViewController> Reported as inappropriate post is %@", [self.post description]);
         }
     }
 }

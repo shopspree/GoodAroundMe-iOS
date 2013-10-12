@@ -15,6 +15,6 @@
 @interface PostViewController : AbstractViewController <NewsfeedPostViewDelegate, UIActionSheetDelegate>
 
 @property (nonatomic, strong) Post *post;
-@property (nonatomic) BOOL keyboardIsShown;
+@property (nonatomic) BOOL isCommentMode;
 
 @end

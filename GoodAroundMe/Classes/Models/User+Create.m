@@ -201,6 +201,7 @@
         self.email = [userDictionary[USER_EMAIL] description];
         self.firstname = [userDictionary[USER_FIRST_NAME] description];
         self.lastname = [userDictionary[USER_LAST_NAME] description];
+        self.displayName = [userDictionary[USER_DISPLAY_NAME] description];
         self.thumbnailURL = [userDictionary[USER_THUMBNAIL_URL] description];
         self.created_at = [ApplicationHelper dateFromString:[userDictionary[USER_CREATED_AT] description]];
         self.updated_at = [ApplicationHelper dateFromString:[userDictionary[USER_UPDATED_AT] description]];
@@ -305,12 +306,6 @@
     
     NSData *jsonData = [ApplicationHelper constructJSON:dictionary];
     return jsonData;
-}
-
-- (NSString *)getFullName
-{
-    NSString *fullName = [NSString stringWithFormat:@"%@ %@", self.firstname, self.lastname];
-    return fullName;
 }
 
 - (NSString *)log
