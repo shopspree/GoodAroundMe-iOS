@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="qtG-kN-63d">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="qtG-kN-63d">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
@@ -532,7 +532,7 @@
                                         </constraints>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="j9r-fo-vIt">
-                                        <rect key="frame" x="0.0" y="46" width="280" height="44"/>
+                                        <rect key="frame" x="0.0" y="46" width="280" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="10" y="0.0" width="260" height="43"/>
@@ -894,7 +894,7 @@
                                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                             <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES" calendarEvent="YES"/>
                                                         </textView>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" image="animal1.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="kJB-Vf-TjC">
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" image="animal1.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="kJB-Vf-TjC">
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="106" id="Jkj-3p-lmW"/>
                                                                 <constraint firstAttribute="width" constant="106" type="user" id="QTp-5c-QiN"/>
@@ -906,12 +906,12 @@
                                                                 <constraint firstAttribute="width" constant="55" type="user" id="Lch-0f-Rhl"/>
                                                             </constraints>
                                                         </imageView>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" image="animal2.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="gqN-Bn-cOV">
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" image="animal2.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="gqN-Bn-cOV">
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="106" type="user" id="K2z-7d-gDt"/>
                                                             </constraints>
                                                         </imageView>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" image="animal3.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="Nt1-Vt-Swd">
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" image="animal3.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="Nt1-Vt-Swd">
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="106" type="user" id="lJC-3D-b40"/>
                                                             </constraints>
@@ -1235,7 +1235,7 @@
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kmB-yH-o0K">
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kmB-yH-o0K">
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="50" id="2H4-d3-9e6"/>
                                                 <constraint firstAttribute="width" constant="50" id="AgQ-SQ-NlJ"/>
@@ -1499,9 +1499,9 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="222"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Dan is following 264 Organizations" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="P52-au-EPG">
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Dan is following 264 organizations" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="P52-au-EPG">
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="50" id="wIe-Xh-Dh4"/>
+                                                <constraint firstAttribute="height" constant="43" id="J1h-VU-Qzx"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" name="GillSans-Light" family="Gill Sans" pointSize="16"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -1512,24 +1512,24 @@
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="1eu-78-Biq">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1eu-78-Biq">
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="142" id="4vk-dH-B6U"/>
+                                                <constraint firstAttribute="width" constant="120" id="O2L-5p-HFC"/>
+                                                <constraint firstAttribute="height" constant="120" id="al7-mL-wOb"/>
                                             </constraints>
                                         </imageView>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <constraints>
-                                    <constraint firstItem="1eu-78-Biq" firstAttribute="centerX" secondItem="QVv-8y-lpJ" secondAttribute="centerX" type="default" id="BAr-ON-Zat"/>
+                                    <constraint firstItem="1eu-78-Biq" firstAttribute="leading" secondItem="POF-B3-U3y" secondAttribute="leading" constant="89" id="2ud-6k-E54"/>
                                     <constraint firstItem="1eu-78-Biq" firstAttribute="top" secondItem="POF-B3-U3y" secondAttribute="top" constant="20" type="default" id="CFH-cW-2M8"/>
                                     <constraint firstAttribute="trailing" secondItem="P52-au-EPG" secondAttribute="trailing" constant="20" type="default" id="NvV-ag-ykb"/>
+                                    <constraint firstItem="P52-au-EPG" firstAttribute="top" secondItem="QVv-8y-lpJ" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="RAK-eI-7JY"/>
                                     <constraint firstItem="P52-au-EPG" firstAttribute="leading" secondItem="POF-B3-U3y" secondAttribute="leading" constant="20" type="default" id="RGN-4H-aho"/>
-                                    <constraint firstItem="QVv-8y-lpJ" firstAttribute="top" secondItem="1eu-78-Biq" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="Uzd-jm-rQf"/>
-                                    <constraint firstItem="P52-au-EPG" firstAttribute="top" secondItem="QVv-8y-lpJ" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="bil-aD-T4x"/>
+                                    <constraint firstItem="QVv-8y-lpJ" firstAttribute="top" secondItem="1eu-78-Biq" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="ZLv-nF-Fnb"/>
                                     <constraint firstItem="QVv-8y-lpJ" firstAttribute="leading" secondItem="POF-B3-U3y" secondAttribute="leading" constant="20" type="default" id="nNc-Go-4C8"/>
                                     <constraint firstAttribute="trailing" secondItem="QVv-8y-lpJ" secondAttribute="trailing" constant="20" type="default" id="yUa-n7-9ll"/>
-                                    <constraint firstItem="P52-au-EPG" firstAttribute="top" secondItem="POF-B3-U3y" secondAttribute="top" constant="174" id="zug-vq-Gka"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="followingLabel" destination="P52-au-EPG" id="jHD-rw-wtI"/>
@@ -1690,7 +1690,7 @@
             <objects>
                 <viewController id="bgA-95-GwP" customClass="UserSettingsViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="zJu-6a-kKq">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="ryf-Ov-8xS">
@@ -1789,7 +1789,7 @@
             <objects>
                 <tableViewController id="RxN-Wo-Eda" customClass="UserChangePasswordViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="l9U-Zf-PYp">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -2069,7 +2069,7 @@
             <objects>
                 <tableViewController id="UJP-Ye-k6p" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" alpha="0.75" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="static" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="5" id="RHs-oE-Jwh">
-                        <rect key="frame" x="0.0" y="0.0" width="271" height="195"/>
+                        <rect key="frame" x="0.0" y="20" width="271" height="195"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -2100,7 +2100,7 @@
                                         </constraints>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="xAO-D1-PZ8">
-                                        <rect key="frame" x="0.0" y="55" width="271" height="44"/>
+                                        <rect key="frame" x="0.0" y="55" width="271" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="10" y="0.0" width="251" height="43"/>
@@ -2128,7 +2128,7 @@
                             <tableViewSection id="gnV-15-nqD">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="HyJ-S8-KLF">
-                                        <rect key="frame" x="0.0" y="114" width="271" height="45"/>
+                                        <rect key="frame" x="0.0" y="114" width="271" height="46"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="10" y="1" width="251" height="43"/>
@@ -2163,14 +2163,14 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="14N-0q-uX2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2630" y="571"/>
+            <point key="canvasLocation" x="2638" y="547"/>
         </scene>
         <!--User Edit Name View Controller-->
         <scene sceneID="nxF-RX-ESm">
             <objects>
                 <tableViewController id="Y3d-0K-qWT" customClass="UserEditNameViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="SYD-36-sMK">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -2723,7 +2723,7 @@
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="399" id="pLz-vD-DsL"/>
                                             </constraints>
-                                            <mutableString key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</mutableString>
+                                            <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                             <fontDescription key="fontDescription" name="GillSans-Light" family="Gill Sans" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES"/>
@@ -2778,7 +2778,7 @@
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="H4b-3O-Xoq">
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="H4b-3O-Xoq">
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="50" id="JZf-VH-iAQ"/>
                                                 <constraint firstAttribute="height" constant="50" id="Upe-tO-59H"/>
@@ -3021,10 +3021,10 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="XC8-Qi-2I7"/>
-        <segue reference="9Tx-6g-ZPn"/>
-        <segue reference="YM7-eP-AmQ"/>
-        <segue reference="RPy-EX-WJG"/>
-        <segue reference="PqH-At-cbe"/>
+        <segue reference="tVZ-xG-BkR"/>
         <segue reference="2Ed-4t-11v"/>
+        <segue reference="cCw-WB-4EB"/>
+        <segue reference="PqH-At-cbe"/>
+        <segue reference="Fbx-7W-NmB"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -2,7 +2,7 @@
 //  User.h
 //  GoodAroundMe
 //
-//  Created by asaf ahi-mordehai on 10/7/13.
+//  Created by asaf ahi-mordehai on 10/14/13.
 //  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 

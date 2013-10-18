@@ -30,8 +30,8 @@
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *tap;
 @property (nonatomic, strong) PostTableViewController *postTableViewController;
 
-@property (nonatomic) BOOL isKeyboardShown;
 @property (nonatomic) CGRect viewFrame;
+@property (nonatomic) BOOL isKeyboardShown;
 
 @end
 

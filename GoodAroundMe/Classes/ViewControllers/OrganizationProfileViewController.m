@@ -45,6 +45,8 @@ static NSString *PostCellIdentifier = @"PostCell";
     
     self.title = self.organization.name;
     
+    NSLog(@"[DEBUG] <OrganizationProfileViewController> Loading %d posts", [self.posts count]); // also lazy load the posts on ControllerView load
+    
     User *user = [User currentUser:self.managedObjectContext];
     if (user.organization && user.organization.uid == self.organization.uid) {
         self.navigationItem.rightBarButtonItem = self.editNavButton;

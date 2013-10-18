@@ -15,6 +15,7 @@
 @property (strong, nonatomic) NSArray *sections;
 @property (nonatomic) NSInteger headerHeight;
 @property (strong, nonatomic) UIView *headerView;
+@property (strong, nonatomic) OrganizationAboutCell *templateOrganizationAboutCell;
 
 @end
 
@@ -70,6 +71,13 @@
         cell = [tableView dequeueReusableCellWithIdentifier:AboutCellIdentifier forIndexPath:indexPath];
         OrganizationAboutCell *organizationAboutCell = (OrganizationAboutCell *)cell;
         organizationAboutCell.aboutTextView.text = self.organization.about;
+        
+        CGFloat defaultHeight = [self tableView:self.tableView heightForRowAtIndexPath:indexPath];
+        CGFloat actualHeight = organizationAboutCell.aboutTextView.contentSize.height;
+        if (actualHeight > defaultHeight) {
+            self.templateOrganizationAboutCell = organizationAboutCell;
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
     }
     
     return cell;
@@ -94,10 +102,11 @@
 {
     CGFloat height = tableView.rowHeight;
     
-    if (indexPath.section == 0 && indexPath.row == 0) {
-        NSString *about = self.organization.about;
-        CGSize size = [about sizeWithFont:[UIFont fontWithName:@"GillSans-Light" size:14.0f]];
-        height = size.height;
+    if (self.templateOrganizationAboutCell && indexPath.section == 0 && indexPath.row == 0) {
+        //NSString *about = self.organization.about;
+        //CGSize size = [about sizeWithFont:self.templateOrganizationAboutCell.aboutTextView.font constrainedToSize:self.templateOrganizationAboutCell.aboutTextView.frame.size lineBreakMode:NSLineBreakByWordWrapping];
+        //height = size.height;
+        height = self.templateOrganizationAboutCell.aboutTextView.contentSize.height;
     }
     
     return height;

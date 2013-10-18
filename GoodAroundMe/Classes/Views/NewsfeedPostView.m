@@ -52,7 +52,7 @@
         self.thumbnailURL = post.organization.image_thumbnail_url;
         self.nameText = post.organization.name;
         self.titleText = post.title;
-        //self.contributor = post.contributor.displayName;
+        self.contributor = post.contributor;
         self.likesCountNumber = post.likes_count;
         self.commentsCountNumber = post.comments_count;
         self.caption = post.caption;
