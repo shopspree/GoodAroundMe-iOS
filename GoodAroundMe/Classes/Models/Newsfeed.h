@@ -2,7 +2,7 @@
 //  Newsfeed.h
 //  GoodAroundMe
 //
-//  Created by asaf ahi-mordehai on 8/31/13.
+//  Created by asaf ahi-mordehai on 10/22/13.
 //  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
@@ -20,7 +20,7 @@
 @property (nonatomic, retain) NSDate * updated_at;
 @property (nonatomic, retain) Comment *comment;
 @property (nonatomic, retain) Like *like;
-@property (nonatomic, retain) Post *post;
 @property (nonatomic, retain) Organization *organization;
+@property (nonatomic, retain) Post *post;
 
 @end

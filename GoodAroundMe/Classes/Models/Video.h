@@ -1,5 +1,5 @@
 //
-//  Photo.h
+//  Video.h
 //  GoodAroundMe
 //
 //  Created by asaf ahi-mordehai on 10/22/13.
@@ -11,7 +11,9 @@
 #import "Media.h"
 
 
-@interface Photo : Media
+@interface Video : Media
 
+@property (nonatomic, retain) NSString * url;
+@property (nonatomic, retain) NSString * image_url;
 
 @end

@@ -14,7 +14,7 @@
 @property (nonatomic, strong) NSString *thumbnailURL;
 @property (nonatomic, strong) NSString *nameText;
 @property (nonatomic, strong) NSString *titleText;
-@property (nonatomic, strong) NSString *pictureURL;
+@property (nonatomic, strong) NSString *imageURL;
 @property (nonatomic, strong) NSNumber *likesCountNumber;
 @property (nonatomic, strong) NSNumber *commentsCountNumber;
 @property (nonatomic, strong) NSString *caption;

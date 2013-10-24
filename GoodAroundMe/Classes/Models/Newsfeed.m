@@ -2,7 +2,7 @@
 //  Newsfeed.m
 //  GoodAroundMe
 //
-//  Created by asaf ahi-mordehai on 8/31/13.
+//  Created by asaf ahi-mordehai on 10/22/13.
 //  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
@@ -22,7 +22,7 @@
 @dynamic updated_at;
 @dynamic comment;
 @dynamic like;
-@dynamic post;
 @dynamic organization;
+@dynamic post;
 
 @end

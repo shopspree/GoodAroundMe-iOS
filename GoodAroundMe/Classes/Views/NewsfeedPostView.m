@@ -6,13 +6,15 @@
 //  Copyright (c) 2013 asaf ahi-mordehai. All rights reserved.
 //
 
+#import <MediaPlayer/MediaPlayer.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "NewsfeedPostView.h"
 #import "ApplicationHelper.h"
 #import "NewsfeedPostViewDelegate.h"
 #import "Organization.h"
 #import "Post+Create.h"
-#import "Picture+Create.h"
+#import "Photo+Create.h"
+#import "Video.h"
 #import "User+Create.h"
 #import "Like.h"
 #import "CoreDataFactory.h"
@@ -47,8 +49,8 @@
 {
     _post = post;
     if (post) {
-        Picture *picture = [[post.pictures allObjects] lastObject];
-        self.pictureURL = picture.url;
+        Media *media = [[post.medias allObjects] lastObject];
+        self.imageURL = media.image_url;
         self.thumbnailURL = post.organization.image_thumbnail_url;
         self.nameText = post.organization.name;
         self.titleText = post.title;
@@ -116,22 +118,22 @@
     self.titleLabel.text = titleText;
 }
 
-- (void)setPictureURL:(NSString *)pictureURL
+- (void)setImageURL:(NSString *)imageURL
 {
-    if (pictureURL) {
-        [self.pictureImage setImageWithURL:[NSURL URLWithString:pictureURL] placeholderImage:[UIImage imageNamed:@"Default.png"]];
-        self.pictureImage.image = [self.pictureImage.image scaleToSize:self.pictureImage.frame.size];
-        self.pictureImage.tag = NEWSFEED_POST_VIEW_PICTURE_IMAGE;
-        self.pictureImage.userInteractionEnabled = YES;
+    if (imageURL) {
+        [self.imageView setImageWithURL:[NSURL URLWithString:imageURL]];
+        self.imageView.image = [self.imageView.image scaleToSize:self.imageView.frame.size];
+        self.imageView.tag = NEWSFEED_POST_VIEW_IMAGE;
+        self.imageView.userInteractionEnabled = YES;
+        self.imageView.backgroundColor = [UIColor lightGrayColor];
         
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
         tapGesture.numberOfTapsRequired = 1;
-        [self.pictureImage addGestureRecognizer:tapGesture];
+        [self.imageView addGestureRecognizer:tapGesture];
         
     }
     
-    [super setPictureURL:pictureURL];
-    
+    [super setImageURL:imageURL];
 }
 
 - (void)setLikesCountNumber:(NSNumber *)likesCountNumber
@@ -226,7 +228,7 @@
             [self logoAction:senderView];
             break;
             
-        case NEWSFEED_POST_VIEW_PICTURE_IMAGE:
+        case NEWSFEED_POST_VIEW_IMAGE:
             [self pictureAction:senderView];
             break;
             
@@ -238,18 +240,18 @@
 
 - (IBAction)logoAction:(id)sender
 {
-    [self.delegate goToOrganization:sender];
+    [self.delegate tapOnOrganization:sender];
 }
 
 - (IBAction)nameAction:(id)sender
 {
-    [self.delegate goToOrganization:sender];
+    [self.delegate tapOnOrganization:sender];
 }
 
 - (IBAction)pictureAction:(id)sender
 {
     
-    [self.delegate goToPost:sender];
+    [self.delegate tapOnPost:sender];
 }
 
 - (IBAction)likeButtonClicked:(id)sender
@@ -269,7 +271,7 @@
 
 - (IBAction)commentsCounButtonClicked:(id)sender
 {
-    [self.delegate goToPost:sender];
+    [self.delegate tapOnPost:sender];
 }
 
 - (IBAction)deleteButtonClicked:(id)sender
@@ -279,7 +281,7 @@
 
 - (IBAction)moreButtonClicked:(id)sender
 {
-    [self.delegate goToPost:sender];
+    [self.delegate tapOnPost:sender];
 }
 
 - (IBAction)giveButtonAction:(id)sender
@@ -292,9 +294,10 @@
     CGFloat height = self.frame.size.height;
 
     CGFloat originalLabelHeight = self.captionLabel.frame.size.height;
+
     CGSize labelSize = [text sizeWithFont:self.captionLabel.font
-                                          constrainedToSize:CGSizeMake(self.captionLabel.frame.size.width, 1000)
-                                              lineBreakMode:NSLineBreakByWordWrapping];
+                        constrainedToSize:CGSizeMake(self.captionLabel.bounds.size.width, 1000)
+                            lineBreakMode:NSLineBreakByWordWrapping];
     
     CGFloat labelHeight = labelSize.height;
     CGFloat delta = (labelHeight - originalLabelHeight);

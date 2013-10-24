@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="2061" systemVersion="12E55" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="2061" systemVersion="12F45" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Comment" representedClassName="Comment" syncable="YES">
         <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
@@ -18,6 +18,13 @@
         <relationship name="newsfeed" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Newsfeed" inverseName="like" inverseEntity="Newsfeed" syncable="YES"/>
         <relationship name="post" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Post" inverseName="likes" inverseEntity="Post" syncable="YES"/>
         <relationship name="user" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="likes" inverseEntity="User" syncable="YES"/>
+    </entity>
+    <entity name="Media" representedClassName="Media" isAbstract="YES" syncable="YES">
+        <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="image_url" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
+        <relationship name="post" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Post" inverseName="medias" inverseEntity="Post" syncable="YES"/>
     </entity>
     <entity name="Newsfeed" representedClassName="Newsfeed" syncable="YES">
         <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
@@ -52,13 +59,7 @@
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="organizations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Organization" inverseName="category" inverseEntity="Organization" syncable="YES"/>
     </entity>
-    <entity name="Picture" representedClassName="Picture" syncable="YES">
-        <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="post" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Post" inverseName="pictures" inverseEntity="Post" syncable="YES"/>
-    </entity>
+    <entity name="Photo" representedClassName="Photo" parentEntity="Media" syncable="YES"/>
     <entity name="Post" representedClassName="Post" syncable="YES">
         <attribute name="caption" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="comments_count" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -71,9 +72,9 @@
         <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="comments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Comment" inverseName="post" inverseEntity="Comment" syncable="YES"/>
         <relationship name="likes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Like" inverseName="post" inverseEntity="Like" syncable="YES"/>
+        <relationship name="medias" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Media" inverseName="post" inverseEntity="Media" syncable="YES"/>
         <relationship name="newsfeed" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Newsfeed" inverseName="post" inverseEntity="Newsfeed" syncable="YES"/>
         <relationship name="organization" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Organization" inverseName="posts" inverseEntity="Organization" syncable="YES"/>
-        <relationship name="pictures" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Picture" inverseName="post" inverseEntity="Picture" syncable="YES"/>
         <relationship name="user" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="posts" inverseEntity="User" syncable="YES"/>
     </entity>
     <entity name="User" representedClassName="User" syncable="YES">
@@ -93,14 +94,19 @@
         <relationship name="organization" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Organization" inverseName="admins" inverseEntity="Organization" syncable="YES"/>
         <relationship name="posts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Post" inverseName="user" inverseEntity="Post" syncable="YES"/>
     </entity>
+    <entity name="Video" representedClassName="Video" parentEntity="Media" syncable="YES">
+        <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <elements>
         <element name="Comment" positionX="187" positionY="1622" width="128" height="178"/>
         <element name="Like" positionX="153" positionY="1469" width="128" height="133"/>
         <element name="Newsfeed" positionX="-110" positionY="1235" width="128" height="178"/>
         <element name="Organization" positionX="-362" positionY="1535" width="128" height="253"/>
         <element name="OrganizationCategory" positionX="-369" positionY="1274" width="128" height="103"/>
-        <element name="Picture" positionX="135" positionY="1835" width="128" height="118"/>
+        <element name="Photo" positionX="90" positionY="1958" width="128" height="43"/>
         <element name="Post" positionX="-146" positionY="1476" width="128" height="268"/>
         <element name="User" positionX="-180" positionY="1787" width="128" height="268"/>
+        <element name="Media" positionX="88" positionY="1818" width="128" height="118"/>
+        <element name="Video" positionX="232" positionY="1958" width="128" height="58"/>
     </elements>
 </model>

@@ -12,7 +12,7 @@
 #import "AmazonAPI.h"
 #import "Organization+Create.h"
 #import "Post+Create.h"
-#import "Picture+Create.h"
+#import "Photo+Create.h"
 #import "StoryboardConstants.h"
 
 @interface NewPostCaptionViewController () <UITextFieldDelegate, AmazonServiceRequestDelegate>
@@ -62,12 +62,11 @@
     NSString *postTitle = self.titleTextField.text;
     NSString *postImageURL = imageURL;
     
-    NSDictionary *pictureDictionary = [NSDictionary dictionaryWithObjectsAndKeys:postImageURL, PICTURE_URL, nil];
-    NSArray *mediasArray = [NSArray arrayWithObjects:pictureDictionary, nil];
+    NSDictionary *photoAttributesDictionary = [NSDictionary dictionaryWithObjectsAndKeys:postImageURL, PHOTO_URL, nil];
     NSDictionary *postAttributesDictionary = [NSDictionary dictionaryWithObjectsAndKeys:postCaption, POST_CAPTION,
-                                              postTitle, POST_TITLE,
-                                              mediasArray, POST_MEDIAS_ATTRIBUTES, nil];
-    NSDictionary *postDictionary = [NSDictionary dictionaryWithObjectsAndKeys:postAttributesDictionary, POST, nil];
+                                              postTitle, POST_TITLE, nil];
+    NSDictionary *postDictionary = [NSDictionary dictionaryWithObjectsAndKeys:postAttributesDictionary, POST,
+                                    photoAttributesDictionary, PHOTO, nil];
     
     [Post newPost:postDictionary managedObjectContext:self.managedObjectContext success:^(Post *post) {
         [self dismissViewControllerAnimated:YES completion:nil];

@@ -12,7 +12,8 @@
 #import "OrganizationCategory+Create.h"
 #import "UIImage+Resize.h"
 #import "Post+Create.h"
-#import "Picture+Create.h"
+#import "Photo+Create.h"
+#import "Video+Create.h"
 #import "UITextView+Truncate.h"
 
 @interface OrganizationProfileCell ()
@@ -60,18 +61,16 @@
 
 - (NSArray *)imagePicks
 {
-    if (! _imagePicks) {
+    if (! _imagePicks || [_imagePicks count] < 3) {
         NSMutableSet *picks = [NSMutableSet set];
         NSArray *posts = [self.organization.posts allObjects];
         if ([posts count] < [self.imageMosaic count]) {
             NSMutableArray *imagePicksCopy = [NSMutableArray arrayWithCapacity:[self.imageMosaic count]];
             for (int i=0; i<[posts count]; i++) {
                 Post *post = [posts objectAtIndex:i];
-                Picture *picture = [[post.pictures allObjects] lastObject];
+                Media *media = [[post.medias allObjects] lastObject];
                 
-                if (picture) {
-                    [imagePicksCopy addObject:picture.url];
-                }
+                [imagePicksCopy addObject:media.image_url];
             }
             
             _imagePicks = imagePicksCopy;
@@ -79,11 +78,9 @@
             do {
                 NSInteger index = arc4random() % [posts count];
                 Post *post = [posts objectAtIndex:index];
-                Picture *picture = [[post.pictures allObjects] lastObject];
+                Media *media = [[post.medias allObjects] lastObject];
                 
-                if (picture) {
-                    [picks addObject:picture.url];
-                }
+                [picks addObject:media.image_url];
                 
             } while ([picks count] < [self.imageMosaic count]);
             _imagePicks = [picks allObjects];

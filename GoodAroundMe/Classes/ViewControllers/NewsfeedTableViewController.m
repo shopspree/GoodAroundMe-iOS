@@ -349,7 +349,7 @@
         
         //image = [self imageWithImage:image scaledToSize:CGSizeMake(320, 269)];
         NewsfeedPostView *view = [[[NSBundle mainBundle] loadNibNamed:@"NewsfeedPostView" owner:self options:nil] lastObject];
-        image = [image scaleToSize:CGSizeMake(view.pictureImage.frame.size.width/2, view.pictureImage.frame.size.height/2)];
+        image = [image scaleToSize:CGSizeMake(view.imageView.frame.size.width/2, view.imageView.frame.size.height/2)];
         
         // Save the new image (original or edited) to the Camera Roll
         UIImageWriteToSavedPhotosAlbum (image, nil, nil , nil);
@@ -435,12 +435,12 @@
     [self selectPostAndSegue:STORYBOARD_POST sender:sender];
 }
 
-- (void)goToPost:(id)sender
+- (void)tapOnPost:(id)sender
 {
     [self selectPostAndSegue:STORYBOARD_POST sender:sender];
 }
 
-- (void)goToOrganization:(id)sender
+- (void)tapOnOrganization:(id)sender
 {
     Post *post = [self selectPost:sender];
     [self performSegueWithIdentifier:STORYBOARD_ORGANIZATION_PROFILE sender:post.organization];

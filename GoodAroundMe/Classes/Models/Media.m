@@ -1,21 +1,21 @@
 //
-//  Picture.m
+//  Media.m
 //  GoodAroundMe
 //
-//  Created by asaf ahi-mordehai on 8/31/13.
+//  Created by asaf ahi-mordehai on 10/22/13.
 //  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
-#import "Picture.h"
+#import "Media.h"
 #import "Post.h"
 
 
-@implementation Picture
+@implementation Media
 
 @dynamic created_at;
-@dynamic uid;
 @dynamic updated_at;
-@dynamic url;
+@dynamic uid;
+@dynamic image_url;
 @dynamic post;
 
 @end

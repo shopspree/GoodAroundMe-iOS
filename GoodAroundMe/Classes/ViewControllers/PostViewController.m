@@ -234,14 +234,14 @@
     [self performSegueWithIdentifier:STORYBOARD_LIKES sender:self];
 }
 
-- (void)goToPost:(id)sender
+- (void)tapOnPost:(id)sender
 {
     if (self.isKeyboardShown) {
         [self tap:sender];
     }
 }
 
-- (void)goToOrganization:(id)sender
+- (void)tapOnOrganization:(id)sender
 {
     if (self.isKeyboardShown) {
         [self tap:sender];

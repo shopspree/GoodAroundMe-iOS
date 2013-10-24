@@ -2,7 +2,7 @@
 //  Organization.h
 //  GoodAroundMe
 //
-//  Created by asaf ahi-mordehai on 8/31/13.
+//  Created by asaf ahi-mordehai on 10/22/13.
 //  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
@@ -25,8 +25,8 @@
 @property (nonatomic, retain) NSSet *admins;
 @property (nonatomic, retain) OrganizationCategory *category;
 @property (nonatomic, retain) NSSet *followers;
-@property (nonatomic, retain) NSSet *posts;
 @property (nonatomic, retain) NSSet *newsfeeds;
+@property (nonatomic, retain) NSSet *posts;
 @end
 
 @interface Organization (CoreDataGeneratedAccessors)
@@ -41,14 +41,14 @@
 - (void)addFollowers:(NSSet *)values;
 - (void)removeFollowers:(NSSet *)values;
 
-- (void)addPostsObject:(Post *)value;
-- (void)removePostsObject:(Post *)value;
-- (void)addPosts:(NSSet *)values;
-- (void)removePosts:(NSSet *)values;
-
 - (void)addNewsfeedsObject:(Newsfeed *)value;
 - (void)removeNewsfeedsObject:(Newsfeed *)value;
 - (void)addNewsfeeds:(NSSet *)values;
 - (void)removeNewsfeeds:(NSSet *)values;
+
+- (void)addPostsObject:(Post *)value;
+- (void)removePostsObject:(Post *)value;
+- (void)addPosts:(NSSet *)values;
+- (void)removePosts:(NSSet *)values;
 
 @end

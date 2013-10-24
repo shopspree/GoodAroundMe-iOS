@@ -1,15 +1,17 @@
 //
-//  Photo.m
+//  Video.m
 //  GoodAroundMe
 //
 //  Created by asaf ahi-mordehai on 10/22/13.
 //  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
-#import "Photo.h"
+#import "Video.h"
 
 
-@implementation Photo
+@implementation Video
 
+@dynamic url;
+@dynamic image_url;
 
 @end

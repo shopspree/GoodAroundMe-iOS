@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OrganizationAboutView.h"
 
 @interface OrganizationAboutCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UITextView *aboutTextView;
+@property (strong, nonatomic) NSString *about;
+@property (strong, nonatomic) OrganizationAboutView *aboutView;
 
 @end

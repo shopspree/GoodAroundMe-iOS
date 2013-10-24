@@ -14,8 +14,8 @@
 - (void)likePost:(id)sender;
 - (void)commentOnPost:(id)sender;
 - (void)likesOnPost:(id)sender;
-- (void)goToPost:(id)sender;
-- (void)goToOrganization:(id)sender;
+- (void)tapOnPost:(id)sender;
+- (void)tapOnOrganization:(id)sender;
 - (void)deletePost:(id)sender;
 - (void)more:(id)sender;
 - (void)give:(id)sender;

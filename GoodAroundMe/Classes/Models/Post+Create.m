@@ -8,7 +8,8 @@
 
 #import "Post+Create.h"
 #import "User+Create.h"
-#import "Picture+Create.h"
+#import "Photo+Create.h"
+#import "Video+Create.h"
 #import "Like+Create.h"
 #import "Comment+Create.h"
 #import "Organization+Create.h"
@@ -128,10 +129,13 @@
     }
 
     for (NSDictionary *mediaDictionary in postDictionary[POST_MEDIAS]) {
-        if ([mediaDictionary[MEDIA_TYPE] isEqualToString:MEDIA_TYPE_PICTURE]) {
-            Picture *picture = [Picture pictureWithDictionary:mediaDictionary post:self];
-            [self addPicturesObject:picture];
-        } 
+        if (mediaDictionary[PHOTO]) {
+            Photo *photo = [Photo photoWithDictionary:mediaDictionary[PHOTO] post:self];
+            [self addMediasObject:photo];
+        } else if (mediaDictionary[VIDEO]) {
+            Video *video = [Video videoWithDictionary:mediaDictionary[VIDEO] post:self];
+            [self addMediasObject:video];
+        }
     }
 }
 
