@@ -24,10 +24,18 @@
     [super layoutSubviews];
     
     if (self.user) {
-        [self.imageView setImageWithURL:[NSURL URLWithString:self.user.thumbnailURL]];
-        self.imageView.image = [self.imageView.image scaleToSize:self.imageView.frame.size];
-        self.imageView.backgroundColor = [UIColor lightGrayColor];
-        self.usernameLabel.text = [NSString stringWithFormat:@"%@ %@", self.user.firstname, self.user.lastname];
+        self.usernameLabel.text = self.user.displayName;
+        
+        // TO DO: Bug - why does the storyboard UIImageView not appear while when setting a new one - it does?
+        UIImageView *imageView2 = [[UIImageView alloc] initWithFrame:CGRectMake(5, 5, 50, 50)];
+        [imageView2 setImageWithURL:[NSURL URLWithString:self.user.thumbnailURL]];
+        [self.contentView addSubview:imageView2];
+        
+        //self.imageView.backgroundColor = [UIColor lightGrayColor];
+        //[self.imageView setImageWithURL:[NSURL URLWithString:self.user.thumbnailURL]];
+        //self.imageView.image = [self.imageView.image scaleToSize:self.imageView.frame.size];
+        
+        
     }
     
     NSLog(@"[LikeCell] <layoutSubviews> User cell with user: %@", [self.user log]);

@@ -1230,25 +1230,26 @@
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Name" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="237" translatesAutoresizingMaskIntoConstraints="NO" id="4xy-jI-UAA">
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="237" id="cBB-hb-6qE"/>
+                                                <constraint firstAttribute="width" constant="237" type="user" id="cBB-hb-6qE"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" name="GillSans-Light" family="Gill Sans" pointSize="17"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kmB-yH-o0K">
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="kmB-yH-o0K">
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="50" id="2H4-d3-9e6"/>
-                                                <constraint firstAttribute="width" constant="50" id="AgQ-SQ-NlJ"/>
+                                                <constraint firstAttribute="height" constant="50" type="user" id="2H4-d3-9e6"/>
+                                                <constraint firstAttribute="width" constant="50" type="user" id="AgQ-SQ-NlJ"/>
                                             </constraints>
                                         </imageView>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <constraints>
-                                    <constraint firstItem="kmB-yH-o0K" firstAttribute="centerY" secondItem="q94-Ou-O2b" secondAttribute="centerY" type="default" id="BzR-IA-Qw9"/>
-                                    <constraint firstAttribute="trailing" secondItem="4xy-jI-UAA" secondAttribute="trailing" constant="20" type="default" id="H1t-Zv-bT6"/>
-                                    <constraint firstItem="4xy-jI-UAA" firstAttribute="leading" secondItem="kmB-yH-o0K" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="Nfh-q2-Teu"/>
+                                    <constraint firstAttribute="trailing" secondItem="4xy-jI-UAA" secondAttribute="trailing" constant="20" type="user" id="H1t-Zv-bT6"/>
+                                    <constraint firstItem="kmB-yH-o0K" firstAttribute="top" secondItem="q94-Ou-O2b" secondAttribute="top" constant="5" type="user" id="Hde-0X-66D"/>
+                                    <constraint firstItem="4xy-jI-UAA" firstAttribute="leading" secondItem="kmB-yH-o0K" secondAttribute="trailing" constant="8" symbolic="YES" type="user" id="Nfh-q2-Teu"/>
+                                    <constraint firstItem="kmB-yH-o0K" firstAttribute="leading" secondItem="q94-Ou-O2b" secondAttribute="leading" constant="5" type="user" id="hOL-Ez-nan"/>
                                     <constraint firstAttribute="bottom" secondItem="4xy-jI-UAA" secondAttribute="bottom" constant="20" type="default" id="wez-OR-yJD"/>
                                 </constraints>
                                 <connections>
@@ -3348,9 +3349,9 @@
     <inferredMetricsTieBreakers>
         <segue reference="8yc-8c-oUA"/>
         <segue reference="XC8-Qi-2I7"/>
-        <segue reference="9Tx-6g-ZPn"/>
         <segue reference="w65-aQ-LpU"/>
         <segue reference="YM7-eP-AmQ"/>
         <segue reference="RPy-EX-WJG"/>
+        <segue reference="tVZ-xG-BkR"/>
     </inferredMetricsTieBreakers>
 </document>
