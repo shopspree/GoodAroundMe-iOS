@@ -30,6 +30,14 @@
                                                object:nil];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:nil action:nil];
+    self.navigationItem.backBarButtonItem = backButton;
+}
+
 - (void)viewDidAppear:(BOOL)animated {
     
     NSLog(@"[DEBUG] <%@> viewDidAppear", [self currentViewController]);

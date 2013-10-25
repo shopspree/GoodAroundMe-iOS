@@ -72,6 +72,13 @@
     }
 }
 
+- (NSIndexPath *)lastCommentIndexPath
+{
+    NSInteger rows = [self tableView:self.tableView numberOfRowsInSection:0];
+    NSIndexPath *lastRowIndexPath = [NSIndexPath indexPathForRow:(rows - 1) inSection:0];
+    return lastRowIndexPath;
+}
+
 #pragma mark - CommentCellDelegate
 
 - (IBAction)commentTappedAction:(id)sender

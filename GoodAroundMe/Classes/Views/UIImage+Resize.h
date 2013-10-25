@@ -11,5 +11,8 @@
 @interface UIImage (Resize)
 
 - (UIImage *)scaleToSize:(CGSize)newSize;
-
+- (UIImage*)imageScaledToWidth:(CGFloat)targetWidth;
+- (UIImage *)imageScaledToSize:(CGSize)targetSize;
+- (NSData *)imageData;
+- (NSInteger)imageSizeBytes;
 @end

@@ -351,12 +351,12 @@ static NSString *PostCellIdentifier = @"PostCell";
     [self selectPostAndSegue:STORYBOARD_POST sender:sender];
 }
 
-- (void)goToPost:(id)sender
+- (void)tapOnPost:(id)sender
 {
     [self selectPostAndSegue:STORYBOARD_POST sender:sender];
 }
 
-- (void)goToOrganization:(id)sender
+- (void)tapOnOrganization:(id)sender
 {
     return; // already in Organization Profile screen - do nothing
 }

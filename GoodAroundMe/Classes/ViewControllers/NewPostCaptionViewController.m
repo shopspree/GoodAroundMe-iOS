@@ -148,7 +148,7 @@
 -(void)request:(AmazonServiceRequest *)request didSendData:(long long)bytesWritten totalBytesWritten:(long long)totalBytesWritten totalBytesExpectedToWrite:(long long)totalBytesExpectedToWrite
 {
     float progress = (float)totalBytesWritten / (float)totalBytesExpectedToWrite;
-    NSLog(@"[DEBUG] Request tag:%@ url:%@ %f%%!", request.requestTag, request.url, progress);
+    //NSLog(@"[DEBUG] Request tag:%@ url:%@ %f%%!", request.requestTag, request.url, progress);
 }
     
 /** Sent when there was a basic failure with the underlying connection.

@@ -190,6 +190,7 @@
         [self.postTableViewController.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
                                                       withRowAnimation:UITableViewRowAnimationAutomatic];
         [self.postTableViewController setupFetchedResultsController];
+        [self.postTableViewController.tableView scrollToRowAtIndexPath:[self.postTableViewController lastCommentIndexPath] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     } failure:^(NSString *message) {
         [self fail:@"Comment" withMessage:message];
     }];

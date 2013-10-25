@@ -51,6 +51,7 @@
 #define API_ORGANIZATION_UPDATE         @"/api/v1/organizations/%@.json"
 #define API_ORGANIZATION_FOLLOWERS      @"/api/v1/organizations/%@/followers.json"
 #define API_PROBLEMS_CREATE             @"/api/v1/problems.json"
+#define API_METADATA                    @"/api/v1/metadata.json"
 
 
 

@@ -92,6 +92,7 @@
 + (void)serverRequest:(NSURLRequest *)request success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure
 {
     AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+        [self setNetworkActivityIndicatorVisible:NO];
         if ([response statusCode] == 200) {
             //NSLog(@"[DEBUG] <BaseAPI> Response from server: \n %@", JSON);
             NSDictionary *responseDictionary = (NSDictionary *)JSON;
@@ -101,12 +102,14 @@
             }  
         }
     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+        [self setNetworkActivityIndicatorVisible:NO];
         NSLog(@"[DEBUG] <%@> %d error for %@!!!", [[self class] description], [response statusCode], request.URL.path);
         NSString *message = [BaseAPI error:JSON onRequest:request withStatusCode:[response statusCode]];
         failure(message);
     }];
     
     [operation start];
+    [self setNetworkActivityIndicatorVisible:YES];
 }
 
 + (NSURLRequest *)requestWithURL:(NSString *)urlString withJSON:(NSData *)jsonData httpMethod:(NSString *)httpMethod
@@ -201,6 +204,22 @@
 + (NSURLRequest *)deleteRequestWithURL:(NSString *)urlString withJSON:(NSData *)jsonData
 {
     return [BaseAPI requestWithURL:urlString withJSON:jsonData httpMethod:HTTP_DELETE];
+}
+
++ (void)setNetworkActivityIndicatorVisible:(BOOL)setVisible {
+    static NSInteger NumberOfCallsToSetVisible = 0;
+    if (setVisible)
+        NumberOfCallsToSetVisible++;
+    else
+        NumberOfCallsToSetVisible--;
+    
+    // The assertion helps to find programmer errors in activity indicator management.
+    // Since a negative NumberOfCallsToSetVisible is not a fatal error,
+    // it should probably be removed from production code.
+    NSAssert(NumberOfCallsToSetVisible >= 0, @"Network Activity Indicator was asked to hide more often than shown");
+    
+    // Display the indicator as long as our static counter is > 0.
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:(NumberOfCallsToSetVisible > 0)];
 }
 
 

@@ -349,7 +349,13 @@
         
         //image = [self imageWithImage:image scaledToSize:CGSizeMake(320, 269)];
         NewsfeedPostView *view = [[[NSBundle mainBundle] loadNibNamed:@"NewsfeedPostView" owner:self options:nil] lastObject];
-        image = [image scaleToSize:CGSizeMake(view.imageView.frame.size.width/2, view.imageView.frame.size.height/2)];
+        
+        //image = [image scaleToSize:CGSizeMake(view.imageView.frame.size.width, view.imageView.frame.size.height)];
+        
+        //image = [image imageScaledToSize:view.imageView.frame.size];
+        NSLog(@"[DEBUG] <NewsfeedTableViewController> Original image size = %d", [image imageSizeBytes]);
+        image = [image imageScaledToWidth:view.imageView.frame.size.width];
+        NSLog(@"[DEBUG] <NewsfeedTableViewController> Original image size = %d", [image imageSizeBytes]);
         
         // Save the new image (original or edited) to the Camera Roll
         UIImageWriteToSavedPhotosAlbum (image, nil, nil , nil);

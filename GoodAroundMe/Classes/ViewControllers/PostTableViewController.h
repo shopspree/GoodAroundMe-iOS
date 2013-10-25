@@ -16,5 +16,6 @@
 @property (nonatomic, strong) Post *post;
 
 - (void)setupFetchedResultsController;
+- (NSIndexPath *)lastCommentIndexPath;
 
 @end

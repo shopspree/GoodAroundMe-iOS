@@ -47,7 +47,7 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "GoodAroundMe/Classes/ViewControllers/PostViewController.m"
-         timestampString = "401787471.703938"
+         timestampString = "404351707.89417"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "104"
@@ -99,7 +99,7 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "GoodAroundMe/Classes/ViewControllers/PostViewController.m"
-         timestampString = "401731968.226737"
+         timestampString = "404351707.89417"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "63"
@@ -125,11 +125,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "GoodAroundMe/Classes/ViewControllers/PostTableViewController.m"
-         timestampString = "401788257.754758"
+         timestampString = "404348660.568368"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "79"
-         endingLineNumber = "79"
+         startingLineNumber = "86"
+         endingLineNumber = "86"
          landmarkName = "-commentTappedAction:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -151,11 +151,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "GoodAroundMe/Classes/ViewControllers/PostTableViewController.m"
-         timestampString = "401788257.754758"
+         timestampString = "404348660.568368"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "126"
-         endingLineNumber = "126"
+         startingLineNumber = "133"
+         endingLineNumber = "133"
          landmarkName = "@implementation PostTableViewController"
          landmarkType = "3">
       </FileBreakpoint>
@@ -164,11 +164,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "GoodAroundMe/Classes/ViewControllers/PostTableViewController.m"
-         timestampString = "401788257.754758"
+         timestampString = "404348660.568368"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "120"
-         endingLineNumber = "120"
+         startingLineNumber = "127"
+         endingLineNumber = "127"
          landmarkName = "@implementation PostTableViewController"
          landmarkType = "3">
       </FileBreakpoint>
@@ -177,11 +177,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "GoodAroundMe/Classes/ViewControllers/PostTableViewController.m"
-         timestampString = "401788257.754758"
+         timestampString = "404348660.568368"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "114"
-         endingLineNumber = "114"
+         startingLineNumber = "121"
+         endingLineNumber = "121"
          landmarkName = "-tableView:cellForRowAtIndexPath:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -190,20 +190,20 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "GoodAroundMe/Classes/ViewControllers/PostTableViewController.m"
-         timestampString = "401788257.754758"
+         timestampString = "404348660.568368"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "121"
-         endingLineNumber = "121"
+         startingLineNumber = "128"
+         endingLineNumber = "128"
          landmarkName = "-commentForIndexPath:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
-         shouldBeEnabled = "Yes"
+         shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "GoodAroundMe/Classes/ViewControllers/PostViewController.m"
-         timestampString = "401787471.703938"
+         timestampString = "404351707.89417"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "105"
@@ -229,11 +229,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "GoodAroundMe/Classes/ViewControllers/PostTableViewController.m"
-         timestampString = "401788257.754758"
+         timestampString = "404348660.568368"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "127"
-         endingLineNumber = "127"
+         startingLineNumber = "134"
+         endingLineNumber = "134"
          landmarkName = "-tableView:heightForRowAtIndexPath:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -242,11 +242,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "GoodAroundMe/Classes/ViewControllers/PostTableViewController.m"
-         timestampString = "401788349.94785"
+         timestampString = "404348660.568368"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "231"
-         endingLineNumber = "231">
+         startingLineNumber = "238"
+         endingLineNumber = "238">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -383,11 +383,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "GoodAroundMe/Classes/Models/BaseAPI.m"
-         timestampString = "402060602.266461"
+         timestampString = "404349724.396876"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "169"
-         endingLineNumber = "169"
+         startingLineNumber = "172"
+         endingLineNumber = "172"
          landmarkName = "+error:onRequest:withStatusCode:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -623,6 +623,58 @@
          startingLineNumber = "31"
          endingLineNumber = "31"
          landmarkName = "-sizeToFitText:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "GoodAroundMe/Classes/ViewControllers/PostTableViewController.m"
+         timestampString = "404348660.568368"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "77"
+         endingLineNumber = "77"
+         landmarkName = "-lastCommentIndexPath"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "GoodAroundMe/Classes/ViewControllers/PostTableViewController.m"
+         timestampString = "404348660.568368"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "79"
+         endingLineNumber = "79"
+         landmarkName = "-lastCommentIndexPath"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "GoodAroundMe/Classes/Views/NewsfeedPostView.m"
+         timestampString = "404352218.977133"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "274"
+         endingLineNumber = "274"
+         landmarkName = "-commentsCounButtonClicked:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "GoodAroundMe/Classes/Views/UIImage+Resize.m"
+         timestampString = "404412079.789143"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "45"
+         endingLineNumber = "45"
+         landmarkName = "-imageScaledToSize:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

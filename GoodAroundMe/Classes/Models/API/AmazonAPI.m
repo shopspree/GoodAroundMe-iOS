@@ -8,6 +8,7 @@
 
 #import "AmazonAPI.h"
 #import "StoryboardConstants.h"
+#import "UIImage+Resize.h"
 
 @interface AmazonAPI() <AmazonServiceRequestDelegate>
 
@@ -24,8 +25,8 @@
     
     S3PutObjectRequest *por = [[S3PutObjectRequest alloc] initWithKey:fileName inBucket:fullBucketPath];
     por.contentType = @"image/jpeg";
-    NSData *imageData = UIImagePNGRepresentation(image);
-    por.data = imageData;
+    
+    por.data = [image imageData];
     por.cannedACL = [S3CannedACL publicRead];
     por.delegate = delegate;
     //[self.s3 putObject:por];
