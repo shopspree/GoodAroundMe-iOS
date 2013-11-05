@@ -40,6 +40,7 @@
 #define API_HASHTAGS_URL                @"/api/v1/hashtags.json"
 #define API_USER                        @"/api/v1/users/%@.json"
 #define API_USER_CHANGE_PASSWORD        @"/api/v1/users/%@/update_password.json"
+#define API_USER_RESET_PASSWORD         @"/users/password.json"
 #define API_PROFILE_SEARCH              @"/api/v1/profiles/search/%@.json?page=%@"
 #define API_NOTIFICATIONS               @"/api/v1/notifications/%@.json"
 #define API_ORGANIZATION_CATEGORIES     @"/api/v1/organization_categories.json"

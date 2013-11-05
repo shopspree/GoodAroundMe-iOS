@@ -7,11 +7,10 @@
 //
 
 #import "AboutViewController.h"
+#import "ApplicationDictionary.h"
 
 @interface AboutViewController ()
-@property (weak, nonatomic) IBOutlet UIImageView *backgroundImageView;
-@property (weak, nonatomic) IBOutlet UIView *backgroundView;
-@property (weak, nonatomic) IBOutlet UITextView *textView;
+
 
 @end
 
@@ -20,17 +19,17 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+}
+
+- (NSString *)urlString
+{
+    if (!super.urlString) {
+        ApplicationDictionary *applicationDictionary = [ApplicationDictionary sharedInstance];
+        super.urlString = [applicationDictionary.dictionary objectForKey:DictionaryAboutURL];//@"http://goodaround.me";
+        
+    }
     
-    self.textView.backgroundColor = [UIColor clearColor];
-    self.textView.textColor = [UIColor whiteColor];
-    CGRect frame = _textView.frame;
-    frame.size.height = self.textView.contentSize.height;
-    self.textView.frame = frame;
-    
-    self.backgroundView.alpha = 0.3;
-    self.backgroundView.backgroundColor = [UIColor blackColor];
-    self.backgroundView.frame = frame;
-    
+    return super.urlString;
 }
 
 @end

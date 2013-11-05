@@ -29,7 +29,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(performLoginIfRequired:)
-                                                 name:@"Unauthorized"
+                                                 name:NotificationUnauthorized
                                                object:nil];
     
     //[self gaiManualScreenMeasurement];
@@ -64,7 +64,7 @@
 
 - (void) performLoginIfRequired:(UIViewController *)source
 {
-    [self navigateStoryboardWithIdentifier:STORYBOARD_LANDING_PAGE];
+    [self navigateStoryboardWithIdentifier:STORYBOARD_SIGNUP_SIGNIN];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

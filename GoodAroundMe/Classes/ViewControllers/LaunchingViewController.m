@@ -13,6 +13,8 @@
 #import "OrganizationCategory.h"
 #import "StoryboardConstants.h"
 #import "CoreDataFactory.h"
+#import "MetadataAPI.h"
+#import "ApplicationDictionary.h"
 
 @interface LaunchingViewController ()
 
@@ -82,11 +84,21 @@
         [self performSegueWithIdentifier:STORYBOARD_SIGNUP_SIGNIN sender:self];
     } else {
         [User userByEmail:email inManagedObjectContext:self.managedObjectContext success:^(User *user) {
-            [self loadCategories];
+            [self LoadDictionary];
         } failure:^(NSString *message) {
             [self fail:@"Good Around Me" withMessage:message];
         }];
     }
+}
+
+- (void)LoadDictionary
+{
+    ApplicationDictionary *applicationDictionary = [ApplicationDictionary sharedInstance];
+    [applicationDictionary loadDictionary:^{
+        [self loadCategories];
+    } failure:^(NSString *message) {
+        [self fail:@"Good Around Me" withMessage:message];
+    }];
 }
 
 - (void)loadCategories

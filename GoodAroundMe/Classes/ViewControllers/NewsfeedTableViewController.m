@@ -35,10 +35,13 @@
 @property (nonatomic, strong) NSArray *uploads;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *cameraBarButton;
 //@property (strong, nonatomic) UIView *loadingView;
+@property (nonatomic) BOOL shouldRefreshAutomatically;
 
 @end
 
 @implementation NewsfeedTableViewController
+
+static CGFloat duration = 0.27f;
 
 - (void)viewDidLoad
 {
@@ -55,6 +58,8 @@
     if (!currentUser.organization) {
         self.navigationItem.rightBarButtonItem = nil;
     }
+    
+    self.shouldRefreshAutomatically = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -64,7 +69,9 @@
     self.selectedPost = nil;
     
     [self segueToExploreIfUserIsNotFollowing];
-    [self refresh];
+    
+    if (self.shouldRefreshAutomatically)
+        [self refresh];
 }
 
 - (void)didReceiveMemoryWarning
@@ -80,27 +87,39 @@
     [self.refreshControl beginRefreshing];
     [self fetchCoreData];
     
-    static CGFloat duration = 0.27f; 
-    [UIView animateWithDuration:duration animations:^{
-        CGPoint newOffset = CGPointMake(0, -1 * self.tableView.rowHeight);//[self.tableView contentInset].top);
-        [self.tableView setContentOffset:newOffset animated:YES];
-     }];
+    [self pullDownToRefresh];
     
     [Newsfeed newsfeedFromServer:self.managedObjectContext success:^{
-        [UIView animateWithDuration:duration animations:^{
-            [self.tableView setContentOffset:CGPointZero animated:YES];
-        } completion:^(BOOL finished) {
-            [self.refreshControl endRefreshing];
-        }];
+        [self pullUpAfterRefresh];
         [self fetchCoreData];
     } failure:^(NSString *message) {
+        [self pullUpAfterRefresh];
+        [self fail:@"Newsfeed" withMessage:message];
+    }];
+}
+
+- (void)pullDownToRefresh
+{
+    if (self.shouldRefreshAutomatically) {
+        [UIView animateWithDuration:duration animations:^{
+            CGPoint newOffset = CGPointMake(0, -1 * self.tableView.rowHeight);
+            [self.tableView setContentOffset:newOffset animated:YES];
+        }];
+    }
+    
+}
+
+- (void)pullUpAfterRefresh
+{
+    if (self.shouldRefreshAutomatically) {
         [UIView animateWithDuration:duration animations:^{
             [self.tableView setContentOffset:CGPointZero animated:YES];
         } completion:^(BOOL finished) {
             [self.refreshControl endRefreshing];
         }];
-        [self fail:@"Newsfeed" withMessage:message];
-    }];
+    }
+    
+    self.shouldRefreshAutomatically = NO;
 }
 
 - (void)fetchCoreData
@@ -350,11 +369,11 @@
         //image = [self imageWithImage:image scaledToSize:CGSizeMake(320, 269)];
         NewsfeedPostView *view = [[[NSBundle mainBundle] loadNibNamed:@"NewsfeedPostView" owner:self options:nil] lastObject];
         
-        //image = [image scaleToSize:CGSizeMake(view.imageView.frame.size.width, view.imageView.frame.size.height)];
+        image = [image scaleToSize:CGSizeMake(view.imageView.frame.size.width, view.imageView.frame.size.height)]; //attempt 1 to scale -> image is smeared
         
-        //image = [image imageScaledToSize:view.imageView.frame.size];
+        //image = [image imageScaledToSize:view.imageView.frame.size]; // attempt 2 - > does very little effect
         NSLog(@"[DEBUG] <NewsfeedTableViewController> Original image size = %d", [image imageSizeBytes]);
-        image = [image imageScaledToWidth:view.imageView.frame.size.width];
+        image = [image imageScaledToWidth:view.imageView.frame.size.width]; 
         NSLog(@"[DEBUG] <NewsfeedTableViewController> Original image size = %d", [image imageSizeBytes]);
         
         // Save the new image (original or edited) to the Camera Roll

@@ -24,6 +24,7 @@
 #define USER_UPDATED_AT @"updated_at"
 #define USER_FOLLOWING @"following"
 #define USER_OPERATOR @"operator"
+#define USER_IS_ADMIN @"is_admin"
 
 @interface User (Create) <IJSON>
 
@@ -35,6 +36,7 @@
 + (void)signIn:(NSDictionary *)userDictionary success:(void (^)(User *user))success failure:(void (^)(NSString *message))failure;
 + (void)signOut:(void (^)())success failure:(void (^)(NSString *message))failure;
 + (void)search:(NSString *)keyword page:(NSInteger)page success:(void (^)(NSArray *usersArray))success failure:(void (^)(NSDictionary *errorData))failure;
++ (void)resetPasswordForEmail:(NSString *)email success:(void (^)())success failure:(void (^)(NSString *message))failure;
 
 + (BOOL)validateEmail:(NSString*)email;
 + (BOOL)validateName:(NSString*)name;

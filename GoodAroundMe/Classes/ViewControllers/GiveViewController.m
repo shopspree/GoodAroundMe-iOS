@@ -8,13 +8,10 @@
 
 #import "GiveViewController.h"
 #import "AppConstants.h"
+#import "ApplicationDictionary.h"
+#import "Organization.h"
 
 @interface GiveViewController () <UIWebViewDelegate>
-
-@property (weak, nonatomic) IBOutlet UILabel *statusLabel;
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
-@property (strong, nonatomic) IBOutlet UIWebView *webview;
-@property (strong, nonatomic) NSString *urlString;
 
 @end
 
@@ -25,51 +22,17 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
-    self.webview.delegate = self;
-    [self.webview scalesPageToFit];
+    NSLog(@"[DEBUG] <GiveViewController> Open give url %@ for organization %@", self.urlString, self.organization.name);
+}
+
+- (NSString *)urlString
+{
+    if (!self.urlString) {
+        ApplicationDictionary *applicationDictionary = [ApplicationDictionary sharedInstance];
+        super.urlString = [applicationDictionary.dictionary objectForKey:DictionaryGiveURL];//@"http://goodaround.me";
+    }
     
-    self.activityIndicator.hidesWhenStopped = YES;
-    
-    [self loadRequest];
-}
-
-- (void)loadRequest
-{
-    self.urlString = [NSString stringWithFormat:@"%@://%@:%@/", SERVER_PROTOCOL, SERVER_HOST, SERVER_PORT];
-    self.urlString = @"http://goodaround.me";
-    NSURL *url = [NSURL URLWithString:self.urlString];
-    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
-    [self.webview loadRequest:urlRequest];
-}
-
-#pragma mark - Storyboard
-
-- (IBAction)refresh:(id)sender
-{
-    [self loadRequest];
-}
-
-#pragma mark - UIWebViewDelegate
-
-- (void)webViewDidStartLoad:(UIWebView *)webView
-{
-    self.statusLabel.text = @"Loading...";
-    [self.activityIndicator startAnimating];
-    NSLog(@"[DEBUG] <GiveViewController> webViewDidStartLoad for url %@ ", self.urlString);
-}
-
-- (void)webViewDidFinishLoad:(UIWebView *)webView
-{
-    [self.activityIndicator stopAnimating];
-    self.statusLabel.hidden = YES;
-    NSLog(@"[DEBUG] <GiveViewController> webViewDidFinishLoad for url %@ ", self.urlString);
-}
-
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error;
-{
-    [self.activityIndicator stopAnimating];
-    self.statusLabel.text = @"Error loading";
-    self.statusLabel.textColor = [UIColor redColor];
+    return super.urlString;
 }
 
 @end

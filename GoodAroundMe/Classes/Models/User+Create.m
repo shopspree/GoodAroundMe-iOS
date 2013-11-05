@@ -164,6 +164,15 @@
     }];
 }
 
++ (void)resetPasswordForEmail:(NSString *)email success:(void (^)())success failure:(void (^)(NSString *message))failure
+{
+    [UserAPI resetPasswordForEmail:email success:^(NSDictionary *responseDictionary) {
+        success();
+    } failure:^(NSString *message) {
+        failure(message);
+    }];
+}
+
 + (void)storeUser:(NSDictionary *)userDictionary
 {
     if (userDictionary) {
@@ -206,6 +215,7 @@
         self.created_at = [ApplicationHelper dateFromString:[userDictionary[USER_CREATED_AT] description]];
         self.updated_at = [ApplicationHelper dateFromString:[userDictionary[USER_UPDATED_AT] description]];
         self.orgOperator = [NSNumber numberWithBool:[userDictionary[USER_OPERATOR] isEqualToString:@"true"]];
+        self.isAdmin = @([[userDictionary[USER_IS_ADMIN] description] intValue]);
         
         if (userDictionary[USER_FOLLOWING]) {
             self.following = [NSSet set];

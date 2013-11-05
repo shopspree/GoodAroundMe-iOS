@@ -77,6 +77,8 @@
     }];
 }
 
+//- segueForUnwindingToViewController:fromViewController:identifier:
+
 #pragma mark - storyboard
 
 - (IBAction)cancelButtonAction:(id)sender
@@ -147,7 +149,7 @@
  */
 -(void)request:(AmazonServiceRequest *)request didSendData:(long long)bytesWritten totalBytesWritten:(long long)totalBytesWritten totalBytesExpectedToWrite:(long long)totalBytesExpectedToWrite
 {
-    float progress = (float)totalBytesWritten / (float)totalBytesExpectedToWrite;
+    //float progress = (float)totalBytesWritten / (float)totalBytesExpectedToWrite;
     //NSLog(@"[DEBUG] Request tag:%@ url:%@ %f%%!", request.requestTag, request.url, progress);
 }
     

@@ -56,7 +56,7 @@
 - (void) performLoginIfRequired:(NSNotification *)notification {
     NSLog(@"[DEBUG] <AbstractViewController> Received Notification %@", notification.name);
     
-    [self navigateStoryboardWithIdentifier:STORYBOARD_LANDING_PAGE];
+    [self navigateStoryboardWithIdentifier:STORYBOARD_SIGNUP_SIGNIN];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

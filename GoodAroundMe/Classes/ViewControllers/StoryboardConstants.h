@@ -17,6 +17,7 @@
 #define STORYBOARD_USER_PROFILE @"UserProfile"
 #define STORYBOARD_USER_SETTINGS @"UserSettings"
 #define STORYBOARD_USER_CHANGE_PASSWORD @"ChangePassword"
+#define STORYBOARD_USER_FORGOT_PASSWORD @"ForgotPassword"
 #define STORYBOARD_USER_EDIT_NAME @"EditName"
 #define STORYBOARD_ORGANIZATION_PROFILE @"Organization Profile"
 #define STORYBOARD_ORGANIZATION_SETTINGS @"Organization Settings"

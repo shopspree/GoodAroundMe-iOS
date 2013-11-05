@@ -83,6 +83,7 @@
         <attribute name="displayName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="firstname" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isAdmin" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="lastname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="orgOperator" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="thumbnailURL" optional="YES" attributeType="String" syncable="YES"/>
@@ -105,7 +106,7 @@
         <element name="OrganizationCategory" positionX="-369" positionY="1274" width="128" height="103"/>
         <element name="Photo" positionX="90" positionY="1958" width="128" height="43"/>
         <element name="Post" positionX="-146" positionY="1476" width="128" height="268"/>
-        <element name="User" positionX="-180" positionY="1787" width="128" height="268"/>
+        <element name="User" positionX="-180" positionY="1787" width="128" height="283"/>
         <element name="Media" positionX="88" positionY="1818" width="128" height="118"/>
         <element name="Video" positionX="232" positionY="1958" width="128" height="58"/>
     </elements>

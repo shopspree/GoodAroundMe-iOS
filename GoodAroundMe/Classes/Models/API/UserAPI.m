@@ -130,7 +130,19 @@
     NSData *json = [ApplicationHelper constructJSON:requestDictionary];
     
     [BaseAPI putRequestWithURL:[NSString stringWithFormat:API_USER_CHANGE_PASSWORD, email] json:json success:^(NSDictionary *responseDictionary) {
-        success(requestDictionary);
+        success(responseDictionary);
+    } failure:^(NSString *message) {
+        failure(message);
+    }];
+}
+
++ (void)resetPasswordForEmail:(NSString *)email success:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure
+{
+    NSDictionary *requestDictionary = [NSDictionary dictionaryWithObjectsAndKeys: [NSDictionary dictionaryWithObjectsAndKeys:email, USER_EMAIL, nil], USER, nil];
+    NSData *json = [ApplicationHelper constructJSON:requestDictionary];
+    
+    [BaseAPI postRequestWithURL:API_USER_RESET_PASSWORD json:json success:^(NSDictionary *responseDictionary) {
+        success(responseDictionary);
     } failure:^(NSString *message) {
         failure(message);
     }];

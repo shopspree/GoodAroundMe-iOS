@@ -6,9 +6,8 @@
 //  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "AbstractViewController.h"
+#import "GAMWebViewController.h"
 
-@interface AboutViewController : AbstractViewController
+@interface AboutViewController : GAMWebViewController
 
 @end

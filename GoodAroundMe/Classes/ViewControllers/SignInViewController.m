@@ -8,6 +8,7 @@
 
 #import "SignInViewController.h"
 #import "SignInTableController.h"
+#import "SignInResetPasswordViewController.h"
 #import "User+Create.h"
 
 @interface SignInViewController ()
@@ -55,6 +56,16 @@
     [self.view endEditing:YES];
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    //[super prepareForSegue:segue sender:sender];
+    
+    if ([segue.identifier isEqualToString:STORYBOARD_USER_FORGOT_PASSWORD] && [segue.destinationViewController isKindOfClass:[SignInResetPasswordViewController class]]) {
+        SignInResetPasswordViewController *signInResetVC = segue.destinationViewController;
+        SignInTableController *signInTableController= [self.childViewControllers lastObject];
+        signInResetVC.email = signInTableController.emailTextField.text;
+    }
+}
 
 #pragma mark - UITextFieldDelegate
 
@@ -71,7 +82,7 @@
 }
 
 
-#pragma mark - protected
+#pragma mark - storyboard
 
 - (void)signIn
 {
@@ -95,13 +106,18 @@
                 NSLog(@"[DEBUG] <SignInViewController> Login success for user %@", user.email);
                 [self dismissViewControllerAnimated:YES completion:nil];
             } failure:^(NSString *message) {
-                [self fail:@"Login" withMessage:message];
                 self.logInButton.hidden = NO;
                 [self.activityIndicator stopAnimating];
                 self.activityIndicator.hidden = YES;
+                [self fail:@"Login" withMessage:message];
             }];
         } 
     }
+}
+
+- (IBAction)forgotMyPassword:(id)sender
+{
+    [self performSegueWithIdentifier:STORYBOARD_USER_FORGOT_PASSWORD sender:self];
 }
 
 

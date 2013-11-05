@@ -10,4 +10,6 @@
 
 @interface MetadataAPI : BaseAPI
 
++ (void)metadata:(void (^)(NSDictionary *responseDictionary))success failure:(void (^)(NSString *message))failure;
+
 @end

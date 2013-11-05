@@ -14,7 +14,7 @@
 {
     NSData *json = nil;
     
-    [BaseAPI postRequestWithURL:API_METADATA json:json success:^(NSDictionary *responseDictionary) {
+    [BaseAPI getRequestWithURL:API_METADATA json:json success:^(NSDictionary *responseDictionary) {
         success(responseDictionary);
     } failure:^(NSString *message) {
         failure(message);

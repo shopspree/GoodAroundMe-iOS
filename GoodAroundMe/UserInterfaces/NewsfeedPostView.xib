@@ -160,7 +160,6 @@
 								<nil key="IBUIHighlightedColor"/>
 								<int key="IBUIBaselineAdjustment">0</int>
 								<float key="IBUIMinimumScaleFactor">0.60000002384185791</float>
-								<int key="IBUINumberOfLines">0</int>
 								<int key="IBUITextAlignment">1</int>
 								<object class="IBUIFontDescription" key="IBUIFontDescription">
 									<string key="name">GillSans</string>
@@ -173,7 +172,6 @@
 									<double key="NSSize">20</double>
 									<int key="NSfFlags">16</int>
 								</object>
-								<double key="preferredMaxLayoutWidth">279</double>
 							</object>
 						</array>
 						<string key="NSFrame">{{0, 66}, {320, 24}}</string>
@@ -389,6 +387,10 @@
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<string key="IBUINormalTitle">Give</string>
 								<reference key="IBUIHighlightedTitleColor" ref="615061021"/>
+								<object class="NSColor" key="IBUIDisabledTitleColor">
+									<int key="NSColorSpace">1</int>
+									<bytes key="NSRGB">MC43MDE5NjA4MDIxIDAuNzAxOTYwODAyMSAwLjcwMTk2MDgwMjEAA</bytes>
+								</object>
 								<reference key="IBUINormalTitleColor" ref="1012493722"/>
 								<reference key="IBUINormalTitleShadowColor" ref="30482456"/>
 								<reference key="IBUIFontDescription" ref="246671595"/>
@@ -1555,9 +1557,9 @@
 							<reference ref="270300260"/>
 							<reference ref="1051759891"/>
 							<reference ref="133180068"/>
-							<reference ref="145562745"/>
 							<reference ref="365871090"/>
 							<reference ref="544311169"/>
+							<reference ref="145562745"/>
 						</array>
 						<reference key="parent" ref="191373211"/>
 					</object>
@@ -2594,6 +2596,7 @@
 					<reference ref="179301435"/>
 				</array>
 				<string key="1041.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+				<real value="3" key="1041.IBUIButtonInspectorSelectedStateConfigurationMetadataKey"/>
 				<array class="NSMutableArray" key="1041.IBViewMetadataConstraints">
 					<reference ref="425972030"/>
 				</array>
@@ -2827,6 +2830,65 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">NewsfeedPostView</string>
 					<string key="superclassName">NewsfeedView</string>
+					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="commentButtonClicked:">id</string>
+						<string key="commentsCounButtonClicked:">id</string>
+						<string key="deleteButtonClicked:">id</string>
+						<string key="giveButtonAction:">id</string>
+						<string key="likeButtonClicked:">id</string>
+						<string key="likesCountButtonClicked:">id</string>
+						<string key="logoAction:">id</string>
+						<string key="moreButtonClicked:">id</string>
+						<string key="nameAction:">id</string>
+						<string key="pictureAction:">id</string>
+						<string key="tap:">id</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="commentButtonClicked:">
+							<string key="name">commentButtonClicked:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="commentsCounButtonClicked:">
+							<string key="name">commentsCounButtonClicked:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="deleteButtonClicked:">
+							<string key="name">deleteButtonClicked:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="giveButtonAction:">
+							<string key="name">giveButtonAction:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="likeButtonClicked:">
+							<string key="name">likeButtonClicked:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="likesCountButtonClicked:">
+							<string key="name">likesCountButtonClicked:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="logoAction:">
+							<string key="name">logoAction:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="moreButtonClicked:">
+							<string key="name">moreButtonClicked:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="nameAction:">
+							<string key="name">nameAction:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="pictureAction:">
+							<string key="name">pictureAction:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="tap:">
+							<string key="name">tap:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="captionLabel">UILabel</string>
 						<string key="captionView">UIView</string>

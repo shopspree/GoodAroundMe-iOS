@@ -2,7 +2,7 @@
 //  User.m
 //  GoodAroundMe
 //
-//  Created by asaf ahi-mordehai on 10/22/13.
+//  Created by asaf ahi-mordehai on 10/28/13.
 //  Copyright (c) 2013 GoodAroundMe. All rights reserved.
 //
 
@@ -25,6 +25,7 @@
 @dynamic thumbnailURL;
 @dynamic uid;
 @dynamic updated_at;
+@dynamic isAdmin;
 @dynamic comments;
 @dynamic following;
 @dynamic likes;

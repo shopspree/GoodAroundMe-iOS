@@ -20,6 +20,7 @@
 #import "CoreDataFactory.h"
 #import "UIResponder+Helper.h"
 #import "AppConstants.h"
+#import "ApplicationDictionary.h"
 
 @interface NewsfeedPostView()
 
@@ -35,6 +36,7 @@
     if (newsfeed) {
         self.post = newsfeed.post;
     }
+    
 }
 
 - (id<NewsfeedPostViewDelegate>)delegate
@@ -68,6 +70,13 @@
 - (void)setup
 {
     self.commentButton.tag = NEWSFEED_POST_VIEW_COMMENT_BUTTON;
+    
+    ApplicationDictionary *applicationDictionary = [ApplicationDictionary sharedInstance];
+    BOOL giveButtonEnabled = [[applicationDictionary.dictionary objectForKey:DictionaryGiveEnabled] isEqualToString:@"true"];
+    self.giveButon.enabled = giveButtonEnabled;
+    
+    self.imageView.contentMode = UIViewContentModeScaleAspectFill;
+    
     /*
     [self addObserver:self.post
            forKeyPath:@"comments_count"
@@ -126,6 +135,7 @@
         self.imageView.tag = NEWSFEED_POST_VIEW_IMAGE;
         self.imageView.userInteractionEnabled = YES;
         self.imageView.backgroundColor = [UIColor lightGrayColor];
+        self.imageView.contentMode = UIViewContentModeScaleAspectFill;
         
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
         tapGesture.numberOfTapsRequired = 1;
@@ -256,6 +266,7 @@
 
 - (IBAction)likeButtonClicked:(id)sender
 {
+    self.imageView.contentMode = UIViewContentModeScaleAspectFill;
     [self.delegate likePost:sender];
 }
 

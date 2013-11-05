@@ -290,6 +290,17 @@ static NSString *PostCellIdentifier = @"PostCell";
     } else if (indexPath.section == SectionOrganizationNewsfeed) {
         UIView *view = [[[NSBundle mainBundle] loadNibNamed:@"NewsfeedPostView" owner:self options:nil] lastObject];
         height = view.frame.size.height;
+        
+        Post *post = [self.posts objectAtIndex:indexPath.row];
+        
+        if ([view isKindOfClass:[NewsfeedPostView class]]) {
+            NewsfeedPostView *newsfeedPostView = (NewsfeedPostView *)view;
+            
+            CGFloat originalHeight = newsfeedPostView.frame.size.height;
+            CGFloat calculatedHeight = [newsfeedPostView sizeToFitText:post.caption];
+            
+            height = MIN(originalHeight, calculatedHeight);
+        }
     }
     
     return height;
