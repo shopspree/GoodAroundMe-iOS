@@ -11,7 +11,7 @@
 #import "PostTableViewController.h"
 #import "UIResponder+Helper.h"
 #import "CommentCell.h"
-#import "User.h"
+#import "User+Create.h"
 #import "OrganizationProfileViewController.h"
 #import "LikesTableViewController.h"
 #import "GiveViewController.h"
@@ -254,7 +254,7 @@
 - (void)deletePost:(id)sender
 {
     User *currentUser = [User currentUser:self.managedObjectContext];
-    NSString *deleteButtonTitle = self.post.organization == currentUser.organization ? @"Delete" : nil;
+    NSString *deleteButtonTitle = [currentUser isAbleToDeletePost:self.post] ? @"Delete" : nil;
     
     UIActionSheet *cellActionSheet = [[UIActionSheet alloc] initWithTitle:@""
                                                                  delegate:self

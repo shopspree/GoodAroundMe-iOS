@@ -24,7 +24,7 @@
 #define USER_UPDATED_AT @"updated_at"
 #define USER_FOLLOWING @"following"
 #define USER_OPERATOR @"operator"
-#define USER_IS_ADMIN @"is_admin"
+#define USER_IS_ADMIN @"admin"
 
 @interface User (Create) <IJSON>
 
@@ -43,6 +43,7 @@
 + (BOOL)validatePassword:(NSString *)password;
 
 - (void)setWithDictionary:(NSDictionary *)userDictionary;
+- (BOOL)isAbleToDeletePost:(Post *)post;
 - (void)changePassword:(NSString *)password confirmPassword:(NSString *)passwordConfirmation currentPassword:(NSString *)currentPassword success:(void (^)())success failure:(void (^)(NSString *message))failure;
 - (void)updateUser:(void (^)(User *user))success failure:(void (^)(NSString *message))failure;
 - (void)follow:(Organization *)organization success:(void (^)())success failure:(void (^)(NSString *message))failure;

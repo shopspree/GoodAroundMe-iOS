@@ -11,6 +11,7 @@
 #import "ApplicationHelper.h"
 #import "UserAPI.h"
 #import "Organization+Create.h"
+#import "Post+Create.h"
 #import "OrganizationAPI.h"
 
 @implementation User (Create)
@@ -215,7 +216,7 @@
         self.created_at = [ApplicationHelper dateFromString:[userDictionary[USER_CREATED_AT] description]];
         self.updated_at = [ApplicationHelper dateFromString:[userDictionary[USER_UPDATED_AT] description]];
         self.orgOperator = [NSNumber numberWithBool:[userDictionary[USER_OPERATOR] isEqualToString:@"true"]];
-        self.isAdmin = @([[userDictionary[USER_IS_ADMIN] description] intValue]);
+        self.isAdmin = [NSNumber numberWithBool:[[userDictionary[USER_IS_ADMIN] description] isEqualToString:@"true"]];
         
         if (userDictionary[USER_FOLLOWING]) {
             self.following = [NSSet set];
@@ -232,7 +233,12 @@
     }
 }
 
-
+- (BOOL)isAbleToDeletePost:(Post *)post
+{
+    BOOL isPostOwner = (post.organization == self.organization);
+    BOOL isAdmin = [self.isAdmin isEqualToNumber:[NSNumber numberWithInt:1]];
+    return (isAdmin || isPostOwner);
+}
 
 - (void)changePassword:(NSString *)password confirmPassword:(NSString *)passwordConfirmation currentPassword:(NSString *)currentPassword success:(void (^)())success failure:(void (^)(NSString *message))failure
 {

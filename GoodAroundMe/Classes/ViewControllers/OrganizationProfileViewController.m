@@ -377,7 +377,7 @@ static NSString *PostCellIdentifier = @"PostCell";
     self.selectedPost = [self selectPost:sender];
     
     User *currentUser = [User currentUser:self.managedObjectContext];
-    NSString *destructiveButtonTitle = self.organization == currentUser.organization ? @"Delete" : nil;
+    NSString *destructiveButtonTitle = [currentUser isAbleToDeletePost:self.selectedPost] ? @"Delete" : nil;
     UIActionSheet *cellActionSheet = [[UIActionSheet alloc] initWithTitle:@""
                                                                  delegate:self
                                                         cancelButtonTitle:@"Cancel"

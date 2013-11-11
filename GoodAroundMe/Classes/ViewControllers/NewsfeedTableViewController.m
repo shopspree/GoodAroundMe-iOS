@@ -36,6 +36,7 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *cameraBarButton;
 //@property (strong, nonatomic) UIView *loadingView;
 @property (nonatomic) BOOL shouldRefreshAutomatically;
+@property (nonatomic) BOOL shouldShowRefreshIndicator;
 
 @end
 
@@ -49,7 +50,7 @@ static CGFloat duration = 0.27f;
     
     // adding refresh controller
     [self.refreshControl addTarget:self
-                            action:@selector(refresh)
+                            action:@selector(refreshControllerAction)
                   forControlEvents:UIControlEventValueChanged];
     
     self.navigationController.navigationBarHidden = NO;
@@ -60,6 +61,7 @@ static CGFloat duration = 0.27f;
     }
     
     self.shouldRefreshAutomatically = YES;
+    self.shouldShowRefreshIndicator = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -70,8 +72,9 @@ static CGFloat duration = 0.27f;
     
     [self segueToExploreIfUserIsNotFollowing];
     
-    if (self.shouldRefreshAutomatically)
+    if (self.shouldRefreshAutomatically) {
         [self refresh];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -81,6 +84,12 @@ static CGFloat duration = 0.27f;
 }
 
 #pragma mark - private methods
+
+- (IBAction)refreshControllerAction
+{
+    self.shouldShowRefreshIndicator = YES;
+    [self refresh];
+}
 
 - (IBAction)refresh
 {
@@ -100,7 +109,7 @@ static CGFloat duration = 0.27f;
 
 - (void)pullDownToRefresh
 {
-    if (self.shouldRefreshAutomatically) {
+    if (self.shouldShowRefreshIndicator) {
         [UIView animateWithDuration:duration animations:^{
             CGPoint newOffset = CGPointMake(0, -1 * self.tableView.rowHeight);
             [self.tableView setContentOffset:newOffset animated:YES];
@@ -111,15 +120,15 @@ static CGFloat duration = 0.27f;
 
 - (void)pullUpAfterRefresh
 {
-    if (self.shouldRefreshAutomatically) {
+    if (self.shouldShowRefreshIndicator) {
         [UIView animateWithDuration:duration animations:^{
             [self.tableView setContentOffset:CGPointZero animated:YES];
         } completion:^(BOOL finished) {
             [self.refreshControl endRefreshing];
         }];
+        self.shouldShowRefreshIndicator = NO;
     }
-    
-    self.shouldRefreshAutomatically = NO;
+
 }
 
 - (void)fetchCoreData
@@ -476,7 +485,7 @@ static CGFloat duration = 0.27f;
     [self selectPost:sender];
     
     User *currentUser = [User currentUser:self.managedObjectContext];
-    NSString *deleteButtonTitle = self.selectedPost.organization == currentUser.organization ? @"Delete" : nil;
+    NSString *deleteButtonTitle = [currentUser isAbleToDeletePost:self.selectedPost] ? @"Delete" : nil;
     
     UIActionSheet *cellActionSheet = [[UIActionSheet alloc] initWithTitle:@""
                                                                  delegate:self
